@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             full_name: fullNameInput.value,
             bio: bioInput.value,
             skills: skillsInput.value,
+            currency: document.getElementById('currency').value,
             updated_at: new Date()
         };
 

@@ -130,46 +130,48 @@
                     </div>
 
                     <form id="donationForm">
-                        <!-- Donation Type Selection -->
+                        <!-- Donation Type Selection (Feature 2) -->
                         <div class="form-group">
-                            <label class="form-label">Donation Type</label>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                                <label
-                                    style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; border: 2px solid var(--neutral-200); padding: 1.25rem; border-radius: var(--radius-lg); cursor: pointer; transition: all 0.3s; background: white;">
+                            <label class="form-label">Giving Frequency</label>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                                <label class="frequency-tab active" data-type="one-time">
                                     <input type="radio" name="donationType" value="one-time" checked
-                                        style="width: 20px; height: 20px; accent-color: var(--gold-500);">
-                                    <span style="font-weight: 600;">One-Time Gift</span>
+                                        style="display:none;">
+                                    <span>One-Time</span>
                                 </label>
-                                <label
-                                    style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; border: 2px solid var(--neutral-200); padding: 1.25rem; border-radius: var(--radius-lg); cursor: pointer; transition: all 0.3s; background: white;">
-                                    <input type="radio" name="donationType" value="recurring"
-                                        style="width: 20px; height: 20px; accent-color: var(--gold-500);">
-                                    <span style="font-weight: 600;">Monthly Support</span>
+                                <label class="frequency-tab" data-type="monthly">
+                                    <input type="radio" name="donationType" value="monthly" style="display:none;">
+                                    <span>Monthly</span>
+                                </label>
+                                <label class="frequency-tab" data-type="quarterly">
+                                    <input type="radio" name="donationType" value="quarterly" style="display:none;">
+                                    <span>Quarterly</span>
                                 </label>
                             </div>
                         </div>
 
-                        <!-- Amount Selection -->
+                        <!-- Amount Selection (Feature 1) -->
                         <div class="form-group">
-                            <label class="form-label">Select Amount</label>
+                            <label class="form-label">Select Impact Level</label>
                             <div class="donation-amounts">
                                 <div class="donation-amount" data-amount="25">
                                     <span class="amount">$25</span>
+                                    <span class="impact-desc">Kingly Nod</span>
                                 </div>
                                 <div class="donation-amount" data-amount="50">
                                     <span class="amount">$50</span>
+                                    <span class="badge-mini">POPULAR</span>
                                 </div>
                                 <div class="donation-amount active" data-amount="100">
                                     <span class="amount">$100</span>
+                                    <span class="impact-desc">Noble Giver</span>
                                 </div>
-                                <div class="donation-amount" data-amount="250">
-                                    <span class="amount">$250</span>
-                                </div>
-                                <div class="donation-amount" data-amount="500">
+                                <div class="donation-amount highlight" data-amount="500">
                                     <span class="amount">$500</span>
+                                    <span class="badge-gold">KINGLY CHOICE</span>
                                 </div>
                                 <div class="donation-amount" data-amount="custom">
-                                    <span class="amount">Other</span>
+                                    <span class="amount">Heritage Gift</span>
                                 </div>
                             </div>
                         </div>
@@ -206,19 +208,25 @@
                             </label>
                         </div>
 
-                        <!-- Dedication Option -->
-                        <div class="form-group">
-                            <label class="form-check">
-                                <input type="checkbox" class="form-check-input" id="dedicateCheck">
-                                <span class="form-check-label">Dedicate this donation in honor or memory of
-                                    someone</span>
+                        <!-- Transaction Fee Coverage (Feature 4) -->
+                        <div class="form-group"
+                            style="padding: 1rem; background: rgba(212, 165, 116, 0.05); border-radius: 8px; border: 1px solid var(--gold-500); margin-bottom: 2rem;">
+                            <label class="form-check" style="margin: 0;">
+                                <input type="checkbox" class="form-check-input" id="feeCoverageCheck">
+                                <span class="form-check-label" style="font-weight: 600;">Cover transaction fees (+$<span
+                                        id="feeAmount">3.00</span>)</span>
                             </label>
+                            <p style="font-size: 0.75rem; color: rgba(0,0,0,0.5); margin: 0.5rem 0 0 2rem;">100% of your
+                                gift goes to our mission when you cover the costs.</p>
                         </div>
 
-                        <div class="form-group" id="dedicationFields" style="display: none;">
-                            <textarea class="form-textarea"
-                                placeholder="Enter the name of the person you'd like to honor and a brief message (optional)"
-                                rows="3"></textarea>
+                        <!-- Payment Method Suite (Feature 6 & 22) -->
+                        <div class="form-group">
+                            <label class="form-label">Secure Payment Method</label>
+                            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                                <div class="pay-method active" data-method="card">💳 Card</div>
+                                <div class="pay-method" data-method="wallet">📱 Digital Wallet</div>
+                            </div>
                         </div>
 
                         <!-- Payment Button -->

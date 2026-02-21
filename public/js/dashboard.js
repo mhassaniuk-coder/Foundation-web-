@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (profile.volunteer_hours >= 10) addBadge(badgeContainer, '⚔️', 'Iron Will', '10+ Hours');
             if (tasksCount >= 3) addBadge(badgeContainer, '🏛️', 'Community Pillar', '3+ Projects');
 
-            // Role-Based UI (Feature 5)
+            // Role-Based UI (Feature 5 & 22)
             if (profile.role === 'admin') {
                 document.querySelector('.container').insertAdjacentHTML('afterbegin', `
                     <div class="glass-panel" style="background: rgba(212, 165, 116, 0.1); border-color: var(--gold-500); padding: 1rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
@@ -117,6 +117,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <a href="/admin.html" class="btn btn-primary btn-sm">Enter Admin Console</a>
                     </div>
                 `);
+            } else if (profile.role === 'partner') {
+                const partnerSection = document.getElementById('partnerSection');
+                if (partnerSection) partnerSection.style.display = 'block';
             }
         }
     } catch (e) {
@@ -246,11 +249,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.5)' } }
                 }
             }
-            // Unlock Resource Vault (Feature 18)
+        });
+    };
+
+    // Unlock Resource Vault (Feature 18)
     const unlockResources = () => {
-                const vault = document.getElementById('resourceVault');
-                if (!vault) return;
-                vault.innerHTML = `
+        const vault = document.getElementById('resourceVault');
+        if (!vault) return;
+        vault.innerHTML = `
             <div style="text-align: center; padding: 1rem; background: rgba(212, 165, 116, 0.05); border-radius: 8px; border: 1px solid var(--gold-500); cursor: pointer;" onclick="alert('Downloading Impact Strategy 2026...')">
                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📄</div>
                 <p style="font-size: 0.7rem; color: white; font-weight: 600;">Impact Strategy 2026</p>
@@ -262,26 +268,28 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <span style="font-size: 0.6rem; color: var(--gold-400);">DOWNLOAD</span>
             </div>
         `;
-            };
+    };
 
-            // Chat Mock (Feature 19)
-            const chatBtn = document.querySelector('.btn-outline');
-            if(chatBtn && chatBtn.innerText === 'Start Premium Consultation') {
-            chatBtn.addEventListener('click', () => {
-                alert("Initiating encrypted line to Foundation Coordinator... Please wait.");
-                setTimeout(() => {
-                    const chatContainer = chatBtn.parentElement;
-                    chatContainer.innerHTML = `
+    // Chat Mock (Feature 19)
+    const chatBtn = document.querySelector('.btn-outline');
+    if (chatBtn && chatBtn.innerText === 'Start Premium Consultation') {
+        chatBtn.addEventListener('click', () => {
+            alert("Initiating encrypted line to Foundation Coordinator... Please wait.");
+            setTimeout(() => {
+                const chatContainer = chatBtn.parentElement;
+                chatContainer.innerHTML = `
                     <div style="width: 100%; text-align: left;">
                         <p style="font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 4px; margin-bottom: 0.5rem;"><strong>Coordinator:</strong> Greetings King. How can I assist your mission today?</p>
                         <input type="text" class="form-input" style="width: 100%; font-size: 0.8rem;" placeholder="Type your message...">
                     </div>
                 `;
-                }, 1000);
-            });
-        }
+            }, 1000);
+        });
+    }
 
-        // Achievement Sharer (Feature 20)
+    // Achievement Sharer (Feature 20)
+    const badgeContainer = document.getElementById('badgeContainer');
+    if (badgeContainer) {
         badgeContainer.addEventListener('click', (e) => {
             const badge = e.target.closest('.glass-panel');
             if (badge) {
@@ -289,23 +297,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert(`Generating shareable Royal Achievement Card for "${title}"... (Success!)`);
             }
         });
+    }
 
-        // Auto-unlock logic check
-        if (totalDonated && parseInt(totalDonated.innerText.replace('$', '')) > 0) {
-            unlockResources();
-        }
-    });
-    };
-
-// Legacy Milestone Timeline (Feature 16)
-const initLegacyTimeline = (joinedDate) => {
-    const dashboardGrid = document.querySelector('.dashboard-grid');
-    const timelinePanel = document.createElement('div');
-    timelinePanel.className = 'glass-panel';
-    timelinePanel.style.padding = '2rem';
-    timelinePanel.style.marginTop = '2rem';
-    timelinePanel.style.gridColumn = 'span 3';
-    timelinePanel.innerHTML = `
+    // Legacy Milestone Timeline (Feature 16)
+    const initLegacyTimeline = (joinedDate) => {
+        const dashboardGrid = document.querySelector('.dashboard-grid');
+        if (!dashboardGrid) return;
+        const timelinePanel = document.createElement('div');
+        timelinePanel.className = 'glass-panel';
+        timelinePanel.style.padding = '2rem';
+        timelinePanel.style.marginTop = '2rem';
+        timelinePanel.style.gridColumn = 'span 2';
+        timelinePanel.innerHTML = `
             <h3 style="margin-bottom: 2rem; color: white;">Your Legacy Timeline</h3>
             <div style="display: flex; justify-content: space-between; position: relative;">
                 <div style="position: absolute; top: 15px; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.1); z-index: 0;"></div>
@@ -326,6 +329,11 @@ const initLegacyTimeline = (joinedDate) => {
                 </div>
             </div>
         `;
-    dashboardGrid.after(timelinePanel);
-};
+        dashboardGrid.after(timelinePanel);
+    };
+
+    // Auto-unlock logic check
+    if (totalDonated && parseInt(totalDonated.innerText.replace('$', '')) > 0) {
+        unlockResources();
+    }
 });
