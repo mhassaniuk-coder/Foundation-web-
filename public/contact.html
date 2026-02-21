@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact Restored Kings Foundation - Get help, volunteer, partner with us, or share feedback.">
+    <title>Contact - Restored Kings Foundation</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">♔ Restored Kings</div>
+            <div class="hamburger" id="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about.html">About Us</a></li>
+                <li><a href="/programs.html">Programs</a></li>
+                <li><a href="/impact.html">Impact</a></li>
+                <li><a href="/blog.html">Blog</a></li>
+                <li><a href="/donate.html" class="btn btn-primary" style="margin: 0;">Donate</a></li>
+                <li><a href="/volunteer.html" class="btn btn-secondary" style="margin: 0;">Volunteer</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" style="background: linear-gradient(135deg, var(--primary-color) 0%, rgba(26, 58, 92, 0.8) 100%); padding: 3rem 2rem;">
+        <div class="hero-content">
+            <h1 style="color: white;">Get In Touch</h1>
+            <p style="color: rgba(255,255,255,0.95);">We'd love to hear from you. Questions, partnership inquiries, or just want to say hi?</p>
+        </div>
+    </section>
+
+    <!-- Contact Info Cards -->
+    <section class="section container">
+        <div class="grid grid-3">
+            <div class="card" style="text-align: center;">
+                <div style="background: var(--primary-color); color: var(--secondary-color); padding: 2rem; font-size: 2.5rem;">📧</div>
+                <div class="card-content">
+                    <h3>Email</h3>
+                    <p style="margin: 0; color: var(--text-dark); font-weight: 600;">contact@restoredkings.org</p>
+                    <p style="margin: 0.5rem 0 0 0; color: var(--text-light); font-size: 0.9rem;">We respond within 24 hours</p>
+                </div>
+            </div>
+
+            <div class="card" style="text-align: center;">
+                <div style="background: var(--secondary-color); color: var(--primary-color); padding: 2rem; font-size: 2.5rem;">📞</div>
+                <div class="card-content">
+                    <h3>Phone</h3>
+                    <p style="margin: 0; color: var(--text-dark); font-weight: 600;">(555) 123-4567</p>
+                    <p style="margin: 0.5rem 0 0 0; color: var(--text-light); font-size: 0.9rem;">Monday-Friday, 9AM-5PM</p>
+                </div>
+            </div>
+
+            <div class="card" style="text-align: center;">
+                <div style="background: var(--accent-color); color: white; padding: 2rem; font-size: 2.5rem;">📍</div>
+                <div class="card-content">
+                    <h3>Location</h3>
+                    <p style="margin: 0; color: var(--text-dark); font-weight: 600;">[City Location]</p>
+                    <p style="margin: 0.5rem 0 0 0; color: var(--text-light); font-size: 0.9rem;">Serving [Region]</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="section light">
+        <div class="container">
+            <div style="max-width: 600px; margin: 0 auto;">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Send Us a Message</h2>
+
+                <div id="contactSuccess" class="alert alert-success" style="margin-bottom: 2rem; display: none;">
+                    ✓ Thank you for your message! We'll get back to you as soon as possible.
+                </div>
+
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name *</label>
+                            <input type="text" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name *</label>
+                            <input type="text" name="lastName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address *</label>
+                        <input type="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" name="phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Reason for Contact *</label>
+                        <select name="reason" required>
+                            <option value="">Select a reason...</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="donation">Donation Question</option>
+                            <option value="volunteer">Volunteer Information</option>
+                            <option value="partnership">Partnership Opportunity</option>
+                            <option value="media">Media Inquiry</option>
+                            <option value="get-help">I Need Help</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Subject *</label>
+                        <input type="text" name="subject" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Message *</label>
+                        <textarea name="message" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="privacy" required>
+                            I understand my information will be used to respond to my inquiry
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block" style="padding: 1rem; font-size: 1.1rem;">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section container">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Common Questions</h2>
+
+        <div class="grid grid-2">
+            <div>
+                <h4 style="margin-top: 0;">Do you provide direct assistance?</h4>
+                <p>Yes! If you or someone you know needs help, reach out. We offer street outreach, housing assistance, job training, mentorship, and more.</p>
+
+                <h4>How can I get involved?</h4>
+                <p>You can volunteer your time, donate funds, or partner with us. Visit our Volunteer or Donate pages to get started.</p>
+
+                <h4>What makes your organization different?</h4>
+                <p>We focus specifically on men and boys—a population often overlooked. We emphasize dignity, action, and sustainable transformation over just crisis response.</p>
+            </div>
+
+            <div>
+                <h4 style="margin-top: 0;">Is the foundation registered as a nonprofit?</h4>
+                <p>Yes, we're a 501(c)(3) registered nonprofit. EIN: XX-XXXXXXX. All donations are tax-deductible.</p>
+
+                <h4>How is my personal information protected?</h4>
+                <p>We take privacy seriously. We never share personal information without consent and comply with all privacy regulations.</p>
+
+                <h4>Can I suggest programs or changes?</h4>
+                <p>Absolutely! We value feedback from our community. Please reach out with your ideas and suggestions.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Media Links -->
+    <section class="section light">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Follow Us</h2>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 2rem;">Stay updated with stories, photos, and announcements on social media.</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+                <a href="https://facebook.com" target="_blank" class="card" style="text-align: center; text-decoration: none;">
+                    <div style="background: linear-gradient(135deg, #3b5998, #1a3a5c); color: white; padding: 2rem; border-radius: 8px 8px 0 0; font-size: 2.5rem;">f</div>
+                    <div class="card-content" style="background: white; padding: 1.5rem;">
+                        <h3 style="margin: 0; color: #3b5998;">Facebook</h3>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-light);">Follow for updates and stories</p>
+                    </div>
+                </a>
+
+                <a href="https://twitter.com" target="_blank" class="card" style="text-align: center; text-decoration: none;">
+                    <div style="background: linear-gradient(135deg, #1DA1F2, #1a3a5c); color: white; padding: 2rem; border-radius: 8px 8px 0 0; font-size: 2.5rem;">𝕏</div>
+                    <div class="card-content" style="background: white; padding: 1.5rem;">
+                        <h3 style="margin: 0; color: #1DA1F2;">Twitter/X</h3>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-light);">Real-time updates and news</p>
+                    </div>
+                </a>
+
+                <a href="https://instagram.com" target="_blank" class="card" style="text-align: center; text-decoration: none;">
+                    <div style="background: linear-gradient(135deg, #E4405F, #1a3a5c); color: white; padding: 2rem; border-radius: 8px 8px 0 0; font-size: 2.5rem;">📷</div>
+                    <div class="card-content" style="background: white; padding: 1.5rem;">
+                        <h3 style="margin: 0; color: #E4405F;">Instagram</h3>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-light);">Visual stories and impact</p>
+                    </div>
+                </a>
+
+                <a href="https://linkedin.com" target="_blank" class="card" style="text-align: center; text-decoration: none;">
+                    <div style="background: linear-gradient(135deg, #0077B5, #1a3a5c); color: white; padding: 2rem; border-radius: 8px 8px 0 0; font-size: 2.5rem;">in</div>
+                    <div class="card-content" style="background: white; padding: 1.5rem;">
+                        <h3 style="margin: 0; color: #0077B5;">LinkedIn</h3>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-light);">Corporate partnerships</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Help Section -->
+    <section class="section" style="background: #e74c3c; color: white; text-align: center;">
+        <div class="container">
+            <h2 style="color: white; margin-bottom: 1rem;">⚠️ In Crisis?</h2>
+            <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; margin-bottom: 1.5rem;">If you or someone you know needs immediate help, please reach out:</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div>
+                    <p style="font-weight: 700; margin-bottom: 0.5rem;">Call Us</p>
+                    <p style="margin: 0; font-size: 1.3rem; font-weight: 600;">(555) 123-4567</p>
+                </div>
+                <div>
+                    <p style="font-weight: 700; margin-bottom: 0.5rem;">Text Crisis</p>
+                    <p style="margin: 0; font-size: 1.3rem; font-weight: 600;">Text RESTORED to 741741</p>
+                </div>
+                <div>
+                    <p style="font-weight: 700; margin-bottom: 0.5rem;">National Hotline</p>
+                    <p style="margin: 0; font-size: 1.1rem;">988 (Suicide & Crisis)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Restored Kings</h3>
+                    <p>Supporting men and boys with dignity, respect, and real action.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/about.html">About</a></li>
+                        <li><a href="/programs.html">Programs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Get Involved</h3>
+                    <ul>
+                        <li><a href="/donate.html">Donate</a></li>
+                        <li><a href="/volunteer.html">Volunteer</a></li>
+                        <li><a href="/blog.html">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Restored Kings Foundation. All rights reserved. | <a href="#" style="color: var(--secondary-color);">Privacy Policy</a> | <a href="#" style="color: var(--secondary-color);">Terms</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

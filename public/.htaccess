@@ -1,0 +1,81 @@
+# Apache Server Configuration for Restored Kings Foundation Website
+
+# Enable mod_rewrite
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  
+  # Remove trailing slashes (except for directories)
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)/$ /$1 [L,R=301]
+  
+  # Allow access to files and directories
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+</IfModule>
+
+# Enable GZIP Compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Set Expires Headers for caching
+<IfModule mod_expires.c>
+  ExpiresActive On
+  
+  # CSS
+  ExpiresByType text/css "access plus 1 month"
+  
+  # JavaScript
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+  
+  # Images
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  
+  # Fonts
+  ExpiresByType application/font-woff2 "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  
+  # Default
+  ExpiresDefault "access plus 2 days"
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+  # Prevent MIME type sniffing
+  Header always set X-Content-Type-Options "nosniff"
+  
+  # Enable XSS Protection
+  Header always set X-XSS-Protection "1; mode=block"
+  
+  # Clickjacking protection
+  Header always set X-Frame-Options "SAMEORIGIN"
+  
+  # Prevent referrer leakage
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  
+  # Permissions Policy
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# Disable directory listing
+Options -Indexes
+
+# Prevent access to sensitive files
+<FilesMatch "^\.">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+<FilesMatch "\.(env|json|config)$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# Security.txt file
+<Files "security.txt">
+  AddType text/plain .txt
+</Files>

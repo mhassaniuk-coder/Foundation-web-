@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(?!.*\\.(js|css|jpg|png|gif|ico|svg|webp)$)(.*)",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "env": {
+    "STRIPE_PUBLIC_KEY": "@stripe_public_key",
+    "GOOGLE_ANALYTICS_ID": "@google_analytics_id"
+  },
+  "public": true
+}

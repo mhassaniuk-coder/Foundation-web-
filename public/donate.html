@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Donate to Restored Kings Foundation - Secure online donations with one-time and recurring options.">
+    <title>Donate - Restored Kings Foundation</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    
+    <!-- Stripe for secure payments -->
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">♔ Restored Kings</div>
+            <div class="hamburger" id="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about.html">About Us</a></li>
+                <li><a href="/programs.html">Programs</a></li>
+                <li><a href="/impact.html">Impact</a></li>
+                <li><a href="/blog.html">Blog</a></li>
+                <li><a href="/donate.html" class="active btn btn-primary" style="margin: 0;">Donate</a></li>
+                <li><a href="/volunteer.html" class="btn btn-secondary" style="margin: 0;">Volunteer</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" style="background: linear-gradient(135deg, var(--primary-color) 0%, rgba(26, 58, 92, 0.8) 100%); padding: 3rem 2rem;">
+        <div class="hero-content">
+            <h1 style="color: white;">Make a Difference</h1>
+            <p style="color: rgba(255,255,255,0.95);">Donate securely and help us transform lives in our community.</p>
+        </div>
+    </section>
+
+    <!-- Why Give Section -->
+    <section class="section container">
+        <div class="grid grid-3">
+            <div class="card">
+                <div style="background: var(--primary-color); color: var(--secondary-color); padding: 2rem; text-align: center; font-size: 3rem;">✓</div>
+                <div class="card-content">
+                    <h3>Transparent Impact</h3>
+                    <p>Know exactly where your money goes. We share detailed reports on how donations are used and the impact they create.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="background: var(--secondary-color); color: var(--primary-color); padding: 2rem; text-align: center; font-size: 3rem;">🔒</div>
+                <div class="card-content">
+                    <h3>Secure & Safe</h3>
+                    <p>Your donation is protected with industry-standard encryption. We never store credit card information.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="background: var(--accent-color); color: white; padding: 2rem; text-align: center; font-size: 3rem;">🌟</div>
+                <div class="card-content">
+                    <h3>Tax Deductible</h3>
+                    <p>All donations are tax-deductible. EIN: XX-XXXXXXX. You'll receive a receipt for your records.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donation Form -->
+    <section class="section light">
+        <div class="container">
+            <div style="max-width: 600px; margin: 0 auto;">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Choose How You Want to Help</h2>
+
+                <!-- Donation Type Selection -->
+                <div class="form-group">
+                    <label style="font-weight: 700; margin-bottom: 1rem; display: block;">Donation Type</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <label style="display: flex; align-items: center; border: 2px solid #ddd; padding: 1rem; border-radius: 4px; cursor: pointer; transition: all 0.3s;">
+                            <input type="radio" name="donationType" value="one-time" checked style="margin-right: 0.5rem;">
+                            <span>One-Time Donation</span>
+                        </label>
+                        <label style="display: flex; align-items: center; border: 2px solid #ddd; padding: 1rem; border-radius: 4px; cursor: pointer; transition: all 0.3s;">
+                            <input type="radio" name="donationType" value="recurring" style="margin-right: 0.5rem;">
+                            <span>Monthly Support</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Amount Selection -->
+                <div class="form-group">
+                    <label>Donation Amount</label>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem;">
+                        <button type="button" class="btn-amount" data-amount="25" style="border: 2px solid #ddd; padding: 1rem; background: white; color: var(--text-dark); cursor: pointer; border-radius: 4px; transition: all 0.3s; font-weight: 600;">$25</button>
+                        <button type="button" class="btn-amount" data-amount="50" style="border: 2px solid #ddd; padding: 1rem; background: white; color: var(--text-dark); cursor: pointer; border-radius: 4px; transition: all 0.3s; font-weight: 600;">$50</button>
+                        <button type="button" class="btn-amount" data-amount="100" style="border: 2px solid #ddd; padding: 1rem; background: white; color: var(--text-dark); cursor: pointer; border-radius: 4px; transition: all 0.3s; font-weight: 600;">$100</button>
+                        <button type="button" class="btn-amount" data-amount="250" style="border: 2px solid #ddd; padding: 1rem; background: white; color: var(--text-dark); cursor: pointer; border-radius: 4px; transition: all 0.3s; font-weight: 600;">$250</button>
+                        <button type="button" class="btn-amount" data-amount="500" style="border: 2px solid #ddd; padding: 1rem; background: white; color: var(--text-dark); cursor: pointer; border-radius: 4px; transition: all 0.3s; font-weight: 600;">$500</button>
+                        <button type="button" class="btn-amount" data-amount="other" style="border: 2px solid #ddd; padding: 1rem; background: white; color: var(--text-dark); cursor: pointer; border-radius: 4px; transition: all 0.3s; font-weight: 600;">Other</button>
+                    </div>
+                </div>
+
+                <!-- Custom Amount -->
+                <div class="form-group" id="customAmountGroup" style="display: none;">
+                    <label>Custom Amount $</label>
+                    <input type="number" id="customAmount" placeholder="Enter amount" min="5" step="0.01">
+                </div>
+
+                <!-- Donor Info -->
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="donorName" placeholder="Your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" id="donorEmail" placeholder="your.email@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="sendReceipt" checked>
+                        Send me a donation receipt via email
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="anonymousDonation">
+                        Keep my donation anonymous
+                    </label>
+                </div>
+
+                <!-- Stripe Payment Element -->
+                <div class="form-group">
+                    <label>Payment Information</label>
+                    <div id="card-element" style="border: 1px solid #ddd; padding: 1rem; border-radius: 4px; background: white;"></div>
+                </div>
+
+                <div id="card-errors" class="alert alert-error"></div>
+
+                <!-- Recurring Info -->
+                <div id="recurringInfo" style="display: none; background: #e8f4f8; padding: 1rem; border-radius: 4px; margin-bottom: 1rem; border-left: 4px solid #3498db;">
+                    <p style="margin: 0; color: #0c5460; font-weight: 600;">✓ Monthly Support</p>
+                    <p style="margin: 0.5rem 0 0 0; color: #0c5460; font-size: 0.95rem;">Your card will be billed monthly. Cancel anytime.</p>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="donateBtn" class="btn btn-primary btn-block" style="padding: 1rem; font-size: 1.1rem; font-weight: 700;">
+                    <span id="btnText">Donate Securely</span>
+                    <span id="btnSpinner" class="spinner" style="display: none; margin-left: 0.5rem;"></span>
+                </button>
+
+                <!-- Success Message -->
+                <div id="donationSuccess" class="alert alert-success" style="margin-top: 1rem;">
+                    ✓ Thank you for your generous donation! You will receive a confirmation email shortly. Your impact will help change lives.
+                </div>
+
+                <p style="text-align: center; font-size: 0.9rem; color: var(--text-light); margin-top: 1.5rem;">
+                    Secured with Stripe • Your information is encrypted and secure • <a href="#" onclick="alert('Privacy Policy'); return false;">Privacy Policy</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alternative Giving Methods -->
+    <section class="section container">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Other Ways to Give</h2>
+
+        <div class="grid grid-3">
+            <div class="card">
+                <div style="background: var(--primary-color); color: var(--secondary-color); padding: 2rem; text-align: center; font-size: 2.5rem;">📞</div>
+                <div class="card-content">
+                    <h3>Phone Donation</h3>
+                    <p>Call us to make a donation over the phone or set up recurring giving.</p>
+                    <p style="margin-top: 1rem; font-weight: 600; color: var(--primary-color);">(555) 123-4567</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="background: var(--secondary-color); color: var(--primary-color); padding: 2rem; text-align: center; font-size: 2.5rem;">✉️</div>
+                <div class="card-content">
+                    <h3>Mail a Check</h3>
+                    <p>Send a check payable to "Restored Kings Foundation"</p>
+                    <p style="margin-top: 1rem; font-weight: 600; color: var(--primary-color);">
+                        [Address]<br>
+                        [City, State ZIP]
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="background: var(--accent-color); color: white; padding: 2rem; text-align: center; font-size: 2.5rem;">🏢</div>
+                <div class="card-content">
+                    <h3>Corporate Gifts</h3>
+                    <p>Interested in corporate matching or sponsorship? Let's talk about partnerships.</p>
+                    <p style="margin-top: 1rem;"><a href="/contact.html" style="color: var(--secondary-color); font-weight: 700;">Contact Us →</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Tiers -->
+    <section class="section light">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Your Giving Impact</h2>
+            <div class="grid grid-2">
+                <div style="background: white; padding: 2rem; border-radius: 8px; border-left: 4px solid #52c0a8;">
+                    <h4 style="color: #52c0a8; margin-bottom: 1rem;">$25 Supporter</h4>
+                    <ul style="list-style: none;">
+                        <li>✓ 1 hot meal for a homeless man</li>
+                        <li>✓ Donation receipt</li>
+                        <li>✓ Monthly impact updates</li>
+                    </ul>
+                </div>
+                <div style="background: white; padding: 2rem; border-radius: 8px; border-left: 4px solid #3498db;">
+                    <h4 style="color: #3498db; margin-bottom: 1rem;">$100 Friend</h4>
+                    <ul style="list-style: none;">
+                        <li>✓ 1 hour of mentoring support</li>
+                        <li>✓ Quarterly impact report</li>
+                        <li>✓ Donor recognition (unless anonymous)</li>
+                    </ul>
+                </div>
+                <div style="background: white; padding: 2rem; border-radius: 8px; border-left: 4px solid #f39c12;">
+                    <h4 style="color: #f39c12; margin-bottom: 1rem;">$250 Champion</h4>
+                    <ul style="list-style: none;">
+                        <li>✓ Job training for one person</li>
+                        <li>✓ Annual dinner invitation</li>
+                        <li>✓ Special thank you call from founder</li>
+                    </ul>
+                </div>
+                <div style="background: white; padding: 2rem; border-radius: 8px; border-left: 4px solid #e74c3c;">
+                    <h4 style="color: #e74c3c; margin-bottom: 1rem;">$1,000+ Benefactor</h4>
+                    <ul style="list-style: none;">
+                        <li>✓ Full mentorship support for one person</li>
+                        <li>✓ Board recognition (annual report)</li>
+                        <li>✓ Monthly founder updates</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section container">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Frequently Asked Questions</h2>
+
+        <div class="grid grid-2">
+            <div>
+                <h4 style="margin-top: 0;">Is my donation tax deductible?</h4>
+                <p>Yes! Restored Kings Foundation is a registered 501(c)(3) nonprofit. Your donation is fully tax deductible. EIN: XX-XXXXXXX</p>
+            </div>
+            <div>
+                <h4 style="margin-top: 0;">How is my payment information secured?</h4>
+                <p>We use Stripe's industry-standard encryption. Your credit card information is never stored on our servers.</p>
+            </div>
+            <div>
+                <h4 style="margin-top: 0;">Can I cancel my monthly donation?</h4>
+                <p>Absolutely. You can cancel anytime by contacting us at contact@restoredkings.org or calling (555) 123-4567.</p>
+            </div>
+            <div>
+                <h4 style="margin-top: 0;">What if I have questions about my donation?</h4>
+                <p>Contact us anytime at contact@restoredkings.org or call (555) 123-4567. We're happy to help!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Restored Kings</h3>
+                    <p>Supporting men and boys with dignity, respect, and real action.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="/impact.html">See Our Impact</a></li>
+                        <li><a href="/programs.html">Our Programs</a></li>
+                        <li><a href="/volunteer.html">Volunteer</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>📧 contact@restoredkings.org</p>
+                    <p>📞 (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Restored Kings Foundation. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/donate.js"></script>
+</body>
+</html>
