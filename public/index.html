@@ -1,37 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Restored Kings Foundation - Supporting men and boys through compassionate outreach, mentorship, and community programs. Restoring dignity, rebuilding lives.">
+    <meta name="description"
+        content="Restored Kings Foundation - Supporting men and boys through compassionate outreach, mentorship, and community programs. Restoring dignity, rebuilding lives.">
     <meta name="keywords" content="foundation, men, boys, homeless, mentorship, community, support, charity, nonprofit">
     <meta name="author" content="Restored Kings Foundation">
-    
+
     <!-- SEO Meta Tags -->
     <meta property="og:title" content="Restored Kings Foundation - Restoring Dignity, Rebuilding Lives">
-    <meta property="og:description" content="Supporting men and boys with real action. Education. Mentorship. Community.">
+    <meta property="og:description"
+        content="Supporting men and boys with real action. Education. Mentorship. Community.">
     <meta property="og:image" content="/images/og-image.jpg">
     <meta property="og:url" content="https://restoredkingsfoundation.org">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-    
+
     <title>Restored Kings Foundation - Restoring Dignity, Rebuilding Lives</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23d4a574'>♔</text></svg>">
+    <link rel="stylesheet" href="/css/premium.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#d4a574">
+
+    <!-- SEO Schema.org (Feature 22) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "NGO",
+      "name": "Restored Kings Foundation",
+      "url": "https://restoredkings.org",
+      "logo": "https://restoredkings.org/logo.png",
+      "description": "Restoring dignity, rebuilding lives. Compassionate outreach and mentorship for men and boys.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "City District",
+        "addressRegion": "Metro Area",
+        "addressCountry": "US"
+      }
+    }
+    </script>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23d4a574'>♔</text></svg>">
 </head>
+
 <body>
+    <!-- Advanced Theme Engine: Data Attribute controlled by JS -->
+    <script>
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+    </script>
+
     <!-- Navigation Header -->
     <header id="header">
         <nav class="navbar">
             <a href="/" class="logo">
-                <div class="logo-icon">♔</div>
-                <div class="logo-text">Restored <span>Kings</span></div>
+                <div class="logo-icon font-premium">♔</div>
+                <div class="logo-text font-premium">Restored <span>Kings</span></div>
             </a>
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+            <div class="nav-controls">
+                <button id="themeToggle" class="btn-theme" title="Toggle Light/Dark Mode">
+                    <span class="sun">☀️</span>
+                    <span class="moon">🌙</span>
+                </button>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
+
             <ul class="nav-links" id="navLinks">
                 <li><a href="/" class="active">Home</a></li>
                 <li><a href="/about.html">About</a></li>
@@ -39,7 +78,17 @@
                 <li><a href="/impact.html">Impact</a></li>
                 <li><a href="/blog.html">Blog</a></li>
                 <li><a href="/contact.html">Contact</a></li>
+                <li class="nav-search">
+                    <div class="search-box">
+                        <input type="text" id="globalSearch" placeholder="Search foundation...">
+                        <button id="searchBtn">🔍</button>
+                    </div>
+                </li>
+                <li class="nav-login"><a href="#" id="loginTrigger" class="btn btn-ghost"
+                        style="margin-right: 15px;">Login</a></li>
                 <li class="nav-cta"><a href="/donate.html" class="btn btn-primary">Donate Now</a></li>
+
+
             </ul>
         </nav>
     </header>
@@ -58,11 +107,14 @@
         <div class="hero-content">
             <div class="hero-badge">Making a Difference Since 2020</div>
             <h1>Restoring <span class="highlight">Dignity</span>, Rebuilding Lives</h1>
-            <p class="hero-subtitle">We support men and boys who are homeless, struggling, or taken advantage of — providing mentorship, education, and community to help them rise again.</p>
+            <p class="hero-subtitle">We support men and boys who are homeless, struggling, or taken advantage of —
+                providing mentorship, education, and community to help them rise again.</p>
             <div class="hero-cta">
                 <a href="/donate.html" class="btn btn-primary btn-lg">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
                     </svg>
                     Donate Now
                 </a>
@@ -120,16 +172,19 @@
             <div class="section-header">
                 <span class="section-label">Our Mission</span>
                 <h2 class="section-title">What We Stand For</h2>
-                <p class="section-description">We believe every man and boy deserves dignity, respect, and the opportunity to thrive. Our foundation provides the support they need to rebuild their lives.</p>
+                <p class="section-description">We believe every man and boy deserves dignity, respect, and the
+                    opportunity to thrive. Our foundation provides the support they need to rebuild their lives.</p>
             </div>
             <div class="grid grid-3">
                 <div class="card card-feature">
                     <div class="card-icon">🤝</div>
                     <h3 class="card-title">Real Support</h3>
-                    <p class="card-text">We don't just talk about change. We provide hands-on mentorship, housing assistance, and community resources for men and boys in need.</p>
+                    <p class="card-text">We don't just talk about change. We provide hands-on mentorship, housing
+                        assistance, and community resources for men and boys in need.</p>
                     <a href="/programs.html" class="card-link">
                         Learn More
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <path d="M5 12h14M12 5l7 7-7 7"></path>
                         </svg>
                     </a>
@@ -138,10 +193,12 @@
                 <div class="card card-feature">
                     <div class="card-icon">📚</div>
                     <h3 class="card-title">Education First</h3>
-                    <p class="card-text">Skills training, workshops, and educational programming designed to help men rebuild their lives with dignity and confidence.</p>
+                    <p class="card-text">Skills training, workshops, and educational programming designed to help men
+                        rebuild their lives with dignity and confidence.</p>
                     <a href="/programs.html" class="card-link">
                         Our Programs
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <path d="M5 12h14M12 5l7 7-7 7"></path>
                         </svg>
                     </a>
@@ -150,10 +207,12 @@
                 <div class="card card-feature">
                     <div class="card-icon">🏠</div>
                     <h3 class="card-title">Community First</h3>
-                    <p class="card-text">Building stronger neighborhoods through compassion, respect, and accountability. Together, we create lasting change.</p>
+                    <p class="card-text">Building stronger neighborhoods through compassion, respect, and
+                        accountability. Together, we create lasting change.</p>
                     <a href="/impact.html" class="card-link">
                         See Impact
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <path d="M5 12h14M12 5l7 7-7 7"></path>
                         </svg>
                     </a>
@@ -162,15 +221,47 @@
         </div>
     </section>
 
+    <!-- Premium Impact Video Section (Feature 7 & 8) -->
+    <section class="section parallax-container">
+        <div class="parallax-bg"
+            style="background-image: url('https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'); filter: brightness(0.4);">
+        </div>
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Impact in Action</span>
+                <h2 class="section-title" style="color: white;">Real Stories, Real Change</h2>
+                <p class="section-description" style="color: rgba(255,255,255,0.8);">Watch how your support is helping
+                    men and boys across the community rebuild their lives with dignity.</p>
+            </div>
+            <div class="video-premium-container glass-panel" data-video="dQw4w9WgXcQ"
+                style="cursor: pointer; position: relative; overflow: hidden; min-height: 450px; display: flex; align-items: center; justify-content: center;">
+                <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.3); z-index: 1;"></div>
+                <div class="play-button"
+                    style="position: relative; z-index: 2; width: 80px; height: 80px; background: var(--gradient-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-gold); transition: transform 0.3s ease;">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="var(--primary-900)">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                </div>
+                <div style="position: absolute; bottom: 30px; left: 30px; z-index: 2; color: white;">
+                    <h3 style="color: white; margin-bottom: 5px;">Restoring Dignity: Michael's Story</h3>
+                    <p style="color: rgba(255,255,255,0.8); margin: 0;">2024 Short Documentary</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Why We Exist Section -->
+
     <section class="section section-light" id="about">
         <div class="container">
             <div class="grid grid-2" style="align-items: center; gap: 4rem;">
                 <div>
                     <span class="section-label">Our Story</span>
                     <h2>Why We Exist</h2>
-                    <p class="lead">Too many men and boys are left behind. Homeless on the streets. Struggling with addiction. Exploited for labor or resources. Forgotten by society.</p>
-                    <p>The Restored Kings Foundation exists to restore their dignity and help them rebuild their lives with strength and purpose.</p>
+                    <p class="lead">Too many men and boys are left behind. Homeless on the streets. Struggling with
+                        addiction. Exploited for labor or resources. Forgotten by society.</p>
+                    <p>The Restored Kings Foundation exists to restore their dignity and help them rebuild their lives
+                        with strength and purpose.</p>
                     <p><strong>We believe every man and boy deserves:</strong></p>
                     <ul style="list-style: none; margin: 1.5rem 0;">
                         <li style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
@@ -192,18 +283,25 @@
                     </ul>
                     <a href="/about.html" class="btn btn-dark">Learn More About Us</a>
                 </div>
-                <div style="background: var(--gradient-primary); border-radius: var(--radius-2xl); padding: 3rem; color: white; position: relative; overflow: hidden;">
-                    <div style="position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(212, 165, 116, 0.2) 0%, transparent 70%);"></div>
+                <div
+                    style="background: var(--gradient-primary); border-radius: var(--radius-2xl); padding: 3rem; color: white; position: relative; overflow: hidden;">
+                    <div
+                        style="position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(212, 165, 116, 0.2) 0%, transparent 70%);">
+                    </div>
                     <div style="position: relative; z-index: 1;">
                         <div style="font-size: 4rem; margin-bottom: 1rem;">♔</div>
                         <h3 style="color: var(--gold-500); margin-bottom: 1rem;">Our Core Message</h3>
-                        <p style="color: rgba(255,255,255,0.9); font-size: 1.125rem; margin-bottom: 1.5rem;">We restore dignity. We support men and boys with real action. We are transparent. We are building stronger communities.</p>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 1.125rem; margin-bottom: 1.5rem;">We restore
+                            dignity. We support men and boys with real action. We are transparent. We are building
+                            stronger communities.</p>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: var(--radius-lg);">
+                            <div
+                                style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: var(--radius-lg);">
                                 <div style="font-size: 1.5rem; font-weight: 700; color: var(--gold-500);">100%</div>
                                 <div style="font-size: 0.875rem; color: rgba(255,255,255,0.7);">Transparent</div>
                             </div>
-                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: var(--radius-lg);">
+                            <div
+                                style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: var(--radius-lg);">
                                 <div style="font-size: 1.5rem; font-weight: 700; color: var(--gold-500);">24/7</div>
                                 <div style="font-size: 0.875rem; color: rgba(255,255,255,0.7);">Support</div>
                             </div>
@@ -214,25 +312,146 @@
         </div>
     </section>
 
+    <!-- Interactive Community Map (Feature 9) -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Our Presence</span>
+                <h2 class="section-title">Communities We Serve</h2>
+                <p class="section-description">Restoring dignity across the region. Click on our impact markers to see
+                    our work in action.</p>
+            </div>
+            <div class="map-container glass-panel">
+                <div class="map-marker" style="top: 30%; left: 45%;" data-location="North District"
+                    data-stats="500+ Mentored, 2 Shelters">
+                    <span class="map-tooltip">North District: 500+ Mentored</span>
+                </div>
+                <div class="map-marker" style="top: 55%; left: 60%;" data-location="East Side"
+                    data-stats="2000+ Meals, 1 Center">
+                    <span class="map-tooltip">East Side: 2000+ Meals</span>
+                </div>
+                <div class="map-marker" style="top: 70%; left: 35%;" data-location="Downtown"
+                    data-stats="Street Outreach Daily">
+                    <span class="map-tooltip">Downtown: Street Outreach Daily</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Volunteer Project Portal (Feature 11) -->
+    <section class="section section-light" id="volunteer-portal">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Join the Mission</span>
+                <h2 class="section-title">Open Volunteer Projects</h2>
+                <p class="section-description">Use your skills to make a real difference. Apply for one of our current
+                    active projects below.</p>
+            </div>
+            <div class="volunteer-portal">
+                <div class="project-card">
+                    <span class="project-tag">Mentorship</span>
+                    <h3>Weekend Night Outreach</h3>
+                    <p>Join our mobile team providing hot meals and warm clothing to men on the streets during weekend
+                        nights.</p>
+                    <button class="btn btn-dark btn-sm btn-apply" style="margin-top: auto;">Apply to Project</button>
+                </div>
+                <div class="project-card">
+                    <span class="project-tag">Education</span>
+                    <h3>Skills Workshop Assistant</h3>
+                    <p>Help our instructors during weekly financial literacy and job readiness workshops for program
+                        participants.</p>
+                    <button class="btn btn-dark btn-sm btn-apply" style="margin-top: auto;">Apply to Project</button>
+                </div>
+                <div class="project-card">
+                    <span class="project-tag">Administrative</span>
+                    <h3>Documentation Support</h3>
+                    <p>Assist our office team with intake documentation and impact tracking for our various foundation
+                        programs.</p>
+                    <button class="btn btn-dark btn-sm btn-apply" style="margin-top: auto;">Apply to Project</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Story Carousel (Feature 12) -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Transformed Lives</span>
+                <h2 class="section-title">Success Stories</h2>
+                <p class="section-description">Explore the journeys of men who have rebuilt their lives through the
+                    Restored Kings Foundation.</p>
+            </div>
+            <div class="success-stories-slider">
+                <div class="card story-card glass-panel" style="padding: 2.5rem;">
+                    <div style="font-size: 2.5rem; color: var(--gold-500); margin-bottom: 1rem;">"</div>
+                    <p style="margin-bottom: 2rem; font-style: italic;">"I found more than just a shelter; I found a
+                        family. The mentorship program gave me the confidence to start my own small business."</p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 50px; height: 50px; background: var(--gradient-gold); border-radius: 50%;">
+                        </div>
+                        <div>
+                            <h4 style="margin: 0; font-size: 1rem;">Marcus W.</h4>
+                            <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);">Program Graduate 2023
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card story-card glass-panel" style="padding: 2.5rem;">
+                    <div style="font-size: 2.5rem; color: var(--gold-500); margin-bottom: 1rem;">"</div>
+                    <p style="margin-bottom: 2rem; font-style: italic;">"Education was the key for me. The workshops
+                        helped me manage my finances and land a stable job in construction."</p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 50px; height: 50px; background: var(--gradient-gold); border-radius: 50%;">
+                        </div>
+                        <div>
+                            <h4 style="margin: 0; font-size: 1rem;">Robert L.</h4>
+                            <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);">Skills Trainee</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card story-card glass-panel" style="padding: 2.5rem;">
+                    <div style="font-size: 2.5rem; color: var(--gold-500); margin-bottom: 1rem;">"</div>
+                    <p style="margin-bottom: 2rem; font-style: italic;">"Being a mentor is as rewarding as being
+                        mentored. Seeing these young men rise is the greatest joy of my life."</p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 50px; height: 50px; background: var(--gradient-gold); border-radius: 50%;">
+                        </div>
+                        <div>
+                            <h4 style="margin: 0; font-size: 1rem;">Anthony S.</h4>
+                            <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);">Lead Mentor</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Programs Section -->
+
+
     <section class="section" id="programs">
         <div class="container">
             <div class="section-header">
                 <span class="section-label">What We Do</span>
                 <h2 class="section-title">Our Programs & Services</h2>
-                <p class="section-description">Comprehensive support programs designed to address the root causes of homelessness and struggle, empowering men and boys to build sustainable, dignified lives.</p>
+                <p class="section-description">Comprehensive support programs designed to address the root causes of
+                    homelessness and struggle, empowering men and boys to build sustainable, dignified lives.</p>
             </div>
             <div class="grid grid-3">
                 <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, var(--primary-700), var(--primary-900)); display: flex; align-items: center; justify-content: center;">
+                    <div class="card-image"
+                        style="background: linear-gradient(135deg, var(--primary-700), var(--primary-900)); display: flex; align-items: center; justify-content: center;">
                         <span style="font-size: 4rem;">🌃</span>
                     </div>
                     <div class="card-body">
                         <h3 class="card-title">Street Outreach</h3>
-                        <p class="card-text">Meeting men where they are — on the streets, in shelters, or in crisis. We provide immediate support, food, clothing, and connection to resources.</p>
+                        <p class="card-text">Meeting men where they are — on the streets, in shelters, or in crisis. We
+                            provide immediate support, food, clothing, and connection to resources.</p>
                         <a href="/programs.html#outreach" class="card-link">
                             Learn More
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <path d="M5 12h14M12 5l7 7-7 7"></path>
                             </svg>
                         </a>
@@ -240,15 +459,18 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, var(--gold-500), var(--gold-600)); display: flex; align-items: center; justify-content: center;">
+                    <div class="card-image"
+                        style="background: linear-gradient(135deg, var(--gold-500), var(--gold-600)); display: flex; align-items: center; justify-content: center;">
                         <span style="font-size: 4rem;">👥</span>
                     </div>
                     <div class="card-body">
                         <h3 class="card-title">Mentorship Program</h3>
-                        <p class="card-text">One-on-one mentorship pairing men with experienced guides who provide accountability, wisdom, and genuine care for their journey.</p>
+                        <p class="card-text">One-on-one mentorship pairing men with experienced guides who provide
+                            accountability, wisdom, and genuine care for their journey.</p>
                         <a href="/programs.html#mentorship" class="card-link">
                             Learn More
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <path d="M5 12h14M12 5l7 7-7 7"></path>
                             </svg>
                         </a>
@@ -256,15 +478,18 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-image" style="background: linear-gradient(135deg, var(--neutral-700), var(--neutral-900)); display: flex; align-items: center; justify-content: center;">
+                    <div class="card-image"
+                        style="background: linear-gradient(135deg, var(--neutral-700), var(--neutral-900)); display: flex; align-items: center; justify-content: center;">
                         <span style="font-size: 4rem;">🎓</span>
                     </div>
                     <div class="card-body">
                         <h3 class="card-title">Educational Workshops</h3>
-                        <p class="card-text">Life skills, financial literacy, job readiness, and personal development workshops designed to build confidence and capability.</p>
+                        <p class="card-text">Life skills, financial literacy, job readiness, and personal development
+                            workshops designed to build confidence and capability.</p>
                         <a href="/programs.html#education" class="card-link">
                             Learn More
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <path d="M5 12h14M12 5l7 7-7 7"></path>
                             </svg>
                         </a>
@@ -283,13 +508,18 @@
             <div class="section-header">
                 <span class="section-label">Success Stories</span>
                 <h2 class="section-title">Lives Transformed</h2>
-                <p class="section-description">Real stories from men who have been through our programs and emerged stronger, healthier, and more hopeful.</p>
+                <p class="section-description">Real stories from men who have been through our programs and emerged
+                    stronger, healthier, and more hopeful.</p>
             </div>
             <div class="grid grid-3">
                 <div class="testimonial-card">
-                    <p class="testimonial-content">"I was homeless for 3 years before I found Restored Kings. They didn't just give me a bed — they gave me a brotherhood. Today, I have a job, an apartment, and a purpose."</p>
+                    <p class="testimonial-content">"I was homeless for 3 years before I found Restored Kings. They
+                        didn't just give me a bed — they gave me a brotherhood. Today, I have a job, an apartment, and a
+                        purpose."</p>
                     <div class="testimonial-author">
-                        <div class="testimonial-avatar" style="background: var(--gradient-gold); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary-900);">M</div>
+                        <div class="testimonial-avatar"
+                            style="background: var(--gradient-gold); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary-900);">
+                            M</div>
                         <div class="testimonial-info">
                             <h5>Michael T.</h5>
                             <p>Program Graduate, 2023</p>
@@ -298,9 +528,13 @@
                 </div>
 
                 <div class="testimonial-card">
-                    <p class="testimonial-content">"The mentorship program changed my life. My mentor saw potential in me when I couldn't see it myself. Now I'm mentoring others and giving back what was given to me."</p>
+                    <p class="testimonial-content">"The mentorship program changed my life. My mentor saw potential in
+                        me when I couldn't see it myself. Now I'm mentoring others and giving back what was given to
+                        me."</p>
                     <div class="testimonial-author">
-                        <div class="testimonial-avatar" style="background: var(--gradient-gold); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary-900);">D</div>
+                        <div class="testimonial-avatar"
+                            style="background: var(--gradient-gold); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary-900);">
+                            D</div>
                         <div class="testimonial-info">
                             <h5>David R.</h5>
                             <p>Now a Mentor</p>
@@ -309,9 +543,13 @@
                 </div>
 
                 <div class="testimonial-card">
-                    <p class="testimonial-content">"At 19, I was lost and on the streets. The skills training program taught me a trade and gave me confidence. I'm now a certified electrician with a bright future."</p>
+                    <p class="testimonial-content">"At 19, I was lost and on the streets. The skills training program
+                        taught me a trade and gave me confidence. I'm now a certified electrician with a bright future."
+                    </p>
                     <div class="testimonial-author">
-                        <div class="testimonial-avatar" style="background: var(--gradient-gold); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary-900);">J</div>
+                        <div class="testimonial-avatar"
+                            style="background: var(--gradient-gold); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary-900);">
+                            J</div>
                         <div class="testimonial-info">
                             <h5>James K.</h5>
                             <p>Skills Training Graduate</p>
@@ -325,15 +563,128 @@
         </div>
     </section>
 
+    <!-- Dynamic Resource Library (Feature 13) -->
+    <section class="section section-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Resources</span>
+                <h2 class="section-title">Knowledge Library</h2>
+                <p class="section-description">Downloadable guides and resources to help men navigate their journey to
+                    restoration.</p>
+            </div>
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <button class="btn btn-sm btn-ghost resource-filter active" data-filter="all">All</button>
+                <button class="btn btn-sm btn-ghost resource-filter" data-filter="legal">Legal Aid</button>
+                <button class="btn btn-sm btn-ghost resource-filter" data-filter="health">Mental Health</button>
+                <button class="btn btn-sm btn-ghost resource-filter" data-filter="career">Career Growth</button>
+            </div>
+            <div class="grid grid-3">
+                <div class="card resource-item" data-category="career" style="padding: 1.5rem;">
+                    <h4>Job Interview Prep Guide</h4>
+                    <p>Essential tips for presenting your best self to potential employers.</p>
+                    <a href="#" class="btn btn-primary btn-sm">Download PDF</a>
+                </div>
+                <div class="card resource-item" data-category="health" style="padding: 1.5rem;">
+                    <h4>Wellness & Recovery Manual</h4>
+                    <p>A comprehensive guide to mental health resources and daily wellness habits.</p>
+                    <a href="#" class="btn btn-primary btn-sm">Download PDF</a>
+                </div>
+                <div class="card resource-item" data-category="legal" style="padding: 1.5rem;">
+                    <h4>Rights & Housing Law FAQ</h4>
+                    <p>Understanding your rights as a tenant and navigating housing assistance.</p>
+                    <a href="#" class="btn btn-primary btn-sm">Download PDF</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Smart Contact Assistant (Feature 15) -->
+    <div id="aiAssistant" class="glass-panel"
+        style="position: fixed; bottom: 30px; right: 30px; width: 350px; z-index: 1000; overflow: hidden; display: none; flex-direction: column; box-shadow: var(--shadow-2xl);">
+        <div
+            style="background: var(--gradient-gold); padding: 1rem; display: flex; justify-content: space-between; align-items: center; color: var(--primary-900);">
+            <h4 style="margin: 0; font-size: 1rem;">♔ Foundation Assistant</h4>
+            <button id="closeAssistant"
+                style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">×</button>
+        </div>
+        <div id="assistantChat"
+            style="height: 300px; padding: 1rem; overflow-y: auto; background: rgba(255,255,255,0.05); color: white;">
+            <p style="background: rgba(255,255,255,0.1); padding: 8px; border-radius: 8px;">Hello! I'm here to help. How
+                can I assist you with the foundation today?</p>
+        </div>
+        <div style="padding: 1rem; display: flex; gap: 0.5rem;">
+            <input type="text" id="assistantInput" placeholder="Ask a question..."
+                style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: white;">
+            <button id="sendAssistant" class="btn btn-primary btn-sm">Send</button>
+        </div>
+    </div>
+    <button id="openAssistant"
+        style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: var(--gradient-gold); color: var(--primary-900); border: none; font-size: 1.5rem; cursor: pointer; z-index: 1000; box-shadow: var(--shadow-gold);">💬</button>
+
+    <!-- Corporate Partner Showcase (Feature 23) -->
+    <section class="section section-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Our Partners</span>
+                <h2 class="section-title">Kingly Collaborations</h2>
+                <p class="section-description">We are proud to work with these organizations dedicated to social impact.
+                </p>
+            </div>
+            <div
+                style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4rem; align-items: center; opacity: 0.6; filter: grayscale(1);">
+                <div style="font-size: 2rem; font-weight: 700;">TECHCORP</div>
+                <div style="font-size: 2rem; font-weight: 700;">GLOBEX</div>
+                <div style="font-size: 2rem; font-weight: 700;">ACME INC</div>
+                <div style="font-size: 2rem; font-weight: 700;">SOYENT</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Insights Suite (Feature 25 - Mock) -->
+    <section id="adminDashboard" class="section" style="display: none; background: #050b14;">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Admin Console</span>
+                <h2 style="color: white;">Platform Analytics</h2>
+            </div>
+            <div class="dashboard-grid">
+                <div class="card glass-panel" style="padding: 2rem;">
+                    <div style="font-size: 0.8rem; color: var(--gold-400); text-transform: uppercase;">Total Traffic
+                    </div>
+                    <div style="font-size: 2.5rem; font-weight: 700; color: white;">45,820</div>
+                    <div style="color: #4ade80; font-size: 0.8rem;">↑ 12% this month</div>
+                </div>
+                <div class="card glass-panel" style="padding: 2rem;">
+                    <div style="font-size: 0.8rem; color: var(--gold-400); text-transform: uppercase;">New Volunteers
+                    </div>
+                    <div style="font-size: 2.5rem; font-weight: 700; color: white;">128</div>
+                    <div style="color: #4ade80; font-size: 0.8rem;">↑ 5% this month</div>
+                </div>
+                <div class="card glass-panel" style="padding: 2rem;">
+                    <div style="font-size: 0.8rem; color: var(--gold-400); text-transform: uppercase;">Avg. Donation
+                    </div>
+                    <div style="font-size: 2.5rem; font-weight: 700; color: white;">$85</div>
+                    <div style="color: #4ade80; font-size: 0.8rem;">↑ 22% this month</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA Section -->
+
+
     <section class="section section-dark">
         <div class="container" style="text-align: center;">
             <h2 style="color: white; margin-bottom: 1.5rem;">Ready to Make a Difference?</h2>
-            <p style="color: rgba(255,255,255,0.8); font-size: 1.25rem; max-width: 600px; margin: 0 auto 2rem;">Your support directly impacts the lives of men and boys in our community. Join us in restoring dignity and rebuilding lives.</p>
+            <p style="color: rgba(255,255,255,0.8); font-size: 1.25rem; max-width: 600px; margin: 0 auto 2rem;">Your
+                support directly impacts the lives of men and boys in our community. Join us in restoring dignity and
+                rebuilding lives.</p>
             <div class="btn-group" style="justify-content: center;">
                 <a href="/donate.html" class="btn btn-primary btn-lg">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
                     </svg>
                     Donate Now
                 </a>
@@ -345,13 +696,20 @@
     <!-- Newsletter Section -->
     <section class="section">
         <div class="container">
-            <div style="background: var(--gradient-primary); border-radius: var(--radius-2xl); padding: 4rem; text-align: center; position: relative; overflow: hidden;">
-                <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(212, 165, 116, 0.15) 0%, transparent 70%);"></div>
+            <div
+                style="background: var(--gradient-primary); border-radius: var(--radius-2xl); padding: 4rem; text-align: center; position: relative; overflow: hidden;">
+                <div
+                    style="position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(212, 165, 116, 0.15) 0%, transparent 70%);">
+                </div>
                 <div style="position: relative; z-index: 1;">
                     <h2 style="color: white; margin-bottom: 1rem;">Stay Connected</h2>
-                    <p style="color: rgba(255,255,255,0.8); max-width: 500px; margin: 0 auto 2rem;">Subscribe to our newsletter for updates on our impact, upcoming events, and ways you can help.</p>
-                    <form class="newsletter-form" style="display: flex; gap: 1rem; max-width: 500px; margin: 0 auto; flex-wrap: wrap; justify-content: center;">
-                        <input type="email" placeholder="Enter your email" class="form-input" style="flex: 1; min-width: 250px; border: none; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);" required>
+                    <p style="color: rgba(255,255,255,0.8); max-width: 500px; margin: 0 auto 2rem;">Subscribe to our
+                        newsletter for updates on our impact, upcoming events, and ways you can help.</p>
+                    <form class="newsletter-form"
+                        style="display: flex; gap: 1rem; max-width: 500px; margin: 0 auto; flex-wrap: wrap; justify-content: center;">
+                        <input type="email" placeholder="Enter your email" class="form-input"
+                            style="flex: 1; min-width: 250px; border: none; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);"
+                            required>
                         <button type="submit" class="btn btn-primary">Subscribe</button>
                     </form>
                 </div>
@@ -368,7 +726,8 @@
                         <div class="logo-icon">♔</div>
                         <div class="logo-text">Restored <span>Kings</span></div>
                     </a>
-                    <p>Restoring dignity, rebuilding lives. We support men and boys through compassionate outreach, mentorship, and community programs.</p>
+                    <p>Restoring dignity, rebuilding lives. We support men and boys through compassionate outreach,
+                        mentorship, and community programs.</p>
                     <div class="social-links">
                         <a href="#" class="social-link" aria-label="Facebook">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -377,11 +736,14 @@
                         </a>
                         <a href="#" class="social-link" aria-label="Twitter">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                                <path
+                                    d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
+                                </path>
                             </svg>
                         </a>
                         <a href="#" class="social-link" aria-label="Instagram">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
@@ -389,7 +751,9 @@
                         </a>
                         <a href="#" class="social-link" aria-label="LinkedIn">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                <path
+                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                                </path>
                                 <rect x="2" y="9" width="4" height="12"></rect>
                                 <circle cx="4" cy="4" r="2"></circle>
                             </svg>
@@ -427,13 +791,16 @@
                     </div>
                     <div class="footer-contact-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                            </path>
                         </svg>
                         <span>(555) 123-4567</span>
                     </div>
                     <div class="footer-contact-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                            </path>
                             <polyline points="22,6 12,13 2,6"></polyline>
                         </svg>
                         <span>info@restoredkings.org</span>
@@ -451,6 +818,31 @@
         </div>
     </footer>
 
+    <!-- Member Login Modal (Feature 17) -->
+    <div id="loginModal" class="login-modal">
+        <div class="login-content glass-panel">
+            <button id="closeLogin"
+                style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 2rem; color: white; cursor: pointer;">×</button>
+            <h2 style="color: white; margin-bottom: 0.5rem;">Welcome King</h2>
+            <p style="color: rgba(255,255,255,0.7); margin-bottom: 2rem;">Access your impact dashboard and member
+                resources.</p>
+            <form id="premiumLoginForm" style="display: flex; flex-direction: column; gap: 1rem;">
+                <input type="email" placeholder="Email Address" required
+                    style="padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;">
+                <input type="password" placeholder="Password" required
+                    style="padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;">
+                <button type="submit" class="btn btn-primary btn-lg" style="margin-top: 1rem;">Sign In</button>
+                <a href="#" style="color: var(--gold-400); font-size: 0.875rem; margin-top: 1rem;">Forgot Password?</a>
+            </form>
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p style="color: rgba(255,255,255,0.5); font-size: 0.875rem;">New to the foundation?</p>
+                <a href="/volunteer.html" class="btn btn-ghost btn-sm">Join as Volunteer</a>
+            </div>
+        </div>
+    </div>
+
     <script src="/js/main.js"></script>
+
 </body>
+
 </html>

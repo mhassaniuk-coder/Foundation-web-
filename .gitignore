@@ -110,3 +110,4 @@ tmp/
 # System files
 .thumbsdb
 .DS_Store
+.vercel
