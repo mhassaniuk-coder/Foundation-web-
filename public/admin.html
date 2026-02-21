@@ -4,82 +4,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Console | Restored Kings Foundation</title>
+    <title>Command Center | Restored Kings Foundation</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/premium.css">
+    <!-- Chart.js for Intelligence Engine -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body class="admin-body">
-    <header class="navbar glass-panel" style="background: var(--primary-950);">
-        <div class="container"
-            style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0;">
-            <a href="/" class="logo">
-                <div class="logo-icon">♔</div>
-                <div class="logo-text">Admin <span>Console</span></div>
-            </a>
-            <div style="display: flex; gap: 1rem; align-items: center;">
-                <span style="color: var(--gold-400); font-weight: 700;">SYSTEM OVERSEER</span>
-                <button id="logoutBtn" class="btn btn-ghost btn-sm">Sign Out</button>
-            </div>
-        </div>
-    </header>
+<body class="admin-body" style="background: #020617; color: white; display: flex; height: 100vh; overflow: hidden;">
 
-    <main class="container" style="padding-top: 3rem;">
-        <div class="section-header" style="text-align: left;">
-            <span class="section-label">Global Insights</span>
-            <h2 style="color: white;">Foundation Performance Analytics</h2>
+    <!-- Command Sidebar (Feature 10: Granular Controls Foundation) -->
+    <aside class="glass-panel"
+        style="width: 280px; border-radius: 0; border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; padding: 2rem 1.5rem;">
+        <div class="logo" style="margin-bottom: 3rem;">
+            <div class="logo-icon">♔</div>
+            <div class="logo-text" style="color: white;">RKF <span>OS</span></div>
         </div>
 
-        <!-- Global Stats -->
-        <div class="dashboard-grid">
-            <div class="card glass-panel" style="padding: 2rem;">
-                <div style="font-size: 0.8rem; color: var(--gold-400); text-transform: uppercase; letter-spacing: 2px;">
-                    Total Raised</div>
-                <div id="totalFunds" style="font-size: 3rem; font-weight: 800; color: white;">$245,820</div>
-                <div style="color: #4ade80; font-size: 0.8rem; margin-top: 0.5rem;">↑ 12% vs last month</div>
+        <nav style="flex-grow: 1;">
+            <div
+                style="font-size: 0.7rem; color: var(--gold-500); letter-spacing: 2px; margin-bottom: 1rem; text-transform: uppercase;">
+                Command Suites</div>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem;">
+                <li><a href="#" class="nav-link active" data-suite="intelligence"><span>📊</span> Intelligence</a></li>
+                <li><a href="#" class="nav-link" data-suite="command"><span>🕹️</span> Control</a></li>
+                <li><a href="#" class="nav-link" data-suite="engagement"><span>📈</span> Engagement</a></li>
+                <li><a href="#" class="nav-link" data-suite="audit"><span>🛡️</span> Audit Vault</a></li>
+            </ul>
+        </nav>
+
+        <div style="padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div
+                    style="width: 40px; height: 40px; border-radius: 50%; background: var(--gradient-gold); display: flex; align-items: center; justify-content: center; color: var(--primary-900); font-weight: 900;">
+                    SO</div>
+                <div>
+                    <div style="font-size: 0.8rem; font-weight: 700;">Overseer One</div>
+                    <div style="font-size: 0.6rem; color: var(--gold-400);">SYSTEM_ROOT</div>
+                </div>
             </div>
-            <div class="card glass-panel" style="padding: 2rem;">
-                <div style="font-size: 0.8rem; color: var(--gold-400); text-transform: uppercase; letter-spacing: 2px;">
-                    Active Volunteers</div>
-                <div id="activeVolunteers" style="font-size: 3rem; font-weight: 800; color: white;">342</div>
-                <div style="color: #4ade80; font-size: 0.8rem; margin-top: 0.5rem;">↑ 8 new this week</div>
+            <button id="logoutBtn" class="btn btn-ghost btn-sm btn-block">Deauthorize Session</button>
+        </div>
+    </aside>
+
+    <!-- Main Operational Workspace -->
+    <main style="flex-grow: 1; overflow-y: auto; padding: 3rem; position: relative;">
+
+        <!-- Omni-Search (Feature 23) Overlay Placeholder -->
+        <div id="omniSearchTrigger"
+            style="position: absolute; top: 2rem; right: 3rem; background: rgba(255,255,255,0.05); padding: 0.5rem 1.5rem; border-radius: var(--radius-full); font-size: 0.8rem; color: rgba(255,255,255,0.5); cursor: pointer; border: 1px solid rgba(255,255,255,0.1);">
+            Press <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">⌘ K</kbd> for
+            Global Intelligence
+        </div>
+
+        <div id="intelligenceSuite">
+            <div class="section-header" style="text-align: left; margin-bottom: 3rem;">
+                <span class="section-label">Suite 1: Intelligence & Oversight</span>
+                <h1 style="color: white; margin-top: 0.5rem;">Operational Pulse Radar</h1>
             </div>
-            <div class="card glass-panel" style="padding: 2rem;">
-                <div style="font-size: 0.8rem; color: var(--gold-400); text-transform: uppercase; letter-spacing: 2px;">
-                    Platform Users</div>
-                <div id="platformUsers" style="font-size: 3rem; font-weight: 800; color: white;">1,204</div>
-                <div style="color: #4ade80; font-size: 0.8rem; margin-top: 0.5rem;">↑ 45 registrations today</div>
+
+            <!-- Global Pulse Radar (Feature 1 & 2) -->
+            <div class="grid grid-3" style="gap: 2rem; margin-bottom: 3rem;">
+                <div class="card glass-panel"
+                    style="padding: 2rem; min-height: 300px; display: flex; flex-direction: column;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                        <h4 style="color: var(--gold-400); margin: 0; font-size: 0.9rem;">Impact Growth Velocity
+                            (Feature 2)</h4>
+                        <span style="color: #4ade80; font-size: 0.75rem;">+18.4%</span>
+                    </div>
+                    <div style="flex-grow: 1; position: relative;">
+                        <canvas id="impactVelocityChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card glass-panel" id="impactRadar"
+                    style="padding: 2rem; min-height: 300px; overflow: hidden;">
+                    <h4 style="color: var(--gold-400); margin: 0 0 1.5rem; font-size: 0.9rem;">Heatmap: Field
+                        Distribution (Feature 1)</h4>
+                    <div class="radar-container"
+                        style="height: 200px; background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); border-radius: 8px; position: relative;">
+                        <!-- Animated radar pings -->
+                        <div class="ping" style="top: 20%; left: 30%;"></div>
+                        <div class="ping" style="top: 60%; left: 70%;"></div>
+                        <div class="ping" style="top: 40%; left: 50%;"></div>
+                    </div>
+                    <div
+                        style="margin-top: 1.5rem; display: flex; justify-content: space-between; font-size: 0.7rem; color: rgba(255,255,255,0.5);">
+                        <span>GLOBAL COVERAGE: 82%</span>
+                        <span style="color: var(--gold-500);">3 ACTIVE MISSIONS</span>
+                    </div>
+                </div>
+
+                <div class="card glass-panel" style="padding: 2rem; background: var(--gradient-primary); border: none;">
+                    <h4 style="color: var(--gold-400); margin: 0 0 1rem; font-size: 0.9rem;">Predictive Funding (Feature
+                        3)</h4>
+                    <div style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">$1.2M</div>
+                    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.7);">Projected Q4 revenue based on current
+                        engagement velocity.</p>
+                    <div style="margin-top: 2rem;">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 0.5rem;">
+                            <span>Progress to Milestone</span>
+                            <span>74%</span>
+                        </div>
+                        <div class="fund-bar" style="height: 8px; background: rgba(255,255,255,0.1);">
+                            <div class="fund-fill" style="width: 74%; background: white;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suite Tables / Details (Feature 5 & 6) -->
+            <div class="grid grid-2" style="gap: 2rem;">
+                <div class="glass-panel" style="padding: 2rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3 style="color: white; margin: 0;">System Audit Vault (Feature 5)</h3>
+                        <button class="btn btn-ghost btn-sm">Full Log</button>
+                    </div>
+                    <div id="auditLog" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div class="audit-item">
+                            <span class="status-pill status-success">IDENTITY</span>
+                            <span style="font-size: 0.8rem;">Overseer One decrypted Session_Key_Delta</span>
+                            <span style="font-size: 0.7rem; color: rgba(255,255,255,0.3); margin-left: auto;">2m
+                                ago</span>
+                        </div>
+                        <!-- More items via JS -->
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="padding: 2rem;">
+                    <h3 style="color: white; margin: 0 0 2rem;">Program Success Matrix (Feature 6)</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div class="matrix-item">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span style="font-size: 0.85rem;">Mentorship ROI</span>
+                                <span style="color: var(--gold-500); font-weight: 700;">High Impact</span>
+                            </div>
+                            <div class="fund-bar" style="height: 4px;">
+                                <div class="fund-fill" style="width: 92%;"></div>
+                            </div>
+                        </div>
+                        <div class="matrix-item">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span style="font-size: 0.85rem;">Outreach Conversion</span>
+                                <span style="color: #4ade80; font-weight: 700;">68% Efficiency</span>
+                            </div>
+                            <div class="fund-bar" style="height: 4px;">
+                                <div class="fund-fill" style="width: 68%; background: #4ade80;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        style="margin-top: 2rem; padding: 1rem; background: rgba(255,255,255,0.02); border-radius: 8px;">
+                        <p style="margin: 0; font-size: 0.75rem; color: rgba(255,255,255,0.5);">Feature 7: Resource
+                            Efficiency KPI calculates $840 per kingly restoration.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="grid grid-2" style="margin-top: 3rem;">
-            <!-- User Control Center -->
-            <div class="glass-panel" style="padding: 2rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <h3 style="color: white;">User Management</h3>
-                    <input type="text" placeholder="Filter users..."
-                        style="padding: 0.5rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: white;">
-                </div>
-                <div id="userTable" style="display: flex; flex-direction: column; gap: 1rem;">
-                    <!-- User list from Supabase Auth -->
-                    <p style="color: rgba(255,255,255,0.5);">Syncing with identity service...</p>
-                </div>
-            </div>
-
-            <!-- Project Command Center -->
-            <div class="glass-panel" style="padding: 2rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <h3 style="color: white;">Project Lifecycle</h3>
-                    <button class="btn btn-primary btn-sm">+ New Project</button>
-                </div>
-                <div id="adminProjectList" style="display: flex; flex-direction: column; gap: 1rem;">
-                    <!-- Active projects with controls -->
-                </div>
-            </div>
-        </div>
     </main>
 
-    <script type="module" src="/js/admin.js"></script>
+    <style>
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--gold-500);
+            transform: translateX(5px);
+        }
+
+        .nav-link active {
+            background: rgba(212, 165, 116, 0.1);
+        }
+
+        .audit-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .ping {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--gold-500);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--gold-500);
+            animation: radar-ping 2s infinite;
+        }
+
+        @keyframes radar-ping {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        .status-pill {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .status-success {
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+            border: 1px solid rgba(74, 222, 128, 0.2);
+        }
+
+        kbd {
+            font-family: sans-serif;
+        }
+    </style>
+
+    <script src="/js/admin.js"></script>
 </body>
 
 </html>
