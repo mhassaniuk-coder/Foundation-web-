@@ -196,6 +196,59 @@ class HeritageEngine {
             </div>
         `;
     }
+    // Feature 15: Syndicated Giving Circles
+    renderGivingCircles() {
+        const container = document.getElementById('givingCircles');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="glass-master" style="padding: 1.5rem; margin-top: 2rem; border-color: #a855f7;">
+                <h3 class="font-premium" style="margin-bottom: 1rem; font-size: 1rem;">Syndicated Giving Circles</h3>
+                <div class="glass-panel" style="padding: 1rem; margin-bottom: 1rem;">
+                    <div style="font-size: 0.8rem; font-weight: 700;">Global Restoration Fund 2026</div>
+                    <div style="font-size: 0.6rem; color: rgba(255,255,255,0.4); margin-bottom: 0.5rem;">Total Pool: $4.2M • 12.5k Members</div>
+                    <div class="progress-bar" style="height: 4px; background: rgba(0,0,0,0.2);">
+                        <div class="progress-fill" style="width: 72%; height: 100%; background: #a855f7;"></div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-sm btn-block" style="background: #a855f7; border: none; color: white;">Contribute to Pool</button>
+            </div>
+        `;
+    }
+
+    // Feature 17: Heritage AI Advisor
+    renderAIAdvisor() {
+        const container = document.getElementById('heritageAIAdvisor');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="glass-master" style="padding: 1.5rem; margin-top: 2rem; border-left: 4px solid var(--gold-500);">
+                <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                    <div style="font-size: 1.5rem;">🤖</div>
+                    <h3 class="font-premium" style="margin:0; font-size: 1rem;">Heritage AI Advisor</h3>
+                </div>
+                <div style="font-size: 0.8rem; font-style: italic; color: rgba(255,255,255,0.7); margin-bottom: 1rem;">
+                    "Based on your 2024 giving trajectory, increasing your focus on the London Chapter would maximize your heritage impact by 24%."
+                </div>
+                <button class="btn btn-ghost btn-sm btn-block">Review Strategy</button>
+            </div>
+        `;
+    }
+
+    // Feature 21: Legacy Pledge Smart Reminders
+    renderPledges() {
+        const container = document.getElementById('legacyPledges');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="glass-panel" style="padding: 1rem; margin-top: 1rem; border: 1px dashed rgba(255,255,255,0.1);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-size: 0.75rem; color: rgba(255,255,255,0.4);">ACTIVE_PLEDGE: <strong>$5,000 / Quarter</strong></div>
+                    <span class="status-pill status-success" style="font-size: 0.5rem;">ON_TRACK</span>
+                </div>
+            </div>
+        `;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -206,4 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.heritage.renderImpactMap();
     window.heritage.renderFamilyAccounts();
     window.heritage.renderNetworking();
+    window.heritage.renderGivingCircles();
+    window.heritage.renderAIAdvisor();
+    window.heritage.renderPledges();
 });
