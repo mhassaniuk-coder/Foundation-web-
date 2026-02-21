@@ -21,6 +21,10 @@
 /* Theme Engine Base */
 [data-theme="dark"] {
     --primary-white: #0a1929;
+    /* Sovereign Heritage Tokens - Phase 11 */
+    --sovereign-midnight: #0a0c10;
+    --sovereign-gold-glow: rgba(212, 165, 116, 0.4);
+    --sovereign-border: rgba(212, 165, 116, 0.15);
     --neutral-bg: #0f172a;
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
