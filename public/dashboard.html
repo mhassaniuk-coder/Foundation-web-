@@ -1,36 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Dashboard — Restored Kings Foundation</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard | Restored Kings Foundation</title>
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/premium.css">
 </head>
-<body>
-  <header>
-    <nav class="navbar">
-      <div class="logo">♔ Restored Kings</div>
-      <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/about.html">About</a></li>
-        <li><a href="/auth/login.html" class="btn btn-outline">Log out</a></li>
-      </ul>
-    </nav>
+
+<body class="dashboard-body">
+  <!-- Mini Navbar for Dashboard -->
+  <header class="navbar glass-panel" style="position: sticky; top: 0; z-index: 100;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0;">
+      <a href="/" class="logo">
+        <div class="logo-icon">♔</div>
+        <div class="logo-text">Dashboard</div>
+      </a>
+      <div style="display: flex; gap: 1rem; align-items: center;">
+        <span id="userName" style="color: var(--gold-400); font-weight: 600;">Welcome, King</span>
+        <button id="logoutBtn" class="btn btn-ghost btn-sm">Logout</button>
+      </div>
+    </div>
   </header>
 
-  <main class="container" style="margin:3rem auto; max-width:1000px;">
-    <h1>Member Dashboard</h1>
-    <p>Welcome — this is a placeholder dashboard for authenticated users. Backend integration required for real data.</p>
-    <section class="grid grid-2" style="margin-top:1.5rem;">
-      <div class="card">
-        <h3>Your Activity</h3>
-        <p>No activity yet.</p>
+  <main class="container" style="padding-top: 3rem;">
+    <div class="section-header" style="text-align: left;">
+      <span class="section-label">Your Impact Overview</span>
+      <h2 id="greeting">Loading your stats...</h2>
+    </div>
+
+    <!-- Dashboard Stats Grid -->
+    <div class="dashboard-grid">
+      <div class="stat-mini-card glass-panel">
+        <h4 style="color: var(--gold-400);">Total Contributions</h4>
+        <div id="totalDonated" style="font-size: 2.5rem; font-weight: 700; color: white;">$0</div>
+        <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-top: 0.5rem;">Total financial support provided
+        </p>
       </div>
-      <div class="card">
-        <h3>Saved Items</h3>
-        <p>No saved items.</p>
+      <div class="stat-mini-card glass-panel">
+        <h4 style="color: var(--gold-400);">Volunteer Hours</h4>
+        <div id="volunteerHours" style="font-size: 2.5rem; font-weight: 700; color: white;">0h</div>
+        <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-top: 0.5rem;">Time spent on outreach</p>
       </div>
-    </section>
+      <div class="stat-mini-card glass-panel">
+        <h4 style="color: var(--gold-400);">Lives Impacted</h4>
+        <div id="livesImpacted" style="font-size: 2.5rem; font-weight: 700; color: white;">0</div>
+        <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-top: 0.5rem;">People reached through your
+          support</p>
+      </div>
+    </div>
+
+    <!-- Detailed Views -->
+    <div class="grid grid-2" style="margin-top: 3rem;">
+      <!-- Donation History -->
+      <div class="glass-panel" style="padding: 2rem;">
+        <h3 style="margin-bottom: 2rem; color: white;">Donation History</h3>
+        <div id="donationList" style="display: flex; flex-direction: column; gap: 1rem;">
+          <p style="color: rgba(255,255,255,0.5);">No donations recorded yet.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" style="margin-top: 2rem; width: 100%;">Donate Again</button>
+      </div>
+
+      <!-- Volunteer Projects -->
+      <div class="glass-panel" style="padding: 2rem;">
+        <h3 style="margin-bottom: 2rem; color: white;">Recommended Projects</h3>
+        <div id="projectList" style="display: flex; flex-direction: column; gap: 1rem;">
+          <!-- Projects will be fetched from Supabase -->
+        </div>
+        <a href="/volunteer.html" class="btn btn-secondary btn-sm"
+          style="margin-top: 2rem; width: 100%; display: block; text-align: center;">View All Projects</a>
+      </div>
+    </div>
   </main>
+
+  <script type="module" src="/js/dashboard.js"></script>
 </body>
+
 </html>

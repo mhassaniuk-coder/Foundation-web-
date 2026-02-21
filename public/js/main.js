@@ -1,11 +1,25 @@
-// ============================================
-// RESTORED KINGS FOUNDATION WEBSITE
-// Main JavaScript File - Modern & Interactive
-// ============================================
+import { auth } from './supabase.js';
 
 // Wait for DOM to be ready
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
+    const user = await auth.getUser();
+    if (user) {
+        const loginBtn = document.getElementById('loginTrigger');
+        if (loginBtn) {
+            loginBtn.innerText = 'Dashboard';
+            loginBtn.href = '/dashboard.html';
+            loginBtn.classList.add('logged-in');
+
+            // Re-bind to prevent the default MemberPortal listener if it exists
+            loginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = '/dashboard.html';
+            });
+        }
+    }
+
     initNavigation();
+
     initThemeEngine();
     initScrollEffects();
     initAnimations();
@@ -665,40 +679,15 @@ function initCommunityMap() {
 // ============================================
 
 function initMemberPortal() {
-    const loginModal = document.getElementById('loginModal');
     const loginBtn = document.getElementById('loginTrigger');
-    const closeLogin = document.getElementById('closeLogin');
-    const loginForm = document.getElementById('premiumLoginForm');
-
-    if (!loginModal) return;
-
     if (loginBtn) {
         loginBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            loginModal.classList.add('active');
-        });
-    }
-
-    if (closeLogin) {
-        closeLogin.addEventListener('click', () => {
-            loginModal.classList.remove('active');
-        });
-    }
-
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            showNotification('Welcome back! Accessing dashboard...', 'success');
-            setTimeout(() => {
-                loginModal.classList.remove('active');
-                if (loginBtn) {
-                    loginBtn.innerText = 'Dashboard';
-                    loginBtn.classList.add('logged-in');
-                }
-            }, 1500);
+            window.location.href = '/auth.html';
         });
     }
 }
+
 
 // ============================================
 // VOLUNTEER PROJECT PORTAL

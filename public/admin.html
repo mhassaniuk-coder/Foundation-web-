@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Console | Restored Kings Foundation</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/premium.css">
+</head>
+
+<body class="admin-body">
+    <header class="navbar glass-panel" style="background: var(--primary-950);">
+        <div class="container"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0;">
+            <a href="/" class="logo">
+                <div class="logo-icon">♔</div>
+                <div class="logo-text">Admin <span>Console</span></div>
+            </a>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <span style="color: var(--gold-400); font-weight: 700;">SYSTEM OVERSEER</span>
+                <button id="logoutBtn" class="btn btn-ghost btn-sm">Sign Out</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 3rem;">
+        <div class="section-header" style="text-align: left;">
+            <span class="section-label">Global Insights</span>
+            <h2 style="color: white;">Foundation Performance Analytics</h2>
+        </div>
+
+        <!-- Global Stats -->
+        <div class="dashboard-grid">
+            <div class="card glass-panel" style="padding: 2rem;">
+                <div style="font-size: 0.8rem; color: var(--gold-400); text-transform: uppercase; letter-spacing: 2px;">
+                    Total Raised</div>
+                <div id="totalFunds" style="font-size: 3rem; font-weight: 800; color: white;">$245,820</div>
+                <div style="color: #4ade80; font-size: 0.8rem; margin-top: 0.5rem;">↑ 12% vs last month</div>
+            </div>
+            <div class="card glass-panel" style="padding: 2rem;">
+                <div style="font-size: 0.8rem; color: var(--gold-400); text-transform: uppercase; letter-spacing: 2px;">
+                    Active Volunteers</div>
+                <div id="activeVolunteers" style="font-size: 3rem; font-weight: 800; color: white;">342</div>
+                <div style="color: #4ade80; font-size: 0.8rem; margin-top: 0.5rem;">↑ 8 new this week</div>
+            </div>
+            <div class="card glass-panel" style="padding: 2rem;">
+                <div style="font-size: 0.8rem; color: var(--gold-400); text-transform: uppercase; letter-spacing: 2px;">
+                    Platform Users</div>
+                <div id="platformUsers" style="font-size: 3rem; font-weight: 800; color: white;">1,204</div>
+                <div style="color: #4ade80; font-size: 0.8rem; margin-top: 0.5rem;">↑ 45 registrations today</div>
+            </div>
+        </div>
+
+        <div class="grid grid-2" style="margin-top: 3rem;">
+            <!-- User Control Center -->
+            <div class="glass-panel" style="padding: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h3 style="color: white;">User Management</h3>
+                    <input type="text" placeholder="Filter users..."
+                        style="padding: 0.5rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: white;">
+                </div>
+                <div id="userTable" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- User list from Supabase Auth -->
+                    <p style="color: rgba(255,255,255,0.5);">Syncing with identity service...</p>
+                </div>
+            </div>
+
+            <!-- Project Command Center -->
+            <div class="glass-panel" style="padding: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h3 style="color: white;">Project Lifecycle</h3>
+                    <button class="btn btn-primary btn-sm">+ New Project</button>
+                </div>
+                <div id="adminProjectList" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- Active projects with controls -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="/js/admin.js"></script>
+</body>
+
+</html>
