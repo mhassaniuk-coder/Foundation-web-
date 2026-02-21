@@ -148,6 +148,54 @@ class HeritageEngine {
             </div>
         `;
     }
+    // Feature 5: Multi-Generational Giving Accounts
+    renderFamilyAccounts() {
+        const container = document.getElementById('familyAccounts');
+        if (!container) return;
+
+        const members = [
+            { name: 'Prince Julian', relation: 'Son', contributions: '$120' },
+            { name: 'Princess Elena', relation: 'Daughter', contributions: '$85' }
+        ];
+
+        container.innerHTML = `
+            <div class="glass-master" style="padding: 1.5rem; margin-top: 2rem;">
+                <h3 class="font-premium" style="margin-bottom: 1rem; font-size: 1rem;">Family Heritage Circle</h3>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem;">
+                    ${members.map(m => `
+                        <div class="glass-panel" style="padding: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 0.8rem; font-weight: 700;">${m.name}</div>
+                                <div style="font-size: 0.6rem; color: rgba(255,255,255,0.4);">${m.relation} Member</div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--gold-500); font-weight: 800;">${m.contributions}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="btn btn-ghost btn-sm btn-block">Add Family Member</button>
+            </div>
+        `;
+    }
+
+    // Feature 4: Noble Networking Hub
+    renderNetworking() {
+        const container = document.getElementById('nobleNetworking');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="glass-master" style="padding: 1.5rem; margin-top: 2rem; background: var(--gradient-primary); border: none;">
+                <h3 class="font-premium" style="color: white; margin-bottom: 0.5rem; font-size: 1rem;">Noble Networking</h3>
+                <p style="font-size: 0.75rem; color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;">Connect with 1,200+ fellow heritage guardians in your region.</p>
+                <div style="display: flex; gap: -10px; margin-bottom: 1.5rem;">
+                    <div style="width: 30px; height: 30px; border-radius: 50%; background: #555; border: 2px solid #000;"></div>
+                    <div style="width: 30px; height: 30px; border-radius: 50%; background: #777; border: 2px solid #000;"></div>
+                    <div style="width: 30px; height: 30px; border-radius: 50%; background: #999; border: 2px solid #000;"></div>
+                    <div style="width: 30px; height: 30px; border-radius: 50%; background: var(--gold-500); border: 2px solid #000; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; font-weight: 800;">+1.2k</div>
+                </div>
+                <button class="btn btn-primary btn-sm btn-block" style="background: white; color: var(--primary-900);">Join Circle</button>
+            </div>
+        `;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -156,4 +204,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.heritage.renderAchievements();
     window.heritage.renderAvatar();
     window.heritage.renderImpactMap();
+    window.heritage.renderFamilyAccounts();
+    window.heritage.renderNetworking();
 });
