@@ -1,6 +1,6 @@
 // ============================================
 // ADMIN COMMAND CENTER - Operational Engine
-// Restored Kings Foundation - Phase 8
+// Restored Kings Foundation - Phase 8 & 11
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -31,79 +31,78 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    const msg = document.querySelector('#commandSuite textarea').value;
-    if (!msg) return alert('Cannot broadcast zero payload.');
-    broadcastBtn.disabled = true;
-    broadcastBtn.innerText = 'Transmitting...';
-    setTimeout(() => {
-        alert(`Royal Decree Transmitted Successfully.\nSegment: ${document.querySelector('#commandSuite select').value}`);
-        broadcastBtn.disabled = false;
-        broadcastBtn.innerText = 'Execute Global Broadcast';
-        document.querySelector('#commandSuite textarea').value = '';
-    }, 1500);
-};
+    // --- Bulk Outreach (Feature 9) ---
+    const broadcastBtn = document.querySelector('#commandSuite .btn-primary');
+    if (broadcastBtn) {
+        broadcastBtn.onclick = () => {
+            const msgInput = document.querySelector('#commandSuite textarea');
+            const msg = msgInput ? msgInput.value : '';
+            if (!msg) return alert('Cannot broadcast zero payload.');
+
+            broadcastBtn.disabled = true;
+            broadcastBtn.innerText = 'Transmitting...';
+            setTimeout(() => {
+                const segment = document.querySelector('#commandSuite select')?.value || 'All';
+                alert(`Royal Decree Transmitted Successfully.\nSegment: ${segment}`);
+                broadcastBtn.disabled = false;
+                broadcastBtn.innerText = 'Execute Global Broadcast';
+                if (msgInput) msgInput.value = '';
+            }, 1500);
+        };
     }
 
-// --- Operational Control (Feature 16: Export) ---
-document.querySelector('.nav-link[data-suite="audit"]')?.addEventListener('click', () => {
-    if (confirm('Initiate audit-ready data export? (Feature 16)')) {
-        alert('Generating encrypted operational report... Download will begin shortly.');
+    // --- Operational Control (Feature 16: Export) ---
+    const auditLink = document.querySelector('.nav-link[data-suite="audit"]');
+    if (auditLink) {
+        auditLink.addEventListener('click', () => {
+            if (confirm('Initiate audit-ready data export? (Feature 16)')) {
+                alert('Generating encrypted operational report... Download will begin shortly.');
+            }
+        });
     }
 });
 
-// --- Intelligence Periodic Updates (Feature 4 & 22) ---
-setInterval(() => {
-    initAuditVault(); // Refresh audit items
-    console.log('[HEARTBEAT] Operational health check passed.');
-}, 60000);
-});
+// --- Intelligence Foundations ---
 
-// --- Intelligence Visualization (Feature 2) ---
 function initIntelligenceCharts() {
     const ctx = document.getElementById('impactVelocityChart');
     if (!ctx) return;
     new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
             datasets: [{
-                label: 'Velocity',
-                data: [12, 19, 15, 25, 32, 45],
-                borderColor: '#d4a574',
-                backgroundColor: 'rgba(212, 165, 116, 0.1)',
-                fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0
+                label: 'Intervention Velocity',
+                data: [45, 52, 48, 70, 85],
+                backgroundColor: '#d4a574'
             }]
         },
-        options: {
-            responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-            scales: { x: { display: false }, y: { display: false } }
-        }
+        options: { responsive: true, maintainAspectRatio: false }
     });
 }
 
-// --- Audit Vault Log (Feature 5) ---
 function initAuditVault() {
-    const vault = document.getElementById('auditLog');
+    const vault = document.getElementById('auditVaultEntries');
     if (!vault) return;
-    vault.innerHTML = '';
-    const mockLogs = [
-        { type: 'SECURE', msg: 'Field Unit 4 communications encrypted', time: '2m ago' },
-        { type: 'FINANCE', msg: 'Batch reconciliation complete', time: '8m ago' },
-        { type: 'IDENTITY', msg: 'Overseer session validated (Feature 5)', time: '14m ago' }
+    const logs = [
+        { time: '14:22:01', action: 'CURRENCY_NEXUS_SYNC', user: 'System' },
+        { time: '14:15:33', action: 'ROLE_AUTHORITY_MOD', user: 'SuperAdmin' },
+        { time: '13:58:12', action: 'BULK_OUTREACH_EXEC', user: 'Ops_Lead' }
     ];
-    mockLogs.forEach(log => {
-        const item = document.createElement('div');
-        item.className = 'audit-item';
-        item.innerHTML = `
-            <span class="status-pill status-${log.type === 'SECURE' ? 'success' : 'info'}">${log.type}</span>
-            <span style="font-size: 0.8rem;">${log.msg}</span>
-            <span style="font-size: 0.7rem; color: rgba(255,255,255,0.3); margin-left: auto;">${log.time}</span>
-        `;
-        vault.appendChild(item);
-    });
+    vault.innerHTML = logs.map(log => `
+        <div style="font-size: 0.75rem; padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between;">
+            <span style="color: var(--gold-500);">${log.time}</span>
+            <span style="font-weight: 700;">${log.action}</span>
+            <span style="color: rgba(255,255,255,0.4);">${log.user}</span>
+        </div>
+    `).join('');
 }
 
-// --- Omni-Search (Feature 23) ---
+function initRadarAnimation() {
+    // Simulated radar pings in CSS/SVG
+    console.log('Impact Radar: Tracking Global Restoration...');
+}
+
 function initOmniSearch() {
     window.addEventListener('keydown', (e) => {
         if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -114,6 +113,34 @@ function initOmniSearch() {
     });
 }
 
-function initRadarAnimation() {
-    console.log('Operational Radar: Scanning Sector 7...');
+function initPredictiveChart() {
+    const ctx = document.getElementById('predictiveImpactChart');
+    if (!ctx) return;
+
+    if (window.myPredictiveChart) window.myPredictiveChart.destroy();
+
+    window.myPredictiveChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['2024', '2025', '2026', '2027', '2028'],
+            datasets: [{
+                label: 'Heritage Projection',
+                data: [100, 140, 210, 350, 520],
+                borderColor: '#d4a574',
+                backgroundColor: 'rgba(212, 165, 116, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderDash: [5, 5]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.5)' } },
+                y: { display: false }
+            }
+        }
+    });
 }
