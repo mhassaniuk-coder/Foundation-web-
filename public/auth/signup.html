@@ -7,24 +7,47 @@
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <main class="container" style="max-width:600px; margin:3rem auto;">
-    <div class="card">
-      <h2>Create an Account</h2>
-      <form id="signupForm">
-        <label>Full name</label>
-        <input type="text" id="signupName" required placeholder="Your full name">
-        <label>Email</label>
-        <input type="email" id="signupEmail" required placeholder="name@domain.org">
-        <label>Password</label>
-        <input type="password" id="signupPassword" required placeholder="Choose a strong password">
-        <label>Confirm Password</label>
-        <input type="password" id="signupConfirm" required placeholder="Confirm password">
-        <div style="margin-top:1rem; display:flex; gap:.5rem;">
-          <button class="btn btn-primary" type="submit">Create Account</button>
-          <a href="/auth/login.html" class="btn btn-outline">Already have an account?</a>
+  <main class="container auth-container">
+    <div class="auth-hero">
+      <h1>Create an account</h1>
+      <p style="opacity:.95; max-width:36rem;">Join our community to receive mentorship updates, volunteer opportunities, and program invitations.</p>
+    </div>
+
+    <aside class="auth-card" aria-labelledby="signup-heading">
+      <h2 id="signup-heading">Sign up</h2>
+      <form id="signupForm" novalidate>
+        <div class="form-row">
+          <label for="signupName">Full name</label>
+          <input type="text" id="signupName" name="name" required placeholder="Your full name" autocomplete="name">
+        </div>
+
+        <div class="form-row">
+          <label for="signupEmail">Email</label>
+          <input type="email" id="signupEmail" name="email" required placeholder="name@domain.org" autocomplete="email">
+        </div>
+
+        <div class="form-row">
+          <label for="signupPassword">Password</label>
+          <input type="password" id="signupPassword" name="password" required placeholder="Choose a strong password" autocomplete="new-password">
+          <div class="password-meter" aria-hidden="true"><i id="signupStrength"></i></div>
+        </div>
+
+        <div class="form-row">
+          <label for="signupConfirm">Confirm password</label>
+          <input type="password" id="signupConfirm" name="confirm" required placeholder="Confirm password" autocomplete="new-password">
+        </div>
+
+        <div class="auth-actions">
+          <button class="btn btn-primary" type="submit" style="flex:1">Create Account</button>
+        </div>
+
+        <div class="social-row">
+          <button type="button" class="social-btn" id="socialGoogleSign">Continue with Google</button>
+          <button type="button" class="social-btn" id="socialFacebookSign">Continue with Facebook</button>
         </div>
       </form>
-    </div>
+      <p style="margin-top:1rem;">Already have an account? <a href="/auth/login.html">Log in</a></p>
+    </aside>
   </main>
   <script src="/js/auth.js"></script>
 </body>
