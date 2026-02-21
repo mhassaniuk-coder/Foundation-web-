@@ -111,6 +111,24 @@ class GlobalNexus {
             </div>
         `;
     }
+    // Feature 24: Heritage VR Experience Portal (Mock)
+    renderVRPortal() {
+        const container = document.getElementById('vrPortal');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="glass-master" style="padding: 1.5rem; margin-top: 2rem; border-color: #f472b6;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 class="font-premium" style="margin:0; font-size: 1rem;">VR Heritage Field Tours</h3>
+                    <span class="status-pill" style="background: rgba(244, 114, 182, 0.1); color: #f472b6; font-size: 0.5rem;">VR_IMMERSION_READY</span>
+                </div>
+                <div style="aspect-ratio: 16/9; background: url('https://images.unsplash.com/photo-1478479405421-ce83c92fb3ba?auto=format&fit=crop&q=80&w=400') center/cover; border-radius: 8px; margin-bottom: 1rem; position: relative; display: flex; align-items: center; justify-content: center;">
+                    <button class="btn btn-primary" style="background: #f472b6; border-color: #f472b6;">Enter 360° Field View</button>
+                </div>
+                <p style="font-size: 0.7rem; color: rgba(255,255,255,0.4); text-align: center;">Experience the impact site in full 3D from your browser or VR headset.</p>
+            </div>
+        `;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -118,4 +136,5 @@ document.addEventListener('DOMContentLoaded', () => {
     nexus.init();
     nexus.renderSummitHub();
     nexus.initLanguageNexus();
+    nexus.renderVRPortal();
 });

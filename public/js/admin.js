@@ -66,19 +66,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initIntelligenceCharts() {
     const ctx = document.getElementById('impactVelocityChart');
-    if (!ctx) return;
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-            datasets: [{
-                label: 'Intervention Velocity',
-                data: [45, 52, 48, 70, 85],
-                backgroundColor: '#d4a574'
-            }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Intervention Velocity',
+                    data: [45, 52, 48, 70, 85],
+                    backgroundColor: '#d4a574'
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
+
+    initSentimentAI();
+    initResourceAllocation();
 }
 
 function initAuditVault() {
@@ -99,7 +103,6 @@ function initAuditVault() {
 }
 
 function initRadarAnimation() {
-    // Simulated radar pings in CSS/SVG
     console.log('Impact Radar: Tracking Global Restoration...');
 }
 
@@ -119,13 +122,11 @@ async function generateGovernanceReport() {
     const { jsPDF } = window.jspdf ? window.jspdf : (await import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'));
     const doc = new jsPDF();
 
-    // Header
     doc.setFontSize(22);
     doc.text('RKF GOVERNANCE REPORT', 105, 20, { align: 'center' });
     doc.setFontSize(10);
     doc.text(`Report ID: GOV-${Date.now()}`, 105, 30, { align: 'center' });
 
-    // Metrics
     doc.setFontSize(14);
     doc.text('Operational Vital Signs:', 20, 50);
     doc.setFontSize(11);
@@ -134,24 +135,15 @@ async function generateGovernanceReport() {
     doc.text('- Active Restoration Chapters: 3', 20, 80);
     doc.text('- Satellite Heritage Verified: True', 20, 90);
 
-    // Footer
     doc.setFontSize(8);
     doc.text('Restored Kings Foundation - Sovereign Intelligence Division', 105, 280, { align: 'center' });
 
     doc.save(`RKF_Governance_Report_${new Date().toISOString().split('T')[0]}.pdf`);
 }
 
-// Feature 22 & 23: Dynamic Resource Allocator & Sentiment AI
-function initIntelligenceCharts() {
-    // ... existing velocity chart code ...
-    initSentimentAI();
-    initResourceAllocation();
-}
-
 function initSentimentAI() {
     const container = document.getElementById('adminSentimentHub');
     if (!container) return;
-    // (UI already present in admin.html, this powers the logic)
     console.log('Sentiment AI: Processing stakeholder pulse data...');
 }
 
@@ -175,33 +167,35 @@ function initResourceAllocation() {
         }
     });
 }
-const ctx = document.getElementById('predictiveImpactChart');
-if (!ctx) return;
 
-if (window.myPredictiveChart) window.myPredictiveChart.destroy();
+function initPredictiveChart() {
+    const ctx = document.getElementById('predictiveImpactChart');
+    if (!ctx) return;
 
-window.myPredictiveChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['2024', '2025', '2026', '2027', '2028'],
-        datasets: [{
-            label: 'Heritage Projection',
-            data: [100, 140, 210, 350, 520],
-            borderColor: '#d4a574',
-            backgroundColor: 'rgba(212, 165, 116, 0.1)',
-            fill: true,
-            tension: 0.4,
-            borderDash: [5, 5]
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-            x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.5)' } },
-            y: { display: false }
+    if (window.myPredictiveChart) window.myPredictiveChart.destroy();
+
+    window.myPredictiveChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['2024', '2025', '2026', '2027', '2028'],
+            datasets: [{
+                label: 'Heritage Projection',
+                data: [100, 140, 210, 350, 520],
+                borderColor: '#d4a574',
+                backgroundColor: 'rgba(212, 165, 116, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderDash: [5, 5]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.5)' } },
+                y: { display: false }
+            }
         }
-    }
-});
+    });
 }
