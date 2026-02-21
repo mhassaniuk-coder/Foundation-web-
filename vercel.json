@@ -16,9 +16,5 @@
       "dest": "/$1"
     }
   ],
-  "env": {
-    "STRIPE_PUBLIC_KEY": "@stripe_public_key",
-    "GOOGLE_ANALYTICS_ID": "@google_analytics_id"
-  },
   "public": true
 }
