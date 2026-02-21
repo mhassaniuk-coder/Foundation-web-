@@ -3,187 +3,341 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Programs & Services - Restored Kings Foundation provides street outreach, mentorship, job training, and community support.">
+    <meta name="description" content="Programs & Services - Restored Kings Foundation provides street outreach, mentorship, job training, educational workshops, and community support for men and boys.">
+    <meta name="keywords" content="programs, services, outreach, mentorship, job training, education, community, men, boys, support">
+    <meta name="author" content="Restored Kings Foundation">
+    
+    <!-- SEO Meta Tags -->
+    <meta property="og:title" content="Programs & Services - Restored Kings Foundation">
+    <meta property="og:description" content="Comprehensive support programs for men and boys in need. Street outreach, mentorship, job training, and more.">
+    <meta property="og:image" content="/images/og-image.jpg">
+    <meta property="og:url" content="https://restoredkingsfoundation.org/programs">
+    <meta property="og:type" content="website">
+    
     <title>Programs & Services - Restored Kings Foundation</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23d4a574'>♔</text></svg>">
 </head>
 <body>
-    <header>
+    <!-- Navigation Header -->
+    <header id="header">
         <nav class="navbar">
-            <div class="logo">♔ Restored Kings</div>
+            <a href="/" class="logo">
+                <div class="logo-icon">♔</div>
+                <div class="logo-text">Restored <span>Kings</span></div>
+            </a>
             <div class="hamburger" id="hamburger">
-                <span></span><span></span><span></span>
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
             <ul class="nav-links" id="navLinks">
                 <li><a href="/">Home</a></li>
-                <li><a href="/about.html">About Us</a></li>
+                <li><a href="/about.html">About</a></li>
                 <li><a href="/programs.html" class="active">Programs</a></li>
                 <li><a href="/impact.html">Impact</a></li>
                 <li><a href="/blog.html">Blog</a></li>
-                <li><a href="/donate.html" class="btn btn-primary" style="margin: 0;">Donate</a></li>
-                <li><a href="/volunteer.html" class="btn btn-secondary" style="margin: 0;">Volunteer</a></li>
-                <li><a href="/auth/login.html" class="btn btn-outline" style="margin: 0;">Login</a></li>
-                <li><a href="/auth/signup.html" class="btn btn-primary" style="margin: 0;">Sign Up</a></li>
-                <li><a href="/dashboard.html" class="btn" style="margin: 0;">Dashboard</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+                <li class="nav-cta"><a href="/donate.html" class="btn btn-primary">Donate Now</a></li>
             </ul>
         </nav>
     </header>
 
-    <section class="hero" style="background: linear-gradient(135deg, var(--primary-color) 0%, rgba(26, 58, 92, 0.8) 100%); padding: 3rem 2rem;">
-        <div class="hero-content">
-            <h1 style="color: white;">Programs & Services</h1>
-            <p style="color: rgba(255,255,255,0.95);">Comprehensive support for men and boys in need.</p>
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Programs & Services</h1>
+            <div class="breadcrumb">
+                <a href="/">Home</a>
+                <span>/</span>
+                <span>Programs</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Programs Overview -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">What We Offer</span>
+                <h2 class="section-title">Comprehensive Support Programs</h2>
+                <p class="section-description">Our programs address the root causes of hardship while providing immediate support. We meet men and boys where they are and walk alongside them on their journey to restoration.</p>
+            </div>
+            
+            <!-- Quick Navigation -->
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 4rem;">
+                <a href="#outreach" class="btn btn-ghost">🌃 Street Outreach</a>
+                <a href="#mentorship" class="btn btn-ghost">👥 Mentorship</a>
+                <a href="#education" class="btn btn-ghost">🎓 Education</a>
+                <a href="#training" class="btn btn-ghost">💼 Job Training</a>
+                <a href="#community" class="btn btn-ghost">🏘️ Community</a>
+            </div>
         </div>
     </section>
 
     <!-- Street Outreach -->
-    <section class="section container" id="outreach">
-        <div class="grid grid-2" style="align-items: center; gap: 3rem;">
-            <div>
-                <h2>🏘️ Street Outreach</h2>
-                <p style="font-size: 1.05rem; line-height: 1.8;">We meet men and boys where they are—on the streets, in shelters, and in the most vulnerable situations. Our outreach teams provide:</p>
-                <ul style="margin-left: 2rem; color: var(--text-dark); line-height: 2;">
-                    <li>✓ Medical care and health assessments</li>
-                    <li>✓ Hot meals and emergency supplies</li>
-                    <li>✓ Hygiene kits and clothing</li>
-                    <li>✓ Connection to housing resources</li>
-                    <li>✓ Mental health and addiction support referrals</li>
-                    <li>✓ Case management and advocacy</li>
-                    <li>✓ Social security and benefits assistance</li>
-                </ul>
-                <p style="margin-top: 1.5rem; font-weight: 600; color: var(--primary-color);">Building relationships and trust, one interaction at a time.</p>
-            </div>
-            <div style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; padding: 2rem; border-radius: 8px; min-height: 350px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                <div style="font-size: 4rem; margin-bottom: 1rem;">🏘️</div>
-                <h3 style="color: var(--secondary-color);">Real Impact in Real Time</h3>
-                <p>Our outreach teams make hundreds of connections each month, providing immediate help and pathways to long-term support.</p>
+    <section class="section section-light" id="outreach">
+        <div class="container">
+            <div class="grid grid-2" style="align-items: center; gap: 4rem;">
+                <div>
+                    <span class="section-label">Program 01</span>
+                    <h2>🌃 Street Outreach</h2>
+                    <p class="lead">Meeting men and boys where they are—on the streets, in shelters, and in the most vulnerable situations.</p>
+                    <p>Our outreach teams build relationships through consistent, compassionate presence. We don't wait for people to come to us; we go to them, offering immediate help and pathways to long-term support.</p>
+                    
+                    <div style="margin: 2rem 0;">
+                        <h4 style="margin-bottom: 1rem;">What We Provide:</h4>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: var(--gold-500);">✓</span> Medical care & assessments
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: var(--gold-500);">✓</span> Hot meals & supplies
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: var(--gold-500);">✓</span> Hygiene kits & clothing
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: var(--gold-500);">✓</span> Housing resources
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: var(--gold-500);">✓</span> Mental health referrals
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: var(--gold-500);">✓</span> Case management
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="/volunteer.html" class="btn btn-dark">Join Our Outreach Team</a>
+                </div>
+                <div style="background: var(--gradient-primary); border-radius: var(--radius-2xl); padding: 3rem; color: white; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(212, 165, 116, 0.2) 0%, transparent 70%);"></div>
+                    <div style="position: relative; z-index: 1; text-align: center;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🌃</div>
+                        <h3 style="color: var(--gold-500); margin-bottom: 1rem;">Real Impact in Real Time</h3>
+                        <p style="color: rgba(255,255,255,0.9); margin-bottom: 2rem;">Our outreach teams make hundreds of connections each month, providing immediate help and pathways to long-term support.</p>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                            <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: var(--radius-lg);">
+                                <div style="font-size: 2rem; font-weight: 700; color: var(--gold-500);">500+</div>
+                                <div style="font-size: 0.875rem; color: rgba(255,255,255,0.7);">Monthly Contacts</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: var(--radius-lg);">
+                                <div style="font-size: 2rem; font-weight: 700; color: var(--gold-500);">24/7</div>
+                                <div style="font-size: 0.875rem; color: rgba(255,255,255,0.7);">Crisis Support</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Mentorship -->
-    <section class="section light" id="mentorship">
+    <!-- Mentorship Program -->
+    <section class="section" id="mentorship">
         <div class="container">
-            <div class="grid grid-2" style="align-items: center; gap: 3rem;">
-                <div style="background: linear-gradient(135deg, var(--secondary-color), var(--accent-color)); color: white; padding: 2rem; border-radius: 8px; min-height: 350px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">👨‍🏫</div>
-                    <h3 style="color: white;">One-on-One Change</h3>
-                    <p>Mentorship is the heart of transformation. Our mentors walk alongside individuals through their journey.</p>
+            <div class="grid grid-2" style="align-items: center; gap: 4rem;">
+                <div style="order: 2; background: var(--gradient-gold); border-radius: var(--radius-2xl); padding: 3rem; color: var(--primary-900); position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -50%; left: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);"></div>
+                    <div style="position: relative; z-index: 1; text-align: center;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">👥</div>
+                        <h3 style="margin-bottom: 1rem;">One-on-One Transformation</h3>
+                        <p style="margin-bottom: 2rem;">Mentorship is the heart of lasting change. Our mentors walk alongside individuals through their entire journey.</p>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                            <div style="background: rgba(255,255,255,0.3); padding: 1.5rem; border-radius: var(--radius-lg);">
+                                <div style="font-size: 2rem; font-weight: 700;">200+</div>
+                                <div style="font-size: 0.875rem;">Active Mentors</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.3); padding: 1.5rem; border-radius: var(--radius-lg);">
+                                <div style="font-size: 2rem; font-weight: 700;">85%</div>
+                                <div style="font-size: 0.875rem;">Success Rate</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <h2>👨‍🏫 Mentorship Programs</h2>
-                    <p style="font-size: 1.05rem; line-height: 1.8;">Every man and boy deserves someone who believes in them. Our mentors provide:</p>
-                    <ul style="margin-left: 2rem; color: var(--text-dark); line-height: 2;">
-                        <li>✓ Life coaching and goal setting</li>
-                        <li>✓ Job interview preparation</li>
-                        <li>✓ Financial literacy training</li>
-                        <li>✓ Emotional support and accountability</li>
-                        <li>✓ Connection to community and networks</li>
-                        <li>✓ Conflict resolution skills</li>
-                        <li>✓ Personal development guidance</li>
-                    </ul>
-                    <p style="margin-top: 1.5rem; font-weight: 600; color: var(--primary-color);">Duration: 6-12 months with ongoing support options.</p>
+                <div style="order: 1;">
+                    <span class="section-label">Program 02</span>
+                    <h2>👥 Mentorship Programs</h2>
+                    <p class="lead">Every man and boy deserves someone who believes in them and will walk alongside them.</p>
+                    <p>Our mentorship program pairs individuals with trained mentors who provide guidance, accountability, and genuine care. This isn't a one-time meeting—it's a committed relationship that lasts 6-12 months or longer.</p>
+                    
+                    <div style="margin: 2rem 0;">
+                        <h4 style="margin-bottom: 1rem;">Mentorship Includes:</h4>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: var(--gold-500);">✓</span> Life coaching & goal setting
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: var(--gold-500);">✓</span> Job interview preparation
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: var(--gold-500);">✓</span> Financial literacy training
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: var(--gold-500);">✓</span> Emotional support
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: var(--gold-500);">✓</span> Community connections
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: var(--gold-500);">✓</span> Conflict resolution skills
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="/volunteer.html" class="btn btn-primary">Become a Mentor</a>
+                        <a href="/contact.html" class="btn btn-ghost">Request a Mentor</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Educational Workshops -->
+    <section class="section section-light" id="education">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Program 03</span>
+                <h2 class="section-title">🎓 Educational Workshops</h2>
+                <p class="section-description">Knowledge is power. Our educational programs equip men and boys with the skills and confidence they need to succeed.</p>
+            </div>
+            <div class="grid grid-3">
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, var(--primary-700), var(--primary-900)); display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 4rem;">💰</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Financial Literacy</h3>
+                        <p class="card-text">Budgeting, saving, credit building, and financial planning. Learn to manage money and build wealth for the future.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, var(--gold-500), var(--gold-600)); display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 4rem;">🧠</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Mental Health & Wellness</h3>
+                        <p class="card-text">Understanding mental health, coping strategies, stress management, and building emotional resilience.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, var(--neutral-700), var(--neutral-900)); display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 4rem;">💬</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Communication Skills</h3>
+                        <p class="card-text">Effective communication, conflict resolution, relationship building, and professional interaction skills.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, var(--primary-600), var(--primary-800)); display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 4rem;">📱</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Digital Literacy</h3>
+                        <p class="card-text">Computer basics, internet safety, online job searching, and essential technology skills for today's world.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, var(--gold-400), var(--gold-500)); display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 4rem;">⚖️</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Legal Rights & Resources</h3>
+                        <p class="card-text">Understanding your rights, navigating legal systems, expungement assistance, and accessing legal aid.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image" style="background: linear-gradient(135deg, var(--neutral-600), var(--neutral-800)); display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 4rem;">❤️</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Health & Nutrition</h3>
+                        <p class="card-text">Physical wellness, nutrition education, exercise programs, and accessing healthcare resources.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Job Training -->
-    <section class="section container" id="training">
-        <div class="grid grid-2" style="align-items: center; gap: 3rem;">
-            <div>
-                <h2>💼 Job Training & Employment</h2>
-                <p style="font-size: 1.05rem; line-height: 1.8;">Sustainable independence starts with employment. We provide:</p>
-                <ul style="margin-left: 2rem; color: var(--text-dark); line-height: 2;">
-                    <li>✓ Skills training programs</li>
-                    <li>✓ Resume and cover letter coaching</li>
-                    <li>✓ Interview preparation (mock interviews)</li>
-                    <li>✓ Job placement assistance</li>
-                    <li>✓ Apprenticeship opportunities</li>
-                    <li>✓ Work readiness training</li>
-                    <li>✓ On-the-job support and mentoring</li>
-                    <li>✓ Long-term career development</li>
-                </ul>
-                <div style="background: #27ae60; color: white; padding: 1rem; border-radius: 4px; margin-top: 1.5rem; text-align: center;">
-                    <p style="font-weight: 600; margin: 0;">89% Job Placement Rate</p>
-                </div>
-            </div>
-            <div style="background: linear-gradient(135deg, var(--accent-color), #1a3a5c); color: white; padding: 2rem; border-radius: 8px; min-height: 350px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                <div style="font-size: 4rem; margin-bottom: 1rem;">💼</div>
-                <h3>Career Pathways</h3>
-                <p>From job readiness to promotion advancement, we support sustainable employment and career growth.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Educational Workshops -->
-    <section class="section light">
+    <section class="section" id="training">
         <div class="container">
-            <h2 style="text-align: center;">📚 Educational Workshops & Skills Training</h2>
-            <p style="text-align: center; color: var(--text-light); margin-bottom: 2rem;">We offer regular workshops on topics that matter for life success.</p>
-            
-            <div class="grid grid-4">
-                <div class="card">
-                    <div style="background: var(--primary-color); color: var(--secondary-color); padding: 1.5rem; text-align: center; font-size: 2rem;">💰</div>
-                    <div class="card-content">
-                        <h4>Financial Literacy</h4>
-                        <p>Budgeting, banking, credit, and money management basics.</p>
+            <div class="grid grid-2" style="align-items: center; gap: 4rem;">
+                <div>
+                    <span class="section-label">Program 04</span>
+                    <h2>💼 Job Training & Employment</h2>
+                    <p class="lead">Sustainable independence starts with meaningful employment. We provide comprehensive job readiness support.</p>
+                    <p>From resume writing to interview preparation, from skills training to job placement, we walk alongside individuals through every step of their employment journey.</p>
+                    
+                    <div style="margin: 2rem 0;">
+                        <h4 style="margin-bottom: 1rem;">Our Employment Services:</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;">
+                                <span style="color: var(--gold-500); font-size: 1.25rem;">📋</span>
+                                <div>
+                                    <strong>Resume & Cover Letter Coaching</strong>
+                                    <p style="margin: 0.25rem 0 0; color: var(--neutral-600);">Professional documents that get noticed by employers.</p>
+                                </div>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;">
+                                <span style="color: var(--gold-500); font-size: 1.25rem;">🎤</span>
+                                <div>
+                                    <strong>Interview Preparation</strong>
+                                    <p style="margin: 0.25rem 0 0; color: var(--neutral-600);">Mock interviews, confidence building, and professional presentation.</p>
+                                </div>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;">
+                                <span style="color: var(--gold-500); font-size: 1.25rem;">🔧</span>
+                                <div>
+                                    <strong>Skills Training Programs</strong>
+                                    <p style="margin: 0.25rem 0 0; color: var(--neutral-600);">Trade skills, certifications, and vocational training opportunities.</p>
+                                </div>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 1rem;">
+                                <span style="color: var(--gold-500); font-size: 1.25rem;">🤝</span>
+                                <div>
+                                    <strong>Employer Partnerships</strong>
+                                    <p style="margin: 0.25rem 0 0; color: var(--neutral-600);">Direct connections to employers who believe in second chances.</p>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
+                    
+                    <a href="/contact.html" class="btn btn-dark">Get Employment Help</a>
                 </div>
-
-                <div class="card">
-                    <div style="background: var(--secondary-color); color: var(--primary-color); padding: 1.5rem; text-align: center; font-size: 2rem;">📱</div>
-                    <div class="card-content">
-                        <h4>Digital Skills</h4>
-                        <p>Computer basics, online safety, and digital tools training.</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div style="background: var(--accent-color); color: white; padding: 1.5rem; text-align: center; font-size: 2rem;">🧠</div>
-                    <div class="card-content">
-                        <h4>Life Skills</h4>
-                        <p>Communication, conflict resolution, and personal growth.</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div style="background: #27ae60; color: white; padding: 1.5rem; text-align: center; font-size: 2rem;">❤️</div>
-                    <div class="card-content">
-                        <h4>Health & Wellness</h4>
-                        <p>Mental health, addiction recovery, and wellness programs.</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div style="background: #e74c3c; color: white; padding: 1.5rem; text-align: center; font-size: 2rem;">🏠</div>
-                    <div class="card-content">
-                        <h4>Housing Support</h4>
-                        <p>Tenancy rights, rental assistance, and housing navigation.</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div style="background: #f39c12; color: white; padding: 1.5rem; text-align: center; font-size: 2rem;">⚖️</div>
-                    <div class="card-content">
-                        <h4>Legal Support</h4>
-                        <p>Document assistance, legal rights, and advocacy.</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div style="background: #9b59b6; color: white; padding: 1.5rem; text-align: center; font-size: 2rem;">👨‍👦</div>
-                    <div class="card-content">
-                        <h4>Parenting Skills</h4>
-                        <p>Support for fathers reconnecting with children.</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div style="background: #16a085; color: white; padding: 1.5rem; text-align: center; font-size: 2rem;">🎯</div>
-                    <div class="card-content">
-                        <h4>Goal Setting</h4>
-                        <p>Creating and achieving personal and professional goals.</p>
+                <div style="background: linear-gradient(135deg, var(--neutral-100), var(--neutral-200)); border-radius: var(--radius-2xl); padding: 3rem; position: relative;">
+                    <h3 style="margin-bottom: 2rem; text-align: center;">Training Programs</h3>
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="background: white; padding: 1.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 50px; height: 50px; background: var(--gradient-gold); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">⚡</div>
+                            <div>
+                                <strong>Electrical</strong>
+                                <p style="margin: 0; font-size: 0.875rem; color: var(--neutral-500);">12-week certification</p>
+                            </div>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 50px; height: 50px; background: var(--gradient-gold); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🔧</div>
+                            <div>
+                                <strong>Plumbing</strong>
+                                <p style="margin: 0; font-size: 0.875rem; color: var(--neutral-500);">10-week certification</p>
+                            </div>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 50px; height: 50px; background: var(--gradient-gold); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🍳</div>
+                            <div>
+                                <strong>Culinary Arts</strong>
+                                <p style="margin: 0; font-size: 0.875rem; color: var(--neutral-500);">8-week certification</p>
+                            </div>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 50px; height: 50px; background: var(--gradient-gold); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">💻</div>
+                            <div>
+                                <strong>IT & Computer Skills</strong>
+                                <p style="margin: 0; font-size: 0.875rem; color: var(--neutral-500);">6-week program</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -191,115 +345,139 @@
     </section>
 
     <!-- Community Activities -->
-    <section class="section container">
-        <h2 style="text-align: center;">🤝 Community Activities & Support Groups</h2>
-        <p style="text-align: center; color: var(--text-light); margin-bottom: 2rem;">Building community and connection is healing.</p>
-        
-        <div class="grid grid-3">
-            <div class="card">
-                <div style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; padding: 2rem; text-align: center; font-size: 2.5rem;">🏀</div>
-                <div class="card-content">
-                    <h3>Sports & Recreation</h3>
-                    <p>Basketball games, hiking trips, and fitness programs that build community and healthy habits.</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div style="background: linear-gradient(135deg, var(--secondary-color), var(--accent-color)); color: white; padding: 2rem; text-align: center; font-size: 2.5rem;">🎨</div>
-                <div class="card-content">
-                    <h3>Creative Programs</h3>
-                    <p>Art, music, and creative expression programs for healing and personal growth.</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div style="background: linear-gradient(135deg, var(--accent-color), #1a3a5c); color: white; padding: 2rem; text-align: center; font-size: 2.5rem;">🍽️</div>
-                <div class="card-content">
-                    <h3>Community Meals</h3>
-                    <p>Regular communal dinners where men connect, share stories, and build friendships.</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 2rem; text-align: center; font-size: 2.5rem;">👥</div>
-                <div class="card-content">
-                    <h3>Support Groups</h3>
-                    <p>Peer support groups for recovery, grief, and healing in a safe community environment.</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 2rem; text-align: center; font-size: 2.5rem;">🎓</div>
-                <div class="card-content">
-                    <h3>Youth Programs</h3>
-                    <p>Special programs for boys and young men, mentoring and guidance for the next generation.</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 2rem; text-align: center; font-size: 2.5rem;">🌍</div>
-                <div class="card-content">
-                    <h3>Volunteering Ops</h3>
-                    <p>Opportunities for clients to volunteer and give back, building self-worth and community.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Call to Action -->
-    <section class="section" style="background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; text-align: center;">
+    <section class="section section-light" id="community">
         <div class="container">
-            <h2 style="color: white;">Ready to Get Help or Get Involved?</h2>
-            <div class="btn-group">
-                <a href="/donate.html" class="btn" style="background-color: var(--secondary-color); color: var(--primary-color);">💰 Support Our Programs</a>
-                <a href="/volunteer.html" class="btn" style="background-color: white; color: var(--primary-color);">🤝 Volunteer</a>
-                <a href="/contact.html" class="btn" style="background-color: transparent; color: white; border: 2px solid white;">📞 Get Help</a>
+            <div class="section-header">
+                <span class="section-label">Program 05</span>
+                <h2 class="section-title">🏘️ Community Activities</h2>
+                <p class="section-description">Healing happens in community. Our activities foster connection, belonging, and mutual support among men and boys.</p>
+            </div>
+            <div class="grid grid-4">
+                <div class="card card-feature">
+                    <div class="card-icon">🏀</div>
+                    <h3 class="card-title">Sports & Recreation</h3>
+                    <p class="card-text">Basketball leagues, fitness groups, and outdoor activities that build camaraderie and health.</p>
+                </div>
+                <div class="card card-feature">
+                    <div class="card-icon">🎤</div>
+                    <h3 class="card-title">Support Groups</h3>
+                    <p class="card-text">Peer-led groups for addiction recovery, grief, anger management, and life transitions.</p>
+                </div>
+                <div class="card card-feature">
+                    <div class="card-icon">🍽️</div>
+                    <h3 class="card-title">Community Meals</h3>
+                    <p class="card-text">Weekly shared meals where everyone is welcome. Good food and genuine connection.</p>
+                </div>
+                <div class="card card-feature">
+                    <div class="card-icon">🎉</div>
+                    <h3 class="card-title">Special Events</h3>
+                    <p class="card-text">Holiday celebrations, family days, and community gatherings throughout the year.</p>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- CTA Section -->
+    <section class="section section-gradient">
+        <div class="container" style="text-align: center;">
+            <h2 style="color: white; margin-bottom: 1.5rem;">Ready to Get Involved?</h2>
+            <p style="color: rgba(255,255,255,0.8); font-size: 1.25rem; max-width: 600px; margin: 0 auto 2rem;">Whether you need help or want to help, we're here for you. Join us in making a real difference.</p>
+            <div class="btn-group" style="justify-content: center;">
+                <a href="/donate.html" class="btn btn-primary btn-lg">Support Our Programs</a>
+                <a href="/volunteer.html" class="btn btn-secondary btn-lg">Volunteer With Us</a>
+                <a href="/contact.html" class="btn btn-secondary btn-lg">Get Help</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer>
-        <div class="footer-content">
+        <div class="container">
             <div class="footer-grid">
-                <div class="footer-section">
-                    <h3>Restored Kings</h3>
-                    <p>Supporting men and boys with dignity, respect, and real action.</p>
+                <div class="footer-brand">
+                    <a href="/" class="logo">
+                        <div class="logo-icon">♔</div>
+                        <div class="logo-text">Restored <span>Kings</span></div>
+                    </a>
+                    <p>Restoring dignity, rebuilding lives. We support men and boys through compassionate outreach, mentorship, and community programs.</p>
                     <div class="social-links">
-                        <a href="https://facebook.com" target="_blank">f</a>
-                        <a href="https://twitter.com" target="_blank">𝕏</a>
-                        <a href="https://instagram.com" target="_blank">📷</a>
-                        <a href="https://linkedin.com" target="_blank">in</a>
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                <rect x="2" y="9" width="4" height="12"></rect>
+                                <circle cx="4" cy="4" r="2"></circle>
+                            </svg>
+                        </a>
                     </div>
                 </div>
-
                 <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="/">Home</a></li>
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
                         <li><a href="/about.html">About Us</a></li>
-                        <li><a href="/programs.html">Programs</a></li>
-                        <li><a href="/impact.html">Our Impact</a></li>
+                        <li><a href="/programs.html">Our Programs</a></li>
+                        <li><a href="/impact.html">Impact Stories</a></li>
+                        <li><a href="/blog.html">News & Blog</a></li>
+                        <li><a href="/contact.html">Contact</a></li>
                     </ul>
                 </div>
-
                 <div class="footer-section">
-                    <h3>Get Involved</h3>
-                    <ul>
+                    <h4>Get Involved</h4>
+                    <ul class="footer-links">
                         <li><a href="/donate.html">Donate</a></li>
                         <li><a href="/volunteer.html">Volunteer</a></li>
-                        <li><a href="/contact.html">Contact Us</a></li>
+                        <li><a href="/programs.html#mentorship">Become a Mentor</a></li>
+                        <li><a href="#">Partner With Us</a></li>
+                        <li><a href="#">Events</a></li>
                     </ul>
                 </div>
-
                 <div class="footer-section">
-                    <h3>Contact</h3>
-                    <p>📧 contact@restoredkings.org</p>
-                    <p>📞 (555) 123-4567</p>
+                    <h4>Contact Us</h4>
+                    <div class="footer-contact-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span>[City Location Here]</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        <span>(555) 123-4567</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <span>info@restoredkings.org</span>
+                    </div>
                 </div>
             </div>
-
             <div class="footer-bottom">
-                <p>&copy; 2024 Restored Kings Foundation. All rights reserved.</p>
+                <p>&copy; 2024 Restored Kings Foundation. All rights reserved. 501(c)(3) Nonprofit.</p>
+                <div class="footer-bottom-links">
+                    <a href="/privacy.html">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Accessibility</a>
+                </div>
             </div>
         </div>
     </footer>
