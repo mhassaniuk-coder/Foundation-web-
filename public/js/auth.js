@@ -1,4 +1,4 @@
-import { auth } from './supabase.js';
+import { auth, supabase } from './supabase.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const tabs = document.querySelectorAll('.auth-tab');
@@ -46,7 +46,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const { data, error } = await auth.signUp(email, password);
       if (error) throw error;
 
-      alert('Welcome King! Please check your email to verify your account.');
+      if (data.user) {
+        // Create profile entry
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert([{
+            id: data.user.id,
+            full_name: fullName,
+            email: email
+          }]);
+
+        if (profileError) console.error("Profile creation error:", profileError);
+      }
+
+      alert('Welcome King! Account created. Please check your email to verify (if enabled) or sign in.');
+      location.reload(); // Switch back to login view
     } catch (error) {
       alert(error.message);
     }

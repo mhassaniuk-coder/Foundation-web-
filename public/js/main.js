@@ -420,13 +420,9 @@ function initNewsletter() {
     });
 }
 
-function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-// ============================================
-// NOTIFICATIONS
-// ============================================
+// Export to global window for non-module scripts and inline events
+window.showNotification = showNotification;
+window.isValidEmail = isValidEmail;
 
 function showNotification(message, type = 'info') {
     // Remove existing notifications
