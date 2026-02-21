@@ -25,39 +25,37 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.suite-section').forEach(section => {
                 section.style.display = section.id === `${suite}Suite` ? 'block' : 'none';
             });
+
+            if (suite === 'sovereign') initPredictiveChart();
             console.log(`Command Suite Switched: ${suite.toUpperCase()}`);
         });
     });
 
-    // --- Bulk Outreach (Feature 9) ---
-    const broadcastBtn = document.querySelector('#commandSuite .btn-primary');
-    if (broadcastBtn) {
-        broadcastBtn.onclick = () => {
-            const msg = document.querySelector('#commandSuite textarea').value;
-            if (!msg) return alert('Cannot broadcast zero payload.');
-            broadcastBtn.disabled = true;
-            broadcastBtn.innerText = 'Transmitting...';
-            setTimeout(() => {
-                alert(`Royal Decree Transmitted Successfully.\nSegment: ${document.querySelector('#commandSuite select').value}`);
-                broadcastBtn.disabled = false;
-                broadcastBtn.innerText = 'Execute Global Broadcast';
-                document.querySelector('#commandSuite textarea').value = '';
-            }, 1500);
-        };
+    const msg = document.querySelector('#commandSuite textarea').value;
+    if (!msg) return alert('Cannot broadcast zero payload.');
+    broadcastBtn.disabled = true;
+    broadcastBtn.innerText = 'Transmitting...';
+    setTimeout(() => {
+        alert(`Royal Decree Transmitted Successfully.\nSegment: ${document.querySelector('#commandSuite select').value}`);
+        broadcastBtn.disabled = false;
+        broadcastBtn.innerText = 'Execute Global Broadcast';
+        document.querySelector('#commandSuite textarea').value = '';
+    }, 1500);
+};
     }
 
-    // --- Operational Control (Feature 16: Export) ---
-    document.querySelector('.nav-link[data-suite="audit"]')?.addEventListener('click', () => {
-        if (confirm('Initiate audit-ready data export? (Feature 16)')) {
-            alert('Generating encrypted operational report... Download will begin shortly.');
-        }
-    });
+// --- Operational Control (Feature 16: Export) ---
+document.querySelector('.nav-link[data-suite="audit"]')?.addEventListener('click', () => {
+    if (confirm('Initiate audit-ready data export? (Feature 16)')) {
+        alert('Generating encrypted operational report... Download will begin shortly.');
+    }
+});
 
-    // --- Intelligence Periodic Updates (Feature 4 & 22) ---
-    setInterval(() => {
-        initAuditVault(); // Refresh audit items
-        console.log('[HEARTBEAT] Operational health check passed.');
-    }, 60000);
+// --- Intelligence Periodic Updates (Feature 4 & 22) ---
+setInterval(() => {
+    initAuditVault(); // Refresh audit items
+    console.log('[HEARTBEAT] Operational health check passed.');
+}, 60000);
 });
 
 // --- Intelligence Visualization (Feature 2) ---
