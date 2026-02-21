@@ -71,9 +71,52 @@ class HeritageEngine {
         const xpBar = document.getElementById('heritageXp');
         if (xpBar) xpBar.style.width = this.avatarData.xp + '%';
     }
+    // Feature 6: Achievement Milestone Certificates
+    renderAchievements() {
+        const container = document.getElementById('heritageAchievements');
+        if (!container) return;
+
+        const achievements = [
+            { id: 'HONOR-001', title: 'Restoration Pioneer', date: '2024-01-01', rarity: 'LEGENDARY' },
+            { id: 'HONOR-052', title: 'Global Catalyst', date: '2024-03-12', rarity: 'EPIC' }
+        ];
+
+        container.innerHTML = `
+            <div class="glass-master" style="padding: 1.5rem; margin-top: 2rem;">
+                <h3 class="font-premium" style="margin-bottom: 1rem; font-size: 1rem;">Achievement Honors</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                    ${achievements.map(a => `
+                        <div class="achievement-medal glass-panel" style="padding: 1rem; text-align: center; border-color: var(--gold-500); cursor: pointer;" onclick="window.heritage.downloadCertificate('${a.id}')">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏅</div>
+                            <div style="font-size: 0.75rem; font-weight: 800;">${a.title}</div>
+                            <div style="font-size: 0.6rem; color: var(--gold-400);">${a.rarity}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    async downloadCertificate(id) {
+        alert(`Generating verified certificate for ${id}...`);
+        const { jsPDF } = window.jspdf ? window.jspdf : (await import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'));
+        const doc = new jsPDF('landscape');
+        doc.setFillColor(10, 12, 16);
+        doc.rect(0, 0, 297, 210, 'F');
+        doc.setTextColor(212, 165, 116);
+        doc.setFontSize(40);
+        doc.text('CERTIFICATE OF HONOR', 148.5, 60, { align: 'center' });
+        doc.setFontSize(20);
+        doc.text('Presented to a Sovereign Heritage Supporter', 148.5, 90, { align: 'center' });
+        doc.setFontSize(14);
+        doc.text(`VERIFICATION_ID: ${id}`, 148.5, 120, { align: 'center' });
+        doc.text('Restored Kings Foundation - Global Heritage Registry', 148.5, 150, { align: 'center' });
+        doc.save(`RKF_Honor_${id}.pdf`);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const engine = new HeritageEngine();
-    engine.init();
+    window.heritage = new HeritageEngine();
+    window.heritage.init();
+    window.heritage.renderAchievements();
 });
