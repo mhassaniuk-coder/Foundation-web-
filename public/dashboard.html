@@ -18,6 +18,7 @@
         <div class="logo-text">Dashboard</div>
       </a>
       <div style="display: flex; gap: 1rem; align-items: center;">
+        <a href="/settings.html" class="btn btn-ghost btn-sm">Settings</a>
         <span id="userName" style="color: var(--gold-400); font-weight: 600;">Welcome, King</span>
         <button id="logoutBtn" class="btn btn-ghost btn-sm">Logout</button>
       </div>
@@ -25,9 +26,15 @@
   </header>
 
   <main class="container" style="padding-top: 3rem;">
-    <div class="section-header" style="text-align: left;">
-      <span class="section-label">Your Impact Overview</span>
-      <h2 id="greeting">Loading your stats...</h2>
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
+      <div class="section-header" style="text-align: left; margin-bottom: 0;">
+        <span class="section-label">Your Impact Overview</span>
+        <h2 id="greeting">Loading your stats...</h2>
+      </div>
+      <!-- Achievement Section (Feature 43) -->
+      <div id="badgeContainer" style="display: flex; gap: 1rem;">
+        <!-- Badges will appear here -->
+      </div>
     </div>
 
     <!-- Dashboard Stats Grid -->

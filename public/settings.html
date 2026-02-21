@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kingly Settings | Restored Kings Foundation</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/premium.css">
+</head>
+
+<body class="dashboard-body">
+    <header class="navbar glass-panel" style="position: sticky; top: 0; z-index: 100;">
+        <div class="container"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0;">
+            <a href="/dashboard.html" class="logo">
+                <div class="logo-icon">♔</div>
+                <div class="logo-text">Dashboard</div>
+            </a>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <a href="/dashboard.html" class="btn btn-ghost btn-sm">Back to Impact</a>
+                <button id="logoutBtn" class="btn btn-ghost btn-sm">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 3rem;">
+        <div class="section-header" style="text-align: left;">
+            <span class="section-label">Identity Configuration</span>
+            <h2>Manage Your Kingly Profile</h2>
+        </div>
+
+        <div class="grid grid-2" style="margin-top: 3rem; align-items: flex-start;">
+            <!-- Profile Info Form -->
+            <div class="glass-panel" style="padding: 2.5rem;">
+                <h3 style="margin-bottom: 2rem; color: white;">Personal Details</h3>
+                <form id="profileForm" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>Display Name</label>
+                        <input type="text" id="fullName" class="form-input" placeholder="Your Full Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Bio (Short Description)</label>
+                        <textarea id="bio" class="form-input" style="min-height: 100px;"
+                            placeholder="Tell us about your mission..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Skills & Expertise</label>
+                        <input type="text" id="skills" class="form-input"
+                            placeholder="Mentorship, Construction, Tech, etc.">
+                        <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 5px;">Separate with
+                            commas</p>
+                    </div>
+                    <button type="submit" id="saveProfile" class="btn btn-primary btn-lg">Update Profile</button>
+                </form>
+            </div>
+
+            <!-- Profile Overview / Avatar -->
+            <div class="glass-panel" style="padding: 2.5rem; text-align: center;">
+                <div
+                    style="width: 150px; height: 150px; border-radius: 50%; background: var(--gradient-gold); margin: 0 auto 2rem; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--primary-900); border: 5px solid rgba(255,255,255,0.1);">
+                    ♔
+                </div>
+                <h3 id="profileNameDisplay" style="color: white; margin-bottom: 0.5rem;">Anonymous King</h3>
+                <p id="profileEmailDisplay"
+                    style="color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-bottom: 2rem;">king@restoredkings.org
+                </p>
+
+                <div
+                    style="text-align: left; background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 12px;">
+                    <h4
+                        style="color: var(--gold-400); margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
+                        Kingly Stats</h4>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Member Since</span>
+                        <span id="joinedDate" style="color: white;">Jan 2024</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Status</span>
+                        <span style="color: #4ade80;">Active Member</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="/js/settings.js"></script>
+</body>
+
+</html>

@@ -66,14 +66,69 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Fetch Stats
     try {
         const { data: profile } = await db.getProfile(user.id);
+        const { count: tasksCount } = await supabase.from('volunteer_tasks').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
+
         if (profile) {
             totalDonated.innerText = `$${profile.total_donated || 0}`;
             document.getElementById('volunteerHours').innerText = `${profile.volunteer_hours || 0}h`;
             document.getElementById('livesImpacted').innerText = profile.lives_impacted || 0;
+
+            // Badge Logic (Feature 43)
+            const badgeContainer = document.getElementById('badgeContainer');
+            if (profile.total_donated > 0) addBadge(badgeContainer, '❤️', 'Golden Heart', 'First Donation');
+            if (profile.volunteer_hours >= 10) addBadge(badgeContainer, '⚔️', 'Iron Will', '10+ Hours');
+            if (tasksCount >= 3) addBadge(badgeContainer, '🏛️', 'Community Pillar', '3+ Projects');
         }
     } catch (e) {
         console.error("Profile fetch error", e);
     }
+
+    function addBadge(container, icon, title, desc) {
+        const badge = document.createElement('div');
+        badge.className = 'glass-panel';
+        badge.style.padding = '10px';
+        badge.style.textAlign = 'center';
+        badge.style.minWidth = '80px';
+        badge.innerHTML = `
+            <div style="font-size: 1.5rem;">${icon}</div>
+            <div style="font-size: 0.7rem; font-weight: 700; color: var(--gold-400);">${title}</div>
+            <div class="tooltip" style="font-size: 0.6rem;">${desc}</div>
+        `;
+        container.appendChild(badge);
+    }
+
+    // Receipt Generation (Feature 44)
+    // Dynamic import for jsPDF to keep main bundle light
+    async function generateReceipt(donation) {
+        const { jsPDF } = await import('https://cdn.skypack.dev/jspdf');
+        const doc = new jsPDF();
+
+        doc.setFont('helvetica', 'bold');
+        doc.text('OFFICIAL DONATION RECEIPT', 105, 40, { align: 'center' });
+        doc.setFont('helvetica', 'normal');
+        doc.text('Restored Kings Foundation', 105, 50, { align: 'center' });
+        doc.text('501(c)(3) Nonprofit Organization', 105, 60, { align: 'center' });
+
+        doc.line(20, 70, 190, 70);
+
+        doc.text(`Donor Identity: ${user.email}`, 20, 90);
+        doc.text(`Contribution Amount: $${donation.amount}`, 20, 100);
+        doc.text(`Date of Giving: ${new Date(donation.created_at).toLocaleDateString()}`, 20, 110);
+        doc.text(`Transaction Type: ${donation.type || 'Standard Contribution'}`, 20, 120);
+
+        doc.text('Thank you for your royalty and support in rebuilding lives.', 105, 150, { align: 'center' });
+
+        doc.save(`Receipt_RKF_${donation.id.substring(0, 8)}.pdf`);
+    }
+
+    // Attach receipt listener via delegation
+    donationList.addEventListener('click', (e) => {
+        if (e.target.innerText === 'Receipt') {
+            const amount = e.target.parentElement.querySelector('p').innerText.match(/\d+/)[0];
+            const date = e.target.parentElement.querySelector('span').innerText;
+            generateReceipt({ amount, created_at: date, id: Math.random().toString(36) });
+        }
+    });
 
     // Fetch Donations
     try {
