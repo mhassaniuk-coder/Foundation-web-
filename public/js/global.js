@@ -63,9 +63,59 @@ class GlobalNexus {
             return (amount * (rates[currency] || 1)).toFixed(2);
         };
     }
+    // Feature 16: Global Restoration Summit Hub
+    renderSummitHub() {
+        const container = document.getElementById('summitHub');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="glass-master" style="padding: 1.5rem; margin-top: 2rem; border-color: #60a5fa;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 class="font-premium" style="margin:0; font-size: 1rem;">Restoration Summit 2026</h3>
+                    <span class="status-pill" style="background: rgba(96, 165, 250, 0.1); color: #60a5fa; font-size: 0.5rem;">GLOBAL_EVENT</span>
+                </div>
+                <div style="font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-bottom: 1.5rem;">The ultimate gathering of Heritage Guardians. London, UK.</div>
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="flex: 1; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: 8px; text-align: center;">
+                        <div style="font-size: 0.6rem; color: var(--gold-400);">DAYS LEFT</div>
+                        <div style="font-size: 1.1rem; font-weight: 800;">142</div>
+                    </div>
+                    <div style="flex: 1; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: 8px; text-align: center;">
+                        <div style="font-size: 0.6rem; color: var(--gold-400);">CAPACITY</div>
+                        <div style="font-size: 1.1rem; font-weight: 800;">85%</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-sm btn-block" style="background: #60a5fa; color: #000; border-color: #60a5fa;">Secure My RSVP</button>
+            </div>
+        `;
+    }
+
+    // Feature 9: Smart Multi-Language Context
+    initLanguageNexus() {
+        const container = document.getElementById('languageNexus');
+        if (!container) return;
+
+        const languages = [
+            { code: 'EN', name: 'English', flag: '🇺🇸' },
+            { code: 'ES', name: 'Español', flag: '🇪🇸' },
+            { code: 'FR', name: 'Français', flag: '🇫🇷' }
+        ];
+
+        container.innerHTML = `
+            <div class="glass-panel" style="padding: 0.5rem; display: flex; gap: 0.5rem;">
+                ${languages.map(l => `
+                    <div class="lang-tab" style="padding: 4px 8px; cursor: pointer; border-radius: 4px; font-size: 0.7rem; border: 1px solid rgba(255,255,255,0.1);" onclick="alert('Switching Context to ${l.name}...')">
+                        ${l.flag} ${l.code}
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const nexus = new GlobalNexus();
     nexus.init();
+    nexus.renderSummitHub();
+    nexus.initLanguageNexus();
 });
