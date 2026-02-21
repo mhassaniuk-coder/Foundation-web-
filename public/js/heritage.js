@@ -113,10 +113,47 @@ class HeritageEngine {
         doc.text('Restored Kings Foundation - Global Heritage Registry', 148.5, 150, { align: 'center' });
         doc.save(`RKF_Honor_${id}.pdf`);
     }
+    // Feature 2: Kingly Avatar System (Visual)
+    renderAvatar() {
+        const container = document.getElementById('sovereignAvatar');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="glass-master" style="padding: 1.5rem; text-align: center; border-color: var(--gold-500);">
+                <div class="avatar-silhouette" style="width: 100px; height: 100px; background: var(--gradient-gold); margin: 0 auto 1rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; box-shadow: 0 0 20px var(--sovereign-gold-glow);">
+                    👑
+                </div>
+                <h4 class="font-premium" style="margin: 0;">${this.avatarData.title}</h4>
+                <div style="font-size: 0.7rem; color: var(--gold-400); margin-bottom: 1rem;">LEVEL ${this.avatarData.level} SOVEREIGN</div>
+                <div class="progress-bar" style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
+                    <div id="heritageXp" class="progress-fill" style="width: ${this.avatarData.xp}%; height: 100%; background: var(--gold-500);"></div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Feature 8: Personal Impact Heatmap
+    renderImpactMap() {
+        const container = document.getElementById('personalImpactMap');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="glass-master" style="padding: 1.5rem; margin-top: 2rem;">
+                <h3 class="font-premium" style="margin-bottom: 1rem; font-size: 1rem;">Personal Heritage Map</h3>
+                <div class="impact-map-container" style="background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=600') center/cover; height: 200px;">
+                    <div class="map-ping" style="top: 40%; left: 30%;"></div>
+                    <div class="map-ping" style="top: 55%; left: 65%;"></div>
+                    <div style="position: absolute; bottom: 0.5rem; right: 0.5rem; font-size: 0.5rem; color: rgba(255,255,255,0.4);">LIVE_HERITAGE_PING</div>
+                </div>
+            </div>
+        `;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     window.heritage = new HeritageEngine();
     window.heritage.init();
     window.heritage.renderAchievements();
+    window.heritage.renderAvatar();
+    window.heritage.renderImpactMap();
 });
