@@ -142,29 +142,47 @@
         </div>
     </section>
 
-    <!-- Impact Stats Section -->
-    <section class="stats-section">
+    <!-- Stats Section -->
+    <section class="stats" id="impact">
         <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number" data-count="2500">2,500+</div>
-                    <div class="stat-label">Men & Boys Helped</div>
+            <div class="grid grid-2" style="gap: 4rem; align-items: start;">
+                <div class="stats-content">
+                    <span class="section-label">Real-Time Impact</span>
+                    <h2 class="section-title">Verified Restoration Metrics</h2>
+                    <div class="stats-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
+                        <div class="stat-item">
+                            <div class="stat-number">2,400+</div>
+                            <div class="stat-label">Kings Restored</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">15,200</div>
+                            <div class="stat-label">Nutritional Units</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">320</div>
+                            <div class="stat-label">Economic Placements</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">45</div>
+                            <div class="stat-label">Verified Programs</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-number" data-count="15000">15,000+</div>
-                    <div class="stat-label">Meals Served</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" data-count="500">500+</div>
-                    <div class="stat-label">Workshops Held</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" data-count="200">200+</div>
-                    <div class="stat-label">Active Mentors</div>
+
+                <!-- Transparency Hub (Feature: Phase 10) -->
+                <div id="transparencyHub" class="glass-master"
+                    style="padding: 2rem; max-height: 550px; overflow: hidden; margin-top: 1rem;">
+                    <div style="text-align: center; padding: 4rem 2rem;">
+                        <span class="spinner"></span>
+                        <p style="color: rgba(255,255,255,0.4); margin-top: 1rem; font-size: 0.8rem;">Initializing
+                            Public Ledger Protocol...</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <script src="/js/ledger.js"></script>
 
     <!-- Mission Section -->
     <section class="section" id="mission">

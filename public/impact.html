@@ -115,17 +115,31 @@
 
     <!-- Visual Impact Growth (Chart Integration) -->
     <section class="section container">
-        <div class="glass-panel" style="padding: 3rem; text-align: center;">
-            <div class="section-header">
-                <h2 style="color: white; margin-bottom: 1rem;">Impact Velocity Radar</h2>
-                <p style="color: rgba(255,255,255,0.6);">Tracking the growth of our mentorship hours and successful
-                    restorations.</p>
+        <div class="grid grid-2" style="gap: 2rem;">
+            <div class="glass-master" style="padding: 3rem; text-align: center;">
+                <div class="section-header">
+                    <h2 style="color: white; margin-bottom: 1rem;">Impact Velocity Radar</h2>
+                    <p style="color: rgba(255,255,255,0.6);">Tracking the growth of our mentorship hours and successful
+                        restorations.</p>
+                </div>
+                <div style="max-width: 900px; margin: 0 auto; height: 350px;">
+                    <canvas id="impactGrowthChart"></canvas>
+                </div>
             </div>
-            <div style="max-width: 900px; margin: 0 auto; height: 350px;">
-                <canvas id="impactGrowthChart"></canvas>
+
+            <!-- Transparency Hub (Feature: Phase 10) -->
+            <div id="transparencyHub" class="glass-master"
+                style="padding: 2rem; max-height: 500px; overflow-y: hidden;">
+                <!-- HeritageLedger will mount here -->
+                <div style="text-align: center; padding: 2rem;">
+                    <span class="spinner"></span>
+                    <p style="color: rgba(255,255,255,0.4); margin-top: 1rem;">Decrypting Transparency Layer...</p>
+                </div>
             </div>
         </div>
     </section>
+
+    <script src="/js/ledger.js"></script>
 
     <!-- Final CTA -->
     <section class="section">
