@@ -124,9 +124,27 @@
         <div class="container">
             <div style="max-width: 700px; margin: 0 auto;">
                 <div class="form-card">
-                    <div class="form-card-header">
-                        <h2 style="margin-bottom: 0.5rem;">Choose How You Want to Help</h2>
-                        <p style="color: var(--neutral-500); margin: 0;">Select your donation type and amount below</p>
+                    <div class="form-card-header"
+                        style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h2 style="margin-bottom: 0.5rem;">Choose How You Want to Help</h2>
+                            <p style="color: var(--neutral-500); margin: 0;">Select your donation type and amount below
+                            </p>
+                        </div>
+                        <!-- Yearly Giving Visualization (Feature 12) -->
+                        <div class="annual-progress-container" title="Your annual impact goal (Feature 12)">
+                            <div class="annual-track">
+                                <svg width="60" height="60">
+                                    <circle cx="30" cy="30" r="25" stroke="rgba(0,0,0,0.05)"></circle>
+                                    <circle cx="30" cy="30" r="25" stroke="var(--gold-500)" stroke-dasharray="157"
+                                        stroke-dashoffset="100"></circle>
+                                </svg>
+                                <span style="position: absolute; font-size: 0.6rem; font-weight: 800;">35%</span>
+                            </div>
+                            <p
+                                style="font-size: 0.55rem; text-align: center; color: var(--gold-600); font-weight: 700; margin: 0;">
+                                2026 GOAL</p>
+                        </div>
                     </div>
 
                     <form id="donationForm">
@@ -201,33 +219,60 @@
                             </div>
                         </div>
 
-                        <!-- Project Fund Thermometers (Feature 9) -->
+                        <!-- Project Selection (Feature 13 - Splitting) -->
                         <div class="form-group">
                             <label class="form-label">Direct Your Gift (Feature 13)</label>
-                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <p style="font-size: 0.8rem; color: var(--neutral-500); margin-bottom: 1rem;">Choose how to
+                                allocate your royal contribution.</p>
+                            <div style="display: flex; flex-direction: column; gap: 1rem;" id="projectSplitting">
                                 <div class="project-fund active" data-project="general">
                                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                                         <span style="font-size: 0.8rem; font-weight: 600;">General Restoration
                                             Fund</span>
-                                        <span style="font-size: 0.8rem; font-weight: 700;">85%</span>
+                                        <span class="fund-percent">85%</span>
                                     </div>
-                                    <div
-                                        style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
-                                        <div style="width: 85%; height: 100%; background: var(--gold-500);"></div>
+                                    <div class="fund-bar">
+                                        <div class="fund-fill" style="width: 85%;"></div>
                                     </div>
                                 </div>
                                 <div class="project-fund" data-project="mentorship">
                                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                                         <span style="font-size: 0.8rem; font-weight: 600;">Mentorship Scaling
                                             2026</span>
-                                        <span style="font-size: 0.8rem; font-weight: 700;">42%</span>
+                                        <span class="fund-percent">42%</span>
                                     </div>
-                                    <div
-                                        style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
-                                        <div style="width: 42%; height: 100%; background: var(--primary-600);"></div>
+                                    <div class="fund-bar">
+                                        <div class="fund-fill" style="width: 42%; background: var(--primary-600);">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Gift Dedication Forge (Feature 15) -->
+                        <div class="form-group" style="margin-top: 2rem;">
+                            <label class="form-check">
+                                <input type="checkbox" class="form-check-input" id="dedicateCheck">
+                                <span class="form-check-label" style="font-weight: 600;">Dedicate this donation (Feature
+                                    15)</span>
+                            </label>
+                        </div>
+
+                        <div id="dedicationFields"
+                            style="display: none; padding: 1.5rem; background: rgba(0,0,0,0.02); border-radius: 8px; border: 1px dashed var(--neutral-300); margin-bottom: 2rem;">
+                            <div class="form-group">
+                                <label style="font-size: 0.8rem; font-weight: 600;">Type of Dedication</label>
+                                <select class="form-input" id="dedicationType" style="margin-top: 0.5rem;">
+                                    <option value="honor">In Honor of</option>
+                                    <option value="memory">In Memory of</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-top: 1rem;">
+                                <input type="text" class="form-input" id="dedicationName" placeholder="Honoree Name">
+                            </div>
+                            <textarea class="form-textarea" id="dedicationMessage"
+                                placeholder="A brief message on your royal certificate (optional)" rows="2"
+                                style="margin-top: 1rem;"></textarea>
                         </div>
 
                         <!-- Donor Information -->

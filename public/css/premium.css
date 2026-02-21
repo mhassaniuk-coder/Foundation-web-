@@ -481,3 +481,82 @@ main {
 .glass-panel:hover {
     transform: translateY(-5px);
 }
+
+/* Donation Project Selection Styles */
+.project-fund {
+    padding: 1rem;
+    background: rgba(15, 23, 41, 0.02);
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.project-fund.active {
+    border-color: var(--gold-500);
+    background: rgba(212, 165, 116, 0.05);
+}
+
+.fund-bar {
+    height: 6px;
+    background: rgba(212, 165, 116, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.fund-fill {
+    height: 100%;
+    background: var(--gold-500);
+}
+
+.fund-percent {
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* Donor Ticker (Feature 11) */
+.donor-ticker {
+    background: var(--primary-900);
+    color: var(--gold-400);
+    padding: 0.5rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    border-top: 1px solid var(--gold-500);
+    z-index: 100;
+}
+
+.ticker-content {
+    display: inline-block;
+    animation: ticker 30s linear infinite;
+    padding-left: 100%;
+}
+
+@keyframes ticker {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Annual Progress Tracker (Feature 12) */
+.annual-track {
+    width: 60px;
+    height: 60px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.annual-track svg {
+    transform: rotate(-90deg);
+}
+
+.annual-track circle {
+    fill: none;
+    stroke-width: 4;
+}
