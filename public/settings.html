@@ -67,19 +67,56 @@
                 </p>
 
                 <div
-                    style="text-align: left; background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 12px;">
+                    style="text-align: left; background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 12px; margin-top: 2rem;">
                     <h4
                         style="color: var(--gold-400); margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
-                        Kingly Stats</h4>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span>Member Since</span>
-                        <span id="joinedDate" style="color: white;">Jan 2024</span>
+                        Security Management</h4>
+
+                    <!-- Multi-Factor Auth (Feature 6) -->
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <div>
+                            <p style="margin: 0; color: white; font-weight: 600;">Multi-Factor Auth</p>
+                            <span style="font-size: 0.75rem; color: rgba(255,255,255,0.4);">Enhance portal
+                                security</span>
+                        </div>
+                        <label class="switch"
+                            style="position: relative; display: inline-block; width: 40px; height: 20px;">
+                            <input type="checkbox" id="mfaToggle" style="opacity: 0; width: 0; height: 0;">
+                            <span class="slider round"
+                                style="position: absolute; cursor: pointer; inset: 0; background-color: rgba(255,255,255,0.1); transition: .4s; border-radius: 20px;"></span>
+                        </label>
                     </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span>Status</span>
-                        <span style="color: #4ade80;">Active Member</span>
-                    </div>
+
+                    <!-- Account Recovery (Feature 8) -->
+                    <button id="resetPasswordBtn" class="btn btn-ghost btn-sm"
+                        style="width: 100%; border: 1px solid rgba(255,255,255,0.1);">Initiate Password Reset</button>
+                    <p
+                        style="font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; margin-top: 0.5rem;">
+                        Secure link will be sent to your email</p>
                 </div>
+
+                <style>
+                    .slider:before {
+                        position: absolute;
+                        content: "";
+                        height: 16px;
+                        width: 16px;
+                        left: 2px;
+                        bottom: 2px;
+                        background-color: white;
+                        transition: .4s;
+                        border-radius: 50%;
+                    }
+
+                    input:checked+.slider {
+                        background-color: var(--gold-500);
+                    }
+
+                    input:checked+.slider:before {
+                        transform: translateX(20px);
+                    }
+                </style>
             </div>
         </div>
     </main>

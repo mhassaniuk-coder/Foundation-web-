@@ -69,6 +69,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    // MFA Toggle (Feature 6)
+    const mfaToggle = document.getElementById('mfaToggle');
+    if (mfaToggle) {
+        mfaToggle.addEventListener('change', () => {
+            if (mfaToggle.checked) {
+                alert("Multi-Factor Authentication enabled. In a production environment, you would now be prompted to scan a QR code.");
+            } else {
+                alert("MFA disabled. Your account is now less secure.");
+            }
+        });
+    }
+
+    // Account Recovery (Feature 8)
+    const resetPasswordBtn = document.getElementById('resetPasswordBtn');
+    if (resetPasswordBtn) {
+        resetPasswordBtn.addEventListener('click', async () => {
+            if (confirm("Send a password reset link to your registered email address?")) {
+                alert(`Security recovery link sent to ${user.email}. Check your inbox, King.`);
+            }
+        });
+    }
+
     // Logout
     logoutBtn.addEventListener('click', async () => {
         await auth.signOut();

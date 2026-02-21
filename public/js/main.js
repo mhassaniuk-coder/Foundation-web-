@@ -39,6 +39,24 @@ document.addEventListener('DOMContentLoaded', async function () {
     initForms();
     initCounters();
     initNewsletter();
+
+    // Auto-Session Purge (Feature 7)
+    if (user && window.location.pathname.includes('.html') && !window.location.pathname.includes('index.html')) {
+        let inactivityTimer;
+        const resetTimer = () => {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(async () => {
+                await auth.signOut();
+                alert("Session expired due to inactivity for your security.");
+                window.location.href = '/auth.html';
+            }, 15 * 60 * 1000); // 15 minutes
+        };
+
+        window.onload = resetTimer;
+        document.onmousemove = resetTimer;
+        document.onkeypress = resetTimer;
+        document.onclick = resetTimer;
+    }
 });
 
 

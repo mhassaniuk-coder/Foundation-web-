@@ -35,14 +35,50 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Password Strength Oracle (Feature 4)
+  const regPassword = document.getElementById('regPassword');
+  const strengthBar = document.getElementById('strengthBar');
+  const strengthText = document.getElementById('strengthText');
+  const strengthContainer = document.getElementById('passwordStrength');
+
+  if (regPassword) {
+    regPassword.addEventListener('input', () => {
+      const val = regPassword.value;
+      if (!val) {
+        strengthContainer.style.display = 'none';
+        strengthText.style.display = 'none';
+        return;
+      }
+
+      strengthContainer.style.display = 'block';
+      strengthText.style.display = 'block';
+
+      let score = 0;
+      if (val.length > 7) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      const colors = ['#ef4444', '#f59e0b', '#10b981', '#10b981'];
+      const texts = ['Weak', 'Fair', 'Strong', 'Kingly Power'];
+
+      strengthBar.style.width = (score / 4) * 100 + '%';
+      strengthBar.style.background = colors[score - 1] || colors[0];
+      strengthText.innerText = texts[score - 1] || texts[0];
+      strengthText.style.color = colors[score - 1] || colors[0];
+    });
+  }
+
   // Registration Handling
   registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const fullName = registerForm.querySelector('input[type="text"]').value;
     const email = registerForm.querySelector('input[type="email"]').value;
-    const password = registerForm.querySelector('input[type="password"]').value;
+    const password = regPassword.value;
 
     try {
+      // Security Audit: Log attempt (Feature 3 Mock)
+      console.log(`Security Audit: Registration attempt for ${email}`);
       const { data, error } = await auth.signUp(email, password);
       if (error) throw error;
 
