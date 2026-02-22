@@ -1,86 +1,520 @@
 // ============================================
-// DONATION PAGE - Payment Processing
-// Stripe Integration & Premium Features Engine
+// DONATION PAGE - Multi-Step Payment Processing
+// Stripe Integration & Form Validation
 // ============================================
 
 // Stripe public key - configurable via environment variables
 const STRIPE_PUBLIC_KEY = window.STRIPE_PUBLIC_KEY || '';
 
-let stripe;
-let cardElement;
+// Global state
+let stripe = null;
+let cardElement = null;
+let currentStep = 1;
+let donationData = {
+    amount: 100,
+    frequency: 'one-time',
+    fullName: '',
+    email: '',
+    phone: '',
+    street: '',
+    city: '',
+    state: '',
+    zip: '',
+    country: 'US',
+    cardHolderName: '',
+    billingDifferent: false,
+    billingStreet: '',
+    billingCity: '',
+    billingState: '',
+    billingZip: '',
+    billingCountry: 'US'
+};
+
+// Impact messages based on amount
+const impactMessages = {
+    25: "Your $25 donation provides a hot meal and essential supplies for a man in need.",
+    50: "Your $50 donation provides a night of safe shelter for someone experiencing homelessness.",
+    100: "Your $100 donation can provide a week of meals and shelter for a man in need.",
+    250: "Your $250 donation funds a month of mentorship sessions for at-risk youth.",
+    500: "Your $500 donation provides emergency housing assistance for a family in crisis."
+};
+
+// ============================================
+// INITIALIZATION
+// ============================================
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Initialize Stripe
-    if (typeof Stripe !== 'undefined') {
+    initializeStripe();
+    initializeMultiStepForm();
+    initializeAmountButtons();
+    initializeFrequencyToggle();
+    initializeBillingToggle();
+    initializeFormValidation();
+});
+
+// Initialize Stripe
+function initializeStripe() {
+    if (typeof Stripe !== 'undefined' && STRIPE_PUBLIC_KEY) {
         stripe = Stripe(STRIPE_PUBLIC_KEY);
         const elements = stripe.elements();
 
         // Custom styling for the Card element
         const style = {
             base: {
-                color: '#ffffff',
-                fontFamily: '"Outfit", sans-serif',
+                color: '#1a3a5c',
+                fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
                 fontSmoothing: 'antialiased',
                 fontSize: '16px',
                 '::placeholder': {
-                    color: 'rgba(255, 255, 255, 0.4)'
+                    color: '#94a3b8'
                 }
             },
             invalid: {
-                color: '#fa755a',
-                iconColor: '#fa755a'
+                color: '#ef4444',
+                iconColor: '#ef4444'
             }
         };
 
-        // Create an instance of the card Element
-        cardElement = elements.create('card', { style: style });
+        // Create card element
+        cardElement = elements.create('card', {
+            style: style,
+            hidePostalCode: true
+        });
 
-        // Add an instance of the card Element into the `card-element` <div>
+        // Mount card element
         const cardElementContainer = document.getElementById('card-element');
         if (cardElementContainer) {
             cardElement.mount('#card-element');
 
-            // Handle real-time validation errors from the card Element
+            // Handle real-time validation errors
             cardElement.on('change', function (event) {
                 const displayError = document.getElementById('card-errors');
                 if (displayError) {
                     if (event.error) {
                         displayError.textContent = event.error.message;
+                        displayError.style.display = 'block';
                     } else {
                         displayError.textContent = '';
+                        displayError.style.display = 'none';
                     }
                 }
             });
         }
+    }
+}
 
-        // Handle form submission
-        const donateForm = document.getElementById('donate-form');
-        if (donateForm) {
-            donateForm.addEventListener('submit', handleDonationSubmit);
+// ============================================
+// MULTI-STEP FORM NAVIGATION
+// ============================================
+
+function initializeMultiStepForm() {
+    // Next buttons
+    document.querySelectorAll('.btn-next').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const nextStep = parseInt(this.dataset.next);
+            if (validateStep(currentStep)) {
+                goToStep(nextStep);
+            }
+        });
+    });
+
+    // Back buttons
+    document.querySelectorAll('.btn-back').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const backStep = parseInt(this.dataset.back);
+            goToStep(backStep);
+        });
+    });
+
+    // Form submission
+    const form = document.getElementById('donationForm');
+    if (form) {
+        form.addEventListener('submit', handleFormSubmit);
+    }
+}
+
+function goToStep(stepNumber) {
+    // Update current step
+    currentStep = stepNumber;
+
+    // Hide all steps
+    document.querySelectorAll('.form-step').forEach(step => {
+        step.classList.remove('active');
+    });
+
+    // Show target step
+    const targetStep = document.querySelector(`.form-step[data-step="${stepNumber}"]`);
+    if (targetStep) {
+        targetStep.classList.add('active');
+    }
+
+    // Update progress indicator
+    updateProgressIndicator(stepNumber);
+
+    // Update summary if on payment step
+    if (stepNumber === 3) {
+        updatePaymentSummary();
+    }
+
+    // Scroll to top of form
+    const formContainer = document.querySelector('.donation-form-container');
+    if (formContainer) {
+        formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function updateProgressIndicator(stepNumber) {
+    document.querySelectorAll('.progress-steps .step').forEach((step, index) => {
+        const stepNum = index + 1;
+        step.classList.remove('active', 'completed');
+
+        if (stepNum < stepNumber) {
+            step.classList.add('completed');
+        } else if (stepNum === stepNumber) {
+            step.classList.add('active');
+        }
+    });
+
+    // Update step lines
+    document.querySelectorAll('.step-line').forEach((line, index) => {
+        if (index < stepNumber - 1) {
+            line.classList.add('completed');
+        } else {
+            line.classList.remove('completed');
+        }
+    });
+}
+
+// ============================================
+// STEP VALIDATION
+// ============================================
+
+function validateStep(step) {
+    clearStepError(step);
+
+    switch (step) {
+        case 1:
+            return validateStep1();
+        case 2:
+            return validateStep2();
+        case 3:
+            return validateStep3();
+        default:
+            return true;
+    }
+}
+
+function validateStep1() {
+    const amount = donationData.amount;
+
+    if (!amount || amount < 1) {
+        showStepError(1, 'Please select or enter a donation amount of at least $1.');
+        return false;
+    }
+
+    return true;
+}
+
+function validateStep2() {
+    const fullName = document.getElementById('fullName')?.value.trim();
+    const email = document.getElementById('email')?.value.trim();
+
+    let isValid = true;
+    let errorMessages = [];
+
+    // Validate full name
+    if (!fullName) {
+        showFieldError('fullName', 'Full name is required');
+        isValid = false;
+    } else {
+        clearFieldError('fullName');
+        donationData.fullName = fullName;
+    }
+
+    // Validate email
+    if (!email) {
+        showFieldError('email', 'Email address is required');
+        isValid = false;
+    } else if (!isValidEmail(email)) {
+        showFieldError('email', 'Please enter a valid email address');
+        isValid = false;
+    } else {
+        clearFieldError('email');
+        donationData.email = email;
+    }
+
+    // Collect optional fields
+    donationData.phone = document.getElementById('phone')?.value.trim() || '';
+    donationData.street = document.getElementById('street')?.value.trim() || '';
+    donationData.city = document.getElementById('city')?.value.trim() || '';
+    donationData.state = document.getElementById('state')?.value.trim() || '';
+    donationData.zip = document.getElementById('zip')?.value.trim() || '';
+    donationData.country = document.getElementById('country')?.value || 'US';
+
+    if (!isValid) {
+        showStepError(2, 'Please fill in all required fields.');
+    }
+
+    return isValid;
+}
+
+function validateStep3() {
+    const cardHolderName = document.getElementById('cardHolderName')?.value.trim();
+
+    let isValid = true;
+
+    // Validate card holder name
+    if (!cardHolderName) {
+        showFieldError('cardHolderName', 'Cardholder name is required');
+        isValid = false;
+    } else {
+        clearFieldError('cardHolderName');
+        donationData.cardHolderName = cardHolderName;
+    }
+
+    // Check if card element is valid
+    if (cardElement) {
+        // Card validation is handled by Stripe's element
+        // We'll do additional validation during submission
+    }
+
+    // Collect billing address if different
+    if (document.getElementById('differentBilling')?.checked) {
+        donationData.billingDifferent = true;
+        donationData.billingStreet = document.getElementById('billingStreet')?.value.trim() || '';
+        donationData.billingCity = document.getElementById('billingCity')?.value.trim() || '';
+        donationData.billingState = document.getElementById('billingState')?.value.trim() || '';
+        donationData.billingZip = document.getElementById('billingZip')?.value.trim() || '';
+        donationData.billingCountry = document.getElementById('billingCountry')?.value || 'US';
+    } else {
+        donationData.billingDifferent = false;
+    }
+
+    return isValid;
+}
+
+// ============================================
+// AMOUNT SELECTION
+// ============================================
+
+function initializeAmountButtons() {
+    const amountBtns = document.querySelectorAll('.amount-btn');
+    const customAmountGroup = document.getElementById('customAmountGroup');
+    const customAmountInput = document.getElementById('customAmount');
+
+    amountBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            // Remove active from all buttons
+            amountBtns.forEach(b => b.classList.remove('active'));
+            // Add active to clicked button
+            this.classList.add('active');
+
+            const amount = this.dataset.amount;
+
+            if (amount === 'custom') {
+                // Show custom amount input
+                if (customAmountGroup) {
+                    customAmountGroup.style.display = 'block';
+                    customAmountInput?.focus();
+                }
+            } else {
+                // Hide custom amount input
+                if (customAmountGroup) {
+                    customAmountGroup.style.display = 'none';
+                }
+                // Set amount
+                donationData.amount = parseInt(amount);
+                updateImpactPreview(parseInt(amount));
+            }
+        });
+    });
+
+    // Custom amount input
+    if (customAmountInput) {
+        customAmountInput.addEventListener('input', function () {
+            const value = parseFloat(this.value);
+            if (value && value > 0) {
+                donationData.amount = value;
+                updateImpactPreview(value);
+            }
+        });
+    }
+}
+
+function initializeFrequencyToggle() {
+    const frequencyInputs = document.querySelectorAll('input[name="donationFrequency"]');
+
+    frequencyInputs.forEach(input => {
+        input.addEventListener('change', function () {
+            // Update active state
+            document.querySelectorAll('.frequency-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            this.closest('.frequency-option').classList.add('active');
+
+            // Store frequency
+            donationData.frequency = this.value;
+        });
+    });
+}
+
+function updateImpactPreview(amount) {
+    const impactText = document.getElementById('impactText');
+    if (!impactText) return;
+
+    // Find the closest impact message
+    let message = impactMessages[500]; // Default for amounts >= 500
+
+    for (const threshold of [500, 250, 100, 50, 25]) {
+        if (amount >= threshold) {
+            message = impactMessages[threshold];
+            break;
         }
     }
 
-    // Initialize all donation page features
-    initializeDonationPage();
-});
+    // Custom message for amounts not matching presets
+    if (amount < 25) {
+        message = `Your $${amount} donation helps provide essential support to men and boys in need.`;
+    } else if (amount > 500) {
+        message = `Your generous $${amount} donation can transform lives through our comprehensive support programs.`;
+    }
+
+    impactText.textContent = message;
+}
 
 // ============================================
-// DONATION FORM HANDLING
+// BILLING ADDRESS TOGGLE
 // ============================================
 
-async function handleDonationSubmit(event) {
+function initializeBillingToggle() {
+    const differentBilling = document.getElementById('differentBilling');
+    const billingSection = document.getElementById('billingAddressSection');
+
+    if (differentBilling && billingSection) {
+        differentBilling.addEventListener('change', function () {
+            billingSection.style.display = this.checked ? 'block' : 'none';
+        });
+    }
+}
+
+// ============================================
+// FORM VALIDATION HELPERS
+// ============================================
+
+function initializeFormValidation() {
+    // Real-time validation for email
+    const emailInput = document.getElementById('email');
+    if (emailInput) {
+        emailInput.addEventListener('blur', function () {
+            if (this.value && !isValidEmail(this.value)) {
+                showFieldError('email', 'Please enter a valid email address');
+            } else {
+                clearFieldError('email');
+            }
+        });
+    }
+
+    // Real-time validation for name
+    const nameInput = document.getElementById('fullName');
+    if (nameInput) {
+        nameInput.addEventListener('input', function () {
+            if (this.value.trim()) {
+                clearFieldError('fullName');
+            }
+        });
+    }
+}
+
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+function showFieldError(fieldId, message) {
+    const errorEl = document.getElementById(`${fieldId}Error`);
+    const inputEl = document.getElementById(fieldId);
+
+    if (errorEl) {
+        errorEl.textContent = message;
+    }
+
+    if (inputEl) {
+        inputEl.classList.add('error');
+    }
+}
+
+function clearFieldError(fieldId) {
+    const errorEl = document.getElementById(`${fieldId}Error`);
+    const inputEl = document.getElementById(fieldId);
+
+    if (errorEl) {
+        errorEl.textContent = '';
+    }
+
+    if (inputEl) {
+        inputEl.classList.remove('error');
+    }
+}
+
+function showStepError(step, message) {
+    const errorEl = document.getElementById(`step${step}Error`);
+    if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+    }
+}
+
+function clearStepError(step) {
+    const errorEl = document.getElementById(`step${step}Error`);
+    if (errorEl) {
+        errorEl.textContent = '';
+        errorEl.style.display = 'none';
+    }
+}
+
+// ============================================
+// PAYMENT SUMMARY
+// ============================================
+
+function updatePaymentSummary() {
+    const summaryAmount = document.getElementById('summaryAmount');
+    const summaryFrequency = document.getElementById('summaryFrequency');
+    const summaryTotal = document.getElementById('summaryTotal');
+
+    if (summaryAmount) {
+        summaryAmount.textContent = `$${donationData.amount}`;
+    }
+
+    if (summaryFrequency) {
+        summaryFrequency.textContent = donationData.frequency === 'monthly' ? 'Monthly' : 'One-Time';
+    }
+
+    if (summaryTotal) {
+        summaryTotal.textContent = `$${donationData.amount.toFixed(2)}`;
+    }
+}
+
+// ============================================
+// FORM SUBMISSION & STRIPE PAYMENT
+// ============================================
+
+async function handleFormSubmit(event) {
     event.preventDefault();
 
-    const submitBtn = document.querySelector('.donate-submit-btn');
-    const originalText = submitBtn.textContent;
+    if (!validateStep(3)) {
+        return;
+    }
+
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnLoader = submitBtn.querySelector('.btn-loader');
+
+    // Show loading state
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Processing...';
+    btnText.style.display = 'none';
+    btnLoader.style.display = 'inline-flex';
 
     try {
-        // Get donation amount
-        const amount = getSelectedAmount();
-        const donationType = document.querySelector('input[name="donation-type"]:checked')?.value || 'one-time';
-
         // Create payment intent
         const response = await fetch('/api/create-payment-intent', {
             method: 'POST',
@@ -88,9 +522,21 @@ async function handleDonationSubmit(event) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                amount: amount,
+                amount: Math.round(donationData.amount * 100), // Convert to cents
                 currency: 'usd',
-                donationType: donationType
+                donationType: donationData.frequency,
+                donor: {
+                    name: donationData.fullName,
+                    email: donationData.email,
+                    phone: donationData.phone,
+                    address: {
+                        street: donationData.street,
+                        city: donationData.city,
+                        state: donationData.state,
+                        zip: donationData.zip,
+                        country: donationData.country
+                    }
+                }
             })
         });
 
@@ -101,13 +547,34 @@ async function handleDonationSubmit(event) {
         }
 
         // Confirm card payment
+        const billingDetails = {
+            name: donationData.cardHolderName,
+            email: donationData.email,
+        };
+
+        // Add address if provided
+        if (donationData.billingDifferent) {
+            billingDetails.address = {
+                line1: donationData.billingStreet,
+                city: donationData.billingCity,
+                state: donationData.billingState,
+                postal_code: donationData.billingZip,
+                country: donationData.billingCountry
+            };
+        } else if (donationData.street) {
+            billingDetails.address = {
+                line1: donationData.street,
+                city: donationData.city,
+                state: donationData.state,
+                postal_code: donationData.zip,
+                country: donationData.country
+            };
+        }
+
         const { error, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret, {
             payment_method: {
                 card: cardElement,
-                billing_details: {
-                    name: document.getElementById('donor-name')?.value || 'Anonymous',
-                    email: document.getElementById('donor-email')?.value || '',
-                }
+                billing_details: billingDetails
             }
         });
 
@@ -115,313 +582,95 @@ async function handleDonationSubmit(event) {
             throw new Error(error.message);
         }
 
-        // Payment successful
-        showSuccessMessage(paymentIntent);
-
-        // Record donation in database
-        await recordDonation(paymentIntent, amount, donationType);
+        // Payment successful - show confirmation
+        showConfirmation(paymentIntent);
 
     } catch (error) {
         console.error('Payment error:', error);
-        showErrorMessage(error.message || 'Payment failed. Please try again.');
-    } finally {
+        showStepError(3, error.message || 'Payment failed. Please try again.');
+
+        // Reset button state
         submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
-    }
-}
-
-function getSelectedAmount() {
-    const selectedBtn = document.querySelector('.amount-btn.selected');
-    if (selectedBtn) {
-        return parseInt(selectedBtn.dataset.amount);
-    }
-    const customAmount = document.getElementById('custom-amount');
-    if (customAmount && customAmount.value) {
-        return parseInt(customAmount.value);
-    }
-    return 25; // Default amount
-}
-
-function showSuccessMessage(paymentIntent) {
-    const form = document.getElementById('donate-form');
-    if (form) {
-        form.innerHTML = `
-            <div class="success-message">
-                <div class="success-icon">✓</div>
-                <h3>Thank You for Your Donation!</h3>
-                <p>Your contribution of $${(paymentIntent.amount / 100).toFixed(2)} has been processed successfully.</p>
-                <p class="transaction-id">Transaction ID: ${paymentIntent.id}</p>
-                <button onclick="location.reload()" class="donate-submit-btn">Make Another Donation</button>
-            </div>
-        `;
-    }
-}
-
-function showErrorMessage(message) {
-    const errorDiv = document.getElementById('card-errors');
-    if (errorDiv) {
-        errorDiv.textContent = message;
-        errorDiv.style.display = 'block';
-    }
-}
-
-async function recordDonation(paymentIntent, amount, donationType) {
-    try {
-        // This would typically call your backend to record the donation
-        console.log('Recording donation:', {
-            paymentIntentId: paymentIntent.id,
-            amount: amount,
-            type: donationType
-        });
-    } catch (error) {
-        console.error('Error recording donation:', error);
+        btnText.style.display = 'inline';
+        btnLoader.style.display = 'none';
     }
 }
 
 // ============================================
-// DONATION PAGE INITIALIZATION
+// CONFIRMATION / RECEIPT
 // ============================================
 
-function initializeDonationPage() {
-    initializeAmountButtons();
-    initializeCustomAmount();
-    initializeDonationTypeToggle();
-    initializeDonationBenefits();
-    initializeRecurringOptions();
-    initializeTributeOptions();
-    initializeCorporateMatching();
-    initializeProgressIndicator();
-}
+function showConfirmation(paymentIntent) {
+    // Go to step 4
+    goToStep(4);
 
-// Amount button selection
-function initializeAmountButtons() {
-    const amountBtns = document.querySelectorAll('.amount-btn');
-    const customAmountInput = document.getElementById('custom-amount');
+    // Populate receipt data
+    const transactionId = document.getElementById('transactionId');
+    const receiptDonor = document.getElementById('receiptDonor');
+    const receiptEmail = document.getElementById('receiptEmail');
+    const receiptAmount = document.getElementById('receiptAmount');
+    const receiptFrequency = document.getElementById('receiptFrequency');
+    const receiptDate = document.getElementById('receiptDate');
 
-    amountBtns.forEach(btn => {
-        btn.addEventListener('click', function () {
-            // Remove selected from all buttons
-            amountBtns.forEach(b => b.classList.remove('selected'));
-            // Add selected to clicked button
-            this.classList.add('selected');
-            // Clear custom amount
-            if (customAmountInput) {
-                customAmountInput.value = '';
-            }
-            // Update summary
-            updateDonationSummary();
-        });
-    });
-}
-
-// Custom amount input
-function initializeCustomAmount() {
-    const customAmountInput = document.getElementById('custom-amount');
-    if (customAmountInput) {
-        customAmountInput.addEventListener('input', function () {
-            // Remove selected from preset buttons
-            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
-            updateDonationSummary();
-        });
-    }
-}
-
-// Donation type toggle (one-time vs recurring)
-function initializeDonationTypeToggle() {
-    const typeInputs = document.querySelectorAll('input[name="donation-type"]');
-    typeInputs.forEach(input => {
-        input.addEventListener('change', function () {
-            updateDonationSummary();
-            toggleRecurringOptions(this.value === 'recurring');
-        });
-    });
-}
-
-function toggleRecurringOptions(show) {
-    const recurringOptions = document.getElementById('recurring-options');
-    if (recurringOptions) {
-        recurringOptions.style.display = show ? 'block' : 'none';
-    }
-}
-
-// Update donation summary
-function updateDonationSummary() {
-    const amount = getSelectedAmount();
-    const donationType = document.querySelector('input[name="donation-type"]:checked')?.value || 'one-time';
-
-    const summaryAmount = document.getElementById('summary-amount');
-    const summaryType = document.getElementById('summary-type');
-
-    if (summaryAmount) {
-        summaryAmount.textContent = `$${amount}`;
+    if (transactionId) {
+        transactionId.textContent = paymentIntent.id;
     }
 
-    if (summaryType) {
-        summaryType.textContent = donationType === 'recurring' ? 'Monthly' : 'One-time';
-    }
-}
-
-// Donation benefits display
-function initializeDonationBenefits() {
-    const amountBtns = document.querySelectorAll('.amount-btn');
-    amountBtns.forEach(btn => {
-        btn.addEventListener('click', function () {
-            updateBenefitsDisplay(parseInt(this.dataset.amount));
-        });
-    });
-}
-
-function updateBenefitsDisplay(amount) {
-    const benefitsContainer = document.getElementById('donation-benefits');
-    if (!benefitsContainer) return;
-
-    let benefits = [];
-
-    if (amount >= 10) {
-        benefits = ['Personal thank you email', 'Name on our donors page'];
-    }
-    if (amount >= 25) {
-        benefits = [...benefits, 'Exclusive newsletter updates', 'Digital certificate of appreciation'];
-    }
-    if (amount >= 50) {
-        benefits = [...benefits, 'Restored Kings Foundation sticker', 'Early access to events'];
-    }
-    if (amount >= 100) {
-        benefits = [...benefits, 'Restored Kings Foundation t-shirt', 'VIP event invitations'];
-    }
-    if (amount >= 250) {
-        benefits = [...benefits, 'Personal video message from leadership', 'Annual report hardcopy'];
-    }
-    if (amount >= 500) {
-        benefits = [...benefits, 'Private dinner invitation', 'Named program sponsorship'];
+    if (receiptDonor) {
+        receiptDonor.textContent = donationData.fullName;
     }
 
-    benefitsContainer.innerHTML = benefits.length > 0
-        ? `<h4>Your Impact</h4><ul>${benefits.map(b => `<li>${b}</li>`).join('')}</ul>`
-        : '';
-}
-
-// Recurring options
-function initializeRecurringOptions() {
-    const frequencySelect = document.getElementById('recurring-frequency');
-    if (frequencySelect) {
-        frequencySelect.addEventListener('change', updateDonationSummary);
+    if (receiptEmail) {
+        receiptEmail.textContent = donationData.email;
     }
-}
 
-// Tribute/gift options
-function initializeTributeOptions() {
-    const tributeCheckbox = document.getElementById('tribute-donation');
-    const tributeForm = document.getElementById('tribute-form');
+    if (receiptAmount) {
+        const amount = paymentIntent.amount / 100;
+        receiptAmount.textContent = `$${amount.toFixed(2)}`;
+    }
 
-    if (tributeCheckbox && tributeForm) {
-        tributeCheckbox.addEventListener('change', function () {
-            tributeForm.style.display = this.checked ? 'block' : 'none';
+    if (receiptFrequency) {
+        receiptFrequency.textContent = donationData.frequency === 'monthly' ? 'Monthly' : 'One-Time';
+    }
+
+    if (receiptDate) {
+        const date = new Date();
+        receiptDate.textContent = date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
         });
     }
 }
 
-// Corporate matching
-function initializeCorporateMatching() {
-    const matchingSearch = document.getElementById('employer-search');
-    if (matchingSearch) {
-        matchingSearch.addEventListener('input', debounce(async function () {
-            const query = this.value;
-            if (query.length >= 2) {
-                // Search for matching employers
-                const results = await searchMatchingEmployers(query);
-                displayMatchingResults(results);
-            }
-        }, 300));
-    }
+// ============================================
+// SOCIAL SHARING
+// ============================================
+
+function shareOnFacebook(event) {
+    event.preventDefault();
+    const url = encodeURIComponent(window.location.origin);
+    const text = encodeURIComponent(`I just donated to Restored Kings Foundation! Help restore dignity and rebuild lives.`);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank', 'width=600,height=400');
 }
 
-async function searchMatchingEmployers(query) {
-    // This would typically call your backend API
-    // For now, return mock data
-    const employers = [
-        { name: 'Google', ratio: '3:1', max: 15000 },
-        { name: 'Microsoft', ratio: '1:1', max: 15000 },
-        { name: 'Apple', ratio: '1:1', max: 10000 },
-        { name: 'Amazon', ratio: '1:1', max: 5000 }
-    ];
-
-    return employers.filter(e =>
-        e.name.toLowerCase().includes(query.toLowerCase())
-    );
+function shareOnTwitter(event) {
+    event.preventDefault();
+    const url = encodeURIComponent(window.location.origin);
+    const text = encodeURIComponent(`I just donated to @RestoredKings! Help restore dignity and rebuild lives. #RestoredKings #GiveBack`);
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'width=600,height=400');
 }
 
-function displayMatchingResults(results) {
-    const resultsContainer = document.getElementById('matching-results');
-    if (!resultsContainer) return;
-
-    if (results.length === 0) {
-        resultsContainer.innerHTML = '<p>No matching employers found</p>';
-        return;
-    }
-
-    resultsContainer.innerHTML = results.map(employer => `
-        <div class="matching-employer" onclick="selectEmployer('${employer.name}', '${employer.ratio}', ${employer.max})">
-            <strong>${employer.name}</strong>
-            <span>Match: ${employer.ratio} up to $${employer.max.toLocaleString()}</span>
-        </div>
-    `).join('');
+function shareOnLinkedIn(event) {
+    event.preventDefault();
+    const url = encodeURIComponent(window.location.origin);
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank', 'width=600,height=400');
 }
 
-function selectEmployer(name, ratio, max) {
-    const selectedEmployer = document.getElementById('selected-employer');
-    if (selectedEmployer) {
-        selectedEmployer.value = name;
-        selectedEmployer.dataset.ratio = ratio;
-        selectedEmployer.dataset.max = max;
-
-        // Update summary with matching info
-        showMatchingInfo(ratio, max);
-    }
-}
-
-function showMatchingInfo(ratio, max) {
-    const amount = getSelectedAmount();
-    const matchAmount = calculateMatch(amount, ratio, max);
-
-    const matchingInfo = document.getElementById('matching-info');
-    if (matchingInfo) {
-        matchingInfo.innerHTML = `
-            <div class="match-alert">
-                <strong>Great news!</strong> Your employer will match $${matchAmount} of your donation.
-                <br>Total impact: $${amount + matchAmount}
-            </div>
-        `;
-        matchingInfo.style.display = 'block';
-    }
-}
-
-function calculateMatch(amount, ratio, max) {
-    const [multiplier, divisor] = ratio.split(':').map(Number);
-    const match = Math.floor(amount * multiplier / divisor);
-    return Math.min(match, max);
-}
-
-// Progress indicator for fundraising goals
-function initializeProgressIndicator() {
-    const progressBar = document.getElementById('fundraising-progress');
-    if (!progressBar) return;
-
-    // This would typically fetch from your backend
-    const currentAmount = 15750;
-    const goalAmount = 25000;
-    const percentage = (currentAmount / goalAmount) * 100;
-
-    progressBar.innerHTML = `
-        <div class="progress-container">
-            <div class="progress-bar" style="width: ${percentage}%"></div>
-        </div>
-        <div class="progress-text">
-            <span>$${currentAmount.toLocaleString()} raised</span>
-            <span>Goal: $${goalAmount.toLocaleString()}</span>
-        </div>
-    `;
-}
+// Make sharing functions global
+window.shareOnFacebook = shareOnFacebook;
+window.shareOnTwitter = shareOnTwitter;
+window.shareOnLinkedIn = shareOnLinkedIn;
 
 // ============================================
 // UTILITY FUNCTIONS
@@ -439,9 +688,9 @@ function debounce(func, wait) {
     };
 }
 
-// Export functions for external use
+// Export for external use
 window.DonationPage = {
-    getSelectedAmount,
-    updateDonationSummary,
-    selectEmployer
+    getDonationData: () => donationData,
+    getCurrentStep: () => currentStep,
+    goToStep: goToStep
 };

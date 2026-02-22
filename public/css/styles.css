@@ -2208,3 +2208,1199 @@ footer::before {
   background: white;
   padding: 4rem 2rem;
 }
+
+/* ============================================
+   MULTI-STEP DONATION FORM STYLES
+   ============================================ */
+
+/* Donation Section */
+.donation-section {
+  background: linear-gradient(180deg, var(--neutral-50) 0%, var(--white) 100%);
+  padding: 3rem 1.5rem 4rem;
+}
+
+.donation-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Progress Steps Indicator */
+.progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  padding: 0 1rem;
+}
+
+.progress-steps .step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.step-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--neutral-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.step-number {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--neutral-500);
+  transition: all 0.3s ease;
+}
+
+.step-check {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  color: var(--white);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.progress-steps .step.active .step-circle {
+  background: var(--primary-700);
+  box-shadow: 0 0 0 4px rgba(26, 58, 92, 0.2);
+}
+
+.progress-steps .step.active .step-number {
+  color: var(--white);
+}
+
+.progress-steps .step.completed .step-circle {
+  background: var(--success);
+}
+
+.progress-steps .step.completed .step-number {
+  opacity: 0;
+}
+
+.progress-steps .step.completed .step-check {
+  opacity: 1;
+}
+
+.step-label {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.progress-steps .step.active .step-label {
+  color: var(--primary-700);
+}
+
+.progress-steps .step.completed .step-label {
+  color: var(--success);
+}
+
+.step-line {
+  flex: 1;
+  height: 3px;
+  background: var(--neutral-200);
+  margin: 0 0.75rem;
+  margin-bottom: 1.5rem;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  min-width: 30px;
+  max-width: 80px;
+}
+
+.step-line.completed {
+  background: var(--success);
+}
+
+/* Donation Form Container */
+.donation-form-container {
+  background: var(--white);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+}
+
+.donation-form {
+  padding: 2rem;
+}
+
+/* Form Steps */
+.form-step {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.form-step.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Step Header */
+.step-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.step-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary-900);
+  margin-bottom: 0.5rem;
+}
+
+.step-header p {
+  color: var(--neutral-500);
+  font-size: 0.95rem;
+}
+
+/* Frequency Toggle */
+.frequency-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.frequency-option {
+  position: relative;
+  cursor: pointer;
+}
+
+.frequency-option input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.frequency-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1rem;
+  background: var(--neutral-50);
+  border: 2px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+}
+
+.frequency-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.frequency-text {
+  font-weight: 600;
+  color: var(--neutral-700);
+}
+
+.frequency-option.active .frequency-label,
+.frequency-option input:checked+.frequency-label {
+  background: rgba(26, 58, 92, 0.05);
+  border-color: var(--primary-700);
+}
+
+.frequency-option.active .frequency-text,
+.frequency-option input:checked+.frequency-label .frequency-text {
+  color: var(--primary-700);
+}
+
+/* Amount Grid */
+.amount-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .amount-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.amount-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0.75rem;
+  background: var(--neutral-50);
+  border: 2px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.amount-btn:hover {
+  border-color: var(--primary-500);
+  background: rgba(26, 58, 92, 0.03);
+}
+
+.amount-btn.active {
+  background: rgba(26, 58, 92, 0.08);
+  border-color: var(--primary-700);
+}
+
+.amount-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-900);
+}
+
+.amount-impact {
+  font-size: 0.7rem;
+  color: var(--neutral-500);
+  margin-top: 0.25rem;
+}
+
+.amount-btn.active .amount-value {
+  color: var(--primary-700);
+}
+
+.amount-btn.active .amount-impact {
+  color: var(--primary-600);
+}
+
+/* Custom Amount */
+.custom-amount-group {
+  margin-top: 1rem;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--neutral-500);
+  font-weight: 600;
+}
+
+.input-with-icon .form-input {
+  padding-left: 2.5rem;
+}
+
+/* Impact Preview */
+.impact-preview {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(26, 58, 92, 0.05) 100%);
+  border: 1px solid var(--gold-300);
+  border-radius: var(--radius-lg);
+  margin-top: 1.5rem;
+}
+
+.impact-icon {
+  font-size: 2rem;
+}
+
+.impact-content h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--primary-900);
+  margin-bottom: 0.25rem;
+}
+
+.impact-content p {
+  font-size: 0.85rem;
+  color: var(--neutral-600);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Form Row */
+.form-row {
+  margin-bottom: 1rem;
+}
+
+.form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 500px) {
+  .form-row-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-section-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 1.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--neutral-200);
+}
+
+/* Form Labels */
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--neutral-700);
+  margin-bottom: 0.5rem;
+}
+
+.form-label .required {
+  color: var(--danger);
+}
+
+.form-label .optional {
+  font-weight: 400;
+  color: var(--neutral-400);
+}
+
+/* Form Input */
+.form-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  border: 2px solid var(--neutral-200);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  transition: all 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-input.error {
+  border-color: var(--danger);
+}
+
+.form-input::placeholder {
+  color: var(--neutral-400);
+}
+
+/* Form Error */
+.form-error {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--danger);
+  margin-top: 0.35rem;
+}
+
+.step-error {
+  background: var(--danger-light);
+  color: var(--danger);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  margin-top: 1rem;
+  display: none;
+}
+
+/* Form Check */
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.form-check-input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary-700);
+  cursor: pointer;
+}
+
+.form-check-label {
+  font-size: 0.9rem;
+  color: var(--neutral-700);
+}
+
+/* Donation Summary Card */
+.donation-summary-card {
+  background: var(--neutral-50);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.summary-label {
+  font-size: 0.9rem;
+  color: var(--neutral-600);
+}
+
+.summary-value {
+  font-weight: 600;
+  color: var(--neutral-800);
+}
+
+.summary-divider {
+  height: 1px;
+  background: var(--neutral-200);
+  margin: 0.75rem 0;
+}
+
+.summary-row.total .summary-label,
+.summary-row.total .summary-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-900);
+}
+
+/* Card Element Container */
+.card-element-container {
+  padding: 1rem;
+  border: 2px solid var(--neutral-200);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  transition: all 0.2s ease;
+}
+
+.card-element-container:focus-within {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.card-errors {
+  font-size: 0.85rem;
+  color: var(--danger);
+  margin-top: 0.5rem;
+  display: none;
+}
+
+/* Billing Address Section */
+.billing-address-section {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--neutral-50);
+  border-radius: var(--radius-md);
+}
+
+/* Security Badge */
+.security-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  color: var(--success);
+}
+
+.security-badge svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Step Navigation */
+.step-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--neutral-200);
+}
+
+.step-navigation .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.step-navigation .btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-back {
+  padding: 0.75rem 1.25rem;
+}
+
+.btn-next,
+.btn-submit {
+  flex: 1;
+  max-width: 280px;
+  justify-content: center;
+}
+
+.btn-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Confirmation Container */
+.confirmation-container {
+  text-align: center;
+  padding: 1rem;
+}
+
+.success-icon-container {
+  margin-bottom: 1.5rem;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.success-icon svg {
+  width: 40px;
+  height: 40px;
+  color: var(--white);
+}
+
+.confirmation-container h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary-900);
+  margin-bottom: 0.75rem;
+}
+
+.confirmation-message {
+  font-size: 1rem;
+  color: var(--neutral-600);
+  max-width: 400px;
+  margin: 0 auto 2rem;
+}
+
+/* Receipt Card */
+.receipt-card {
+  background: var(--neutral-50);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  max-width: 400px;
+  margin: 0 auto 2rem;
+  text-align: left;
+}
+
+.receipt-header {
+  background: var(--primary-700);
+  color: var(--white);
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.receipt-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.receipt-date {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+.receipt-body {
+  padding: 1.25rem;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--neutral-200);
+}
+
+.receipt-row:last-child {
+  border-bottom: none;
+}
+
+.receipt-label {
+  font-size: 0.85rem;
+  color: var(--neutral-500);
+}
+
+.receipt-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--neutral-800);
+}
+
+.receipt-value.transaction-id {
+  font-family: monospace;
+  font-size: 0.75rem;
+  background: var(--neutral-200);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.receipt-amount {
+  font-size: 1.1rem;
+  color: var(--success);
+}
+
+.receipt-footer {
+  padding: 1rem 1.25rem;
+  background: rgba(16, 185, 129, 0.1);
+  text-align: center;
+}
+
+.receipt-footer p {
+  font-size: 0.8rem;
+  color: var(--success);
+  margin: 0;
+}
+
+/* Confirmation Actions */
+.confirmation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.confirmation-actions .btn {
+  padding: 0.75rem 1.25rem;
+  font-size: 0.9rem;
+}
+
+.confirmation-actions .btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Social Share */
+.social-share {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--neutral-200);
+}
+
+.social-share p {
+  font-size: 0.85rem;
+  color: var(--neutral-500);
+  margin-bottom: 0.75rem;
+}
+
+.share-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.share-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  transition: all 0.2s ease;
+}
+
+.share-btn:hover {
+  transform: translateY(-2px);
+}
+
+.share-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.share-btn.facebook {
+  background: #1877f2;
+}
+
+.share-btn.twitter {
+  background: #1da1f2;
+}
+
+.share-btn.linkedin {
+  background: #0077b5;
+}
+
+/* Trust Badges */
+.trust-badges {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--neutral-200);
+}
+
+.trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--neutral-500);
+  font-size: 0.8rem;
+}
+
+.trust-badge svg {
+  width: 20px;
+  height: 20px;
+  color: var(--success);
+}
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--primary-700);
+  color: var(--white);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-800);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--neutral-100);
+  color: var(--neutral-700);
+  border: 1px solid var(--neutral-300);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--neutral-200);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary-700);
+  border: 2px solid var(--primary-700);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: var(--primary-700);
+  color: var(--white);
+}
+
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .donation-form {
+    padding: 1.5rem;
+  }
+
+  .step-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .progress-steps {
+    padding: 0;
+  }
+
+  .step-circle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .step-label {
+    font-size: 0.65rem;
+  }
+
+  .step-line {
+    min-width: 20px;
+    max-width: 50px;
+  }
+
+  .trust-badges {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .confirmation-actions {
+    flex-direction: column;
+  }
+
+  .confirmation-actions .btn {
+    width: 100%;
+  }
+}
+
+/* ============================================
+   VOLUNTEER APPLICATION STYLES
+   ============================================ */
+
+/* Review Section Styles */
+.review-section {
+  background: var(--neutral-50);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: var(--white);
+  border-bottom: 1px solid var(--neutral-200);
+}
+
+.review-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-900);
+  margin: 0;
+}
+
+.review-content {
+  padding: 1rem 1.25rem;
+}
+
+.review-item {
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  color: var(--neutral-700);
+}
+
+.review-item strong {
+  color: var(--neutral-800);
+  margin-right: 0.5rem;
+}
+
+/* Checkbox Label Styles */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  position: relative;
+}
+
+.checkbox-label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--neutral-300);
+  border-radius: var(--radius-sm);
+  margin-right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.checkbox-label input[type="checkbox"]:checked+.checkbox-custom {
+  background: var(--primary-700);
+  border-color: var(--primary-700);
+}
+
+.checkbox-label input[type="checkbox"]:checked+.checkbox-custom::after {
+  content: '';
+  width: 6px;
+  height: 10px;
+  border: solid var(--white);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.checkbox-label input[type="checkbox"]:focus+.checkbox-custom {
+  box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.2);
+}
+
+.checkbox-label span:last-child {
+  font-size: 0.95rem;
+  color: var(--neutral-700);
+}
+
+.checkbox-label a {
+  color: var(--primary-700);
+  text-decoration: underline;
+}
+
+.checkbox-label a:hover {
+  color: var(--primary-800);
+}
+
+/* Reference Number Display */
+.reference-number {
+  background: var(--primary-700);
+  color: var(--white);
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-lg);
+  margin: 1.5rem auto;
+  max-width: 350px;
+  text-align: center;
+}
+
+.reference-number span {
+  display: block;
+  font-size: 0.8rem;
+  opacity: 0.9;
+  margin-bottom: 0.25rem;
+}
+
+.reference-number strong {
+  font-size: 1.25rem;
+  font-family: monospace;
+  letter-spacing: 1px;
+}
+
+/* Next Steps Section */
+.next-steps {
+  background: var(--neutral-50);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  text-align: left;
+}
+
+.next-steps h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-900);
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+.next-steps ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.next-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--neutral-200);
+}
+
+.next-steps li:last-child {
+  border-bottom: none;
+}
+
+.next-steps .step-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.next-steps li div {
+  flex: 1;
+}
+
+.next-steps li strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--neutral-800);
+  margin-bottom: 0.25rem;
+}
+
+.next-steps li p {
+  font-size: 0.85rem;
+  color: var(--neutral-500);
+  margin: 0;
+}
+
+/* Email Confirmation Message */
+.email-confirmation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: var(--info-light);
+  border: 1px solid var(--info);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+
+.email-confirmation svg {
+  color: var(--info);
+  flex-shrink: 0;
+}
+
+.email-confirmation p {
+  font-size: 0.9rem;
+  color: var(--neutral-700);
+  margin: 0;
+}
+
+/* Confirmation Icon */
+.confirmation-icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: scaleIn 0.5s ease;
+}
+
+.confirmation-icon svg {
+  color: var(--white);
+}
+
+/* Field Error Styles */
+.field-error {
+  color: var(--danger);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.form-group input.error,
+.form-group select.error,
+.form-group textarea.error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Step Error Styles */
+.step-error {
+  background: var(--danger-light);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* Button Size Variants */
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* Volunteer Form Responsive */
+@media (max-width: 600px) {
+  .review-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .review-header .btn {
+    width: 100%;
+  }
+
+  .next-steps li {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .email-confirmation {
+    flex-direction: column;
+    text-align: center;
+  }
+}

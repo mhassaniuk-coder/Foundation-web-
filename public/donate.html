@@ -25,8 +25,6 @@
 
     <!-- Stripe for secure payments -->
     <script src="https://js.stripe.com/v3/"></script>
-    <!-- jsPDF for receipts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 <body>
@@ -56,209 +54,516 @@
 
     <!-- Page Header -->
     <section class="page-header">
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h1>Make a Difference</h1>
-                <div class="breadcrumb">
-                    <a href="/">Home</a>
-                    <span>/</span>
-                    <span>Donate</span>
-                </div>
-            </div>
-            <!-- Royal Donor Banner (Feature 20) -->
-            <div class="noble-badge"
-                style="background: var(--gradient-gold); padding: 1rem 2rem; border-radius: var(--radius-full); color: var(--primary-900); font-weight: 800; box-shadow: var(--shadow-xl);">
-                ROYAL GIVER CIRCLE
+        <div class="container">
+            <h1>Make a Difference</h1>
+            <div class="breadcrumb">
+                <a href="/">Home</a>
+                <span>/</span>
+                <span>Donate</span>
             </div>
         </div>
     </section>
 
-    <!-- Donation Form -->
-    <section class="section">
+    <!-- Multi-Step Donation Form -->
+    <section class="section donation-section">
         <div class="container">
-            <div style="max-width: 800px; margin: 0 auto;">
-                <div class="form-card glass-panel" style="border: none;">
-                    <div class="form-card-header"
-                        style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05);">
-                        <div>
-                            <h2 style="margin-bottom: 0.5rem;">Choose How You Want to Help</h2>
-                            <p style="color: var(--neutral-500); margin: 0;">Select your donation type and amount below
-                            </p>
+            <div class="donation-wrapper">
+                <!-- Progress Indicator -->
+                <div class="progress-steps">
+                    <div class="step active" data-step="1">
+                        <div class="step-circle">
+                            <span class="step-number">1</span>
+                            <svg class="step-check" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
                         </div>
-                        <div style="display: flex; gap: 1rem; align-items: center;">
-                            <!-- Multi-Currency Selector (Feature 24) -->
-                            <select id="currencySelector" class="form-input"
-                                style="width: auto; padding: 0.25rem 0.5rem; font-size: 0.75rem; height: auto; border-color: var(--gold-500); background: rgba(212, 165, 116, 0.05);">
-                                <option value="USD">USD ($)</option>
-                                <option value="EUR">EUR (€)</option>
-                                <option value="GBP">GBP (£)</option>
-                                <option value="CAD">CAD ($)</option>
-                            </select>
-                            <!-- Annual Impact Tracker (Feature 12) -->
-                            <div class="annual-progress-container" title="Your annual impact goal (Feature 12)">
-                                <div class="annual-track">
-                                    <svg width="60" height="60">
-                                        <circle cx="30" cy="30" r="25" stroke="rgba(0,0,0,0.05)"></circle>
-                                        <circle cx="30" cy="30" r="25" stroke="var(--gold-500)" stroke-dasharray="157"
-                                            stroke-dashoffset="100"></circle>
-                                    </svg>
-                                    <span style="position: absolute; font-size: 0.6rem; font-weight: 800;">35%</span>
-                                </div>
-                            </div>
-                        </div>
+                        <span class="step-label">Amount</span>
                     </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="2">
+                        <div class="step-circle">
+                            <span class="step-number">2</span>
+                            <svg class="step-check" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <span class="step-label">Information</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="3">
+                        <div class="step-circle">
+                            <span class="step-number">3</span>
+                            <svg class="step-check" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <span class="step-label">Payment</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="4">
+                        <div class="step-circle">
+                            <span class="step-number">4</span>
+                            <svg class="step-check" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <span class="step-label">Confirmation</span>
+                    </div>
+                </div>
 
-                    <form id="donationForm" style="padding: 2rem;">
-                        <!-- Giving Frequency (Feature 2) -->
-                        <div class="form-group">
-                            <label class="form-label">Giving Frequency</label>
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-                                <label class="frequency-tab active">
-                                    <input type="radio" name="donationType" value="one-time" checked
-                                        style="display:none;">
-                                    <span>One-Time</span>
+                <!-- Form Container -->
+                <div class="donation-form-container">
+                    <form id="donationForm" class="donation-form">
+
+                        <!-- Step 1: Donation Amount -->
+                        <div class="form-step active" data-step="1">
+                            <div class="step-header">
+                                <h2>Choose Your Gift</h2>
+                                <p>Select your donation amount and frequency</p>
+                            </div>
+
+                            <!-- Frequency Selection -->
+                            <div class="form-group">
+                                <label class="form-label">Donation Frequency</label>
+                                <div class="frequency-toggle">
+                                    <label class="frequency-option active">
+                                        <input type="radio" name="donationFrequency" value="one-time" checked>
+                                        <span class="frequency-label">
+                                            <span class="frequency-icon">💎</span>
+                                            <span class="frequency-text">One-Time</span>
+                                        </span>
+                                    </label>
+                                    <label class="frequency-option">
+                                        <input type="radio" name="donationFrequency" value="monthly">
+                                        <span class="frequency-label">
+                                            <span class="frequency-icon">👑</span>
+                                            <span class="frequency-text">Monthly</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Amount Selection -->
+                            <div class="form-group">
+                                <label class="form-label">Select Amount</label>
+                                <div class="amount-grid">
+                                    <button type="button" class="amount-btn" data-amount="25">
+                                        <span class="amount-value">$25</span>
+                                        <span class="amount-impact">Noble Start</span>
+                                    </button>
+                                    <button type="button" class="amount-btn" data-amount="50">
+                                        <span class="amount-value">$50</span>
+                                        <span class="amount-impact">Royal Support</span>
+                                    </button>
+                                    <button type="button" class="amount-btn active" data-amount="100">
+                                        <span class="amount-value">$100</span>
+                                        <span class="amount-impact">Kingly Gift</span>
+                                    </button>
+                                    <button type="button" class="amount-btn" data-amount="250">
+                                        <span class="amount-value">$250</span>
+                                        <span class="amount-impact">Heritage Giver</span>
+                                    </button>
+                                    <button type="button" class="amount-btn" data-amount="500">
+                                        <span class="amount-value">$500</span>
+                                        <span class="amount-impact">Crown Patron</span>
+                                    </button>
+                                    <button type="button" class="amount-btn custom-amount-btn" data-amount="custom">
+                                        <span class="amount-value">Custom</span>
+                                        <span class="amount-impact">Your Amount</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Custom Amount Input -->
+                            <div class="form-group custom-amount-group" id="customAmountGroup" style="display: none;">
+                                <label class="form-label" for="customAmount">Enter Custom Amount</label>
+                                <div class="input-with-icon">
+                                    <span class="input-icon">$</span>
+                                    <input type="number" id="customAmount" class="form-input" placeholder="Enter amount"
+                                        min="1" step="1">
+                                </div>
+                            </div>
+
+                            <!-- Impact Preview -->
+                            <div class="impact-preview" id="impactPreview">
+                                <div class="impact-icon">👑</div>
+                                <div class="impact-content">
+                                    <h4>Your Impact</h4>
+                                    <p id="impactText">Your $100 donation can provide a week of meals and shelter for a
+                                        man in need.</p>
+                                </div>
+                            </div>
+
+                            <!-- Error Message -->
+                            <div class="step-error" id="step1Error"></div>
+
+                            <!-- Navigation -->
+                            <div class="step-navigation">
+                                <button type="button" class="btn btn-primary btn-lg btn-next" data-next="2">
+                                    Continue to Information
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Personal Information -->
+                        <div class="form-step" data-step="2">
+                            <div class="step-header">
+                                <h2>Your Information</h2>
+                                <p>Tell us about yourself</p>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="fullName">Full Name <span
+                                            class="required">*</span></label>
+                                    <input type="text" id="fullName" name="fullName" class="form-input"
+                                        placeholder="John Doe" required>
+                                    <span class="form-error" id="fullNameError"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="email">Email Address <span
+                                            class="required">*</span></label>
+                                    <input type="email" id="email" name="email" class="form-input"
+                                        placeholder="john@example.com" required>
+                                    <span class="form-error" id="emailError"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="phone">Phone Number <span
+                                            class="optional">(Optional)</span></label>
+                                    <input type="tel" id="phone" name="phone" class="form-input"
+                                        placeholder="(555) 123-4567">
+                                </div>
+                            </div>
+
+                            <div class="form-section-title">Mailing Address</div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="street">Street Address</label>
+                                    <input type="text" id="street" name="street" class="form-input"
+                                        placeholder="123 Main Street">
+                                </div>
+                            </div>
+
+                            <div class="form-row form-row-2col">
+                                <div class="form-group">
+                                    <label class="form-label" for="city">City</label>
+                                    <input type="text" id="city" name="city" class="form-input"
+                                        placeholder="Los Angeles">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="state">State</label>
+                                    <input type="text" id="state" name="state" class="form-input" placeholder="CA">
+                                </div>
+                            </div>
+
+                            <div class="form-row form-row-2col">
+                                <div class="form-group">
+                                    <label class="form-label" for="zip">ZIP Code</label>
+                                    <input type="text" id="zip" name="zip" class="form-input" placeholder="90001">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="country">Country</label>
+                                    <select id="country" name="country" class="form-input">
+                                        <option value="US" selected>United States</option>
+                                        <option value="CA">Canada</option>
+                                        <option value="GB">United Kingdom</option>
+                                        <option value="AU">Australia</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Error Message -->
+                            <div class="step-error" id="step2Error"></div>
+
+                            <!-- Navigation -->
+                            <div class="step-navigation">
+                                <button type="button" class="btn btn-secondary btn-back" data-back="1">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                                    </svg>
+                                    Back
+                                </button>
+                                <button type="button" class="btn btn-primary btn-lg btn-next" data-next="3">
+                                    Continue to Payment
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Payment Details -->
+                        <div class="form-step" data-step="3">
+                            <div class="step-header">
+                                <h2>Payment Details</h2>
+                                <p>Secure payment powered by Stripe</p>
+                            </div>
+
+                            <!-- Donation Summary -->
+                            <div class="donation-summary-card">
+                                <div class="summary-row">
+                                    <span class="summary-label">Donation Amount</span>
+                                    <span class="summary-value" id="summaryAmount">$100</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-label">Frequency</span>
+                                    <span class="summary-value" id="summaryFrequency">One-Time</span>
+                                </div>
+                                <div class="summary-divider"></div>
+                                <div class="summary-row total">
+                                    <span class="summary-label">Total</span>
+                                    <span class="summary-value" id="summaryTotal">$100.00</span>
+                                </div>
+                            </div>
+
+                            <!-- Card Holder Name -->
+                            <div class="form-group">
+                                <label class="form-label" for="cardHolderName">Cardholder Name <span
+                                        class="required">*</span></label>
+                                <input type="text" id="cardHolderName" name="cardHolderName" class="form-input"
+                                    placeholder="Name as it appears on card" required>
+                                <span class="form-error" id="cardHolderNameError"></span>
+                            </div>
+
+                            <!-- Stripe Card Element -->
+                            <div class="form-group">
+                                <label class="form-label">Card Details <span class="required">*</span></label>
+                                <div class="card-element-container">
+                                    <div id="card-element"></div>
+                                </div>
+                                <div id="card-errors" class="card-errors" role="alert"></div>
+                            </div>
+
+                            <!-- Billing Address Toggle -->
+                            <div class="form-group">
+                                <label class="form-check">
+                                    <input type="checkbox" id="differentBilling" class="form-check-input">
+                                    <span class="form-check-label">Billing address is different from mailing
+                                        address</span>
                                 </label>
-                                <label class="frequency-tab">
-                                    <input type="radio" name="donationType" value="monthly" style="display:none;">
-                                    <span>Monthly</span>
-                                </label>
-                                <label class="frequency-tab">
-                                    <input type="radio" name="donationType" value="quarterly" style="display:none;">
-                                    <span>Quarterly</span>
-                                </label>
                             </div>
-                        </div>
 
-                        <!-- Impact Tiers (Feature 1) -->
-                        <div class="form-group">
-                            <label class="form-label">Select Impact Level</label>
-                            <div class="donation-amounts">
-                                <div class="donation-amount" data-amount="25">
-                                    <span class="amount">$25</span>
-                                    <span class="impact-desc">Noble Start</span>
-                                </div>
-                                <div class="donation-amount active" data-amount="100">
-                                    <span class="amount">$100</span>
-                                    <span class="impact-desc">Kingly Support</span>
-                                </div>
-                                <div class="donation-amount highlight" data-amount="500">
-                                    <span class="amount">$500</span>
-                                    <span class="badge-gold">HERITAGE GIVER</span>
-                                </div>
-                                <div class="donation-amount" data-amount="custom">
-                                    <span class="amount">Heritage Gift</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Custom Amount Group -->
-                        <div class="form-group" id="customAmountGroup" style="display: none;">
-                            <label class="form-label">Enter Heritage Amount</label>
-                            <div style="position: relative;">
-                                <span
-                                    style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--neutral-500);">$</span>
-                                <input type="number" id="customAmount" class="form-input" style="padding-left: 2.5rem;"
-                                    placeholder="Amount">
-                            </div>
-                        </div>
-
-                        <!-- Impact Translation (Feature 10) -->
-                        <div id="impactCalculator" class="glass-panel"
-                            style="padding: 1.5rem; margin-bottom: 2rem; border-color: var(--gold-500); background: rgba(212, 165, 116, 0.05);">
-                            <div style="display: flex; align-items: center; gap: 1rem;">
-                                <div style="font-size: 2rem;">👑</div>
-                                <div>
-                                    <h4 style="margin:0; color: var(--primary-900);">Kingly Impact</h4>
-                                    <p id="impactText"
-                                        style="margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--primary-700); font-weight: 600;">
-                                        Your contribution restores dignity and builds hope.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Project Selection (Feature 13 - Splitting) -->
-                        <div class="form-group">
-                            <label class="form-label">Direct Your Gift (Feature 13)</label>
-                            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                                <div class="project-fund active" data-project="general">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                        <span style="font-size: 0.8rem; font-weight: 600;">General Restoration
-                                            Fund</span>
-                                        <span class="fund-percent">85%</span>
-                                    </div>
-                                    <div class="fund-bar">
-                                        <div class="fund-fill" style="width: 85%;"></div>
+                            <!-- Different Billing Address -->
+                            <div class="billing-address-section" id="billingAddressSection" style="display: none;">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label" for="billingStreet">Billing Street</label>
+                                        <input type="text" id="billingStreet" name="billingStreet" class="form-input"
+                                            placeholder="123 Main Street">
                                     </div>
                                 </div>
-                                <div class="project-fund" data-project="mentorship">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                        <span style="font-size: 0.8rem; font-weight: 600;">Mentorship Scaling
-                                            2026</span>
-                                        <span class="fund-percent">42%</span>
+                                <div class="form-row form-row-2col">
+                                    <div class="form-group">
+                                        <label class="form-label" for="billingCity">City</label>
+                                        <input type="text" id="billingCity" name="billingCity" class="form-input"
+                                            placeholder="City">
                                     </div>
-                                    <div class="fund-bar">
-                                        <div class="fund-fill" style="width: 42%; background: var(--primary-600);">
+                                    <div class="form-group">
+                                        <label class="form-label" for="billingState">State</label>
+                                        <input type="text" id="billingState" name="billingState" class="form-input"
+                                            placeholder="State">
+                                    </div>
+                                </div>
+                                <div class="form-row form-row-2col">
+                                    <div class="form-group">
+                                        <label class="form-label" for="billingZip">ZIP Code</label>
+                                        <input type="text" id="billingZip" name="billingZip" class="form-input"
+                                            placeholder="ZIP">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="billingCountry">Country</label>
+                                        <select id="billingCountry" name="billingCountry" class="form-input">
+                                            <option value="US" selected>United States</option>
+                                            <option value="CA">Canada</option>
+                                            <option value="GB">United Kingdom</option>
+                                            <option value="AU">Australia</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Security Badge -->
+                            <div class="security-badge">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                    <path d="M9 12l2 2 4-4" />
+                                </svg>
+                                <span>Your payment is secured with 256-bit SSL encryption</span>
+                            </div>
+
+                            <!-- Error Message -->
+                            <div class="step-error" id="step3Error"></div>
+
+                            <!-- Navigation -->
+                            <div class="step-navigation">
+                                <button type="button" class="btn btn-secondary btn-back" data-back="2">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                                    </svg>
+                                    Back
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-lg btn-submit" id="submitBtn">
+                                    <span class="btn-text">Complete Donation</span>
+                                    <span class="btn-loader" style="display: none;">
+                                        <svg class="spinner" viewBox="0 0 24 24">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"
+                                                fill="none" stroke-dasharray="31.4 31.4" />
+                                        </svg>
+                                        Processing...
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Confirmation -->
+                        <div class="form-step" data-step="4">
+                            <div class="confirmation-container">
+                                <div class="success-icon-container">
+                                    <div class="success-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                            <polyline points="22 4 12 14.01 9 11.01" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <h2>Thank You for Your Generosity!</h2>
+                                <p class="confirmation-message">Your donation has been processed successfully. You're
+                                    helping restore dignity and rebuild lives.</p>
+
+                                <!-- Receipt Summary -->
+                                <div class="receipt-card">
+                                    <div class="receipt-header">
+                                        <h3>Donation Receipt</h3>
+                                        <span class="receipt-date" id="receiptDate"></span>
+                                    </div>
+
+                                    <div class="receipt-body">
+                                        <div class="receipt-row">
+                                            <span class="receipt-label">Transaction ID</span>
+                                            <span class="receipt-value transaction-id" id="transactionId">-</span>
+                                        </div>
+                                        <div class="receipt-row">
+                                            <span class="receipt-label">Donor</span>
+                                            <span class="receipt-value" id="receiptDonor">-</span>
+                                        </div>
+                                        <div class="receipt-row">
+                                            <span class="receipt-label">Email</span>
+                                            <span class="receipt-value" id="receiptEmail">-</span>
+                                        </div>
+                                        <div class="receipt-row">
+                                            <span class="receipt-label">Amount</span>
+                                            <span class="receipt-value receipt-amount" id="receiptAmount">-</span>
+                                        </div>
+                                        <div class="receipt-row">
+                                            <span class="receipt-label">Frequency</span>
+                                            <span class="receipt-value" id="receiptFrequency">-</span>
                                         </div>
                                     </div>
+
+                                    <div class="receipt-footer">
+                                        <p>A confirmation email has been sent to your email address.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="confirmation-actions">
+                                    <button type="button" class="btn btn-secondary" onclick="window.print()">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M6 9V2h12v7" />
+                                            <path
+                                                d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                                            <rect x="6" y="14" width="12" height="8" />
+                                        </svg>
+                                        Print Receipt
+                                    </button>
+                                    <a href="/dashboard.html" class="btn btn-primary">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                            <circle cx="8.5" cy="7" r="4" />
+                                            <path d="M20 8v6M23 11h-6" />
+                                        </svg>
+                                        Create Account
+                                    </a>
+                                    <a href="/impact.html" class="btn btn-outline">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M12 20V10" />
+                                            <path d="M18 20V4" />
+                                            <path d="M6 20v-4" />
+                                        </svg>
+                                        View Your Impact
+                                    </a>
+                                </div>
+
+                                <!-- Social Share -->
+                                <div class="social-share">
+                                    <p>Share your generosity</p>
+                                    <div class="share-buttons">
+                                        <a href="#" class="share-btn facebook" onclick="shareOnFacebook(event)">
+                                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                                <path
+                                                    d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                                            </svg>
+                                        </a>
+                                        <a href="#" class="share-btn twitter" onclick="shareOnTwitter(event)">
+                                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                                <path
+                                                    d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+                                            </svg>
+                                        </a>
+                                        <a href="#" class="share-btn linkedin" onclick="shareOnLinkedIn(event)">
+                                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                                <path
+                                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                                                <rect x="2" y="9" width="4" height="12" />
+                                                <circle cx="4" cy="4" r="2" />
+                                            </svg>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Corporate Matching (Feature 18) -->
-                        <div class="form-group"
-                            style="padding: 1.5rem; background: rgba(52, 152, 219, 0.05); border: 1px dashed var(--primary-500); border-radius: 8px;">
-                            <label class="form-label">Corporate Matching (Feature 18)</label>
-                            <input type="text" class="form-input" id="employerSearch"
-                                placeholder="Search Employer (e.g. Google, Apple)">
-                            <div id="matchingResult"
-                                style="display: none; margin-top: 1rem; color: var(--primary-600); font-weight: 600;">
-                                ✓ Matching partner found! We'll double this gift.
-                            </div>
-                        </div>
-
-                        <!-- Gift Dedication (Feature 15) -->
-                        <div class="form-group">
-                            <label class="form-check">
-                                <input type="checkbox" class="form-check-input" id="dedicateCheck">
-                                <span class="form-check-label">Dedicate this donation (Feature 15)</span>
-                            </label>
-                        </div>
-                        <div id="dedicationFields"
-                            style="display: none; padding: 1rem; border: 1px solid var(--neutral-200); border-radius: 8px; margin-bottom: 2rem;">
-                            <input type="text" class="form-input" placeholder="Honoree Name">
-                        </div>
-
-                        <!-- Fee Coverage (Feature 4) -->
-                        <div class="form-group"
-                            style="padding: 1rem; background: rgba(0,0,0,0.02); border-radius: 8px;">
-                            <label class="form-check">
-                                <input type="checkbox" class="form-check-input" id="feeCoverageCheck">
-                                <span class="form-check-label">Cover transaction fees (Feature 4)</span>
-                            </label>
-                        </div>
-
-                        <!-- Payment Methods (Feature 6 & 22) -->
-                        <div class="form-group">
-                            <label class="form-label">Payment Method</label>
-                            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
-                                <div class="pay-method active" data-method="card">💳 Card</div>
-                                <div class="pay-method" data-method="wallet">📱 Digital Wallet</div>
-                            </div>
-                            <div id="card-element" class="form-input" style="padding: 1rem;"></div>
-                            <div id="card-errors" class="text-error" style="margin-top: 0.5rem; color: #e74c3c;"></div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-lg btn-block">
-                            Donate $<span id="totalAmount">100.00</span> Now
-                        </button>
-
-                        <!-- Legacy Pledge Bridge (Feature 25) -->
-                        <p
-                            style="text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--neutral-500);">
-                            Interested in a multi-year legacy pledge? <a href="/contact.html"
-                                style="color: var(--gold-600); font-weight: 700;">Establish Your Legacy (Feature 25)</a>
-                        </p>
                     </form>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="trust-badges">
+                    <div class="trust-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        <span>Secure Payment</span>
+                    </div>
+                    <div class="trust-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                        <span>501(c)(3) Nonprofit</span>
+                    </div>
+                    <div class="trust-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        <span>Tax Deductible</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -365,7 +670,6 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="/js/donate.js"></script>
 </body>
 

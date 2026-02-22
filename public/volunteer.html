@@ -150,154 +150,485 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Board Member -->
-                <div class="card">
-                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 2rem; align-items: center;">
-                        <div
-                            style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 2rem; text-align: center; border-radius: 8px; font-size: 3rem;">
-                            🏛️</div>
-                        <div>
-                            <h3 style="margin-top: 0;">Board Leadership</h3>
-                            <p><strong>Commitment:</strong> Strategic guidance and oversight</p>
-                            <p>Help guide the organization's mission and strategy. Monthly board meetings, committee
-                                work, fundraising.</p>
-                            <p><strong>Requirements:</strong> Leadership experience, commitment to mission, ability to
-                                contribute strategic thinking.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Fundraising -->
-                <div class="card">
-                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 2rem; align-items: center;">
-                        <div
-                            style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 2rem; text-align: center; border-radius: 8px; font-size: 3rem;">
-                            💰</div>
-                        <div>
-                            <h3 style="margin-top: 0;">Fundraising Support</h3>
-                            <p><strong>Commitment:</strong> 2-4 hours per week (flexible)</p>
-                            <p>Help organize fundraising events, grant writing, donor outreach, and community awareness
-                                campaigns.</p>
-                            <p><strong>Requirements:</strong> Communication skills, enthusiasm. No sales experience
-                                required.</p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- Volunteer Form -->
+    <!-- Multi-Step Volunteer Application Form -->
     <section class="section container">
-        <div style="max-width: 700px; margin: 0 auto;">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Ready to Volunteer?</h2>
+        <div class="donation-wrapper">
+            <h2 style="text-align: center; margin-bottom: 0.5rem;">Volunteer Application</h2>
+            <p style="text-align: center; color: var(--neutral-500); margin-bottom: 2rem;">Complete all steps to submit
+                your application</p>
 
-            <div class="alert alert-success" id="volunteerSuccess" style="display: none;">
-                ✓ Thank you for your interest! We'll contact you within 2 business days to discuss opportunities.
+            <!-- Progress Steps Indicator -->
+            <div class="progress-steps">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">
+                        <span class="step-number">1</span>
+                        <svg class="step-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <span class="step-label">Personal</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">
+                        <span class="step-number">2</span>
+                        <svg class="step-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <span class="step-label">Interests</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">
+                        <span class="step-number">3</span>
+                        <svg class="step-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <span class="step-label">Experience</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" data-step="4">
+                    <div class="step-circle">
+                        <span class="step-number">4</span>
+                        <svg class="step-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <span class="step-label">Review</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" data-step="5">
+                    <div class="step-circle">
+                        <span class="step-number">5</span>
+                        <svg class="step-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <span class="step-label">Confirmation</span>
+                </div>
             </div>
 
-            <form id="volunteerForm" style="display: block;">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>First Name *</label>
-                        <input type="text" name="firstName" required>
+            <!-- Form Container -->
+            <div class="donation-form-container">
+                <form id="volunteerForm" class="donation-form">
+
+                    <!-- Step 1: Personal Information -->
+                    <div class="form-step active" data-step="1">
+                        <div class="step-header">
+                            <h2>Personal Information</h2>
+                            <p>Please provide your contact details</p>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required placeholder="John">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required placeholder="Doe">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required placeholder="john@example.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dob">Date of Birth *</label>
+                            <input type="date" id="dob" name="dob" required>
+                            <small style="color: var(--neutral-500); font-size: 0.85rem;">You must be 18 years or older
+                                to volunteer</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="street">Street Address *</label>
+                            <input type="text" id="street" name="street" required placeholder="123 Main Street">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City *</label>
+                                <input type="text" id="city" name="city" required placeholder="Los Angeles">
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State/Province *</label>
+                                <input type="text" id="state" name="state" required placeholder="California">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="zip">ZIP/Postal Code *</label>
+                                <input type="text" id="zip" name="zip" required placeholder="90001">
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country *</label>
+                                <select id="country" name="country" required>
+                                    <option value="US">United States</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="UK">United Kingdom</option>
+                                    <option value="AU">Australia</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="step-error" id="step1Error" style="display: none;"></div>
+
+                        <div class="step-navigation">
+                            <button type="button" class="btn btn-primary btn-next" data-next="2">
+                                Continue
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Last Name *</label>
-                        <input type="text" name="lastName" required>
+
+                    <!-- Step 2: Interests & Skills -->
+                    <div class="form-step" data-step="2">
+                        <div class="step-header">
+                            <h2>Interests & Skills</h2>
+                            <p>Tell us about your volunteer preferences</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Volunteer Areas (Select all that apply) *</label>
+                            <div style="display: grid; gap: 0.8rem; margin-top: 0.5rem;">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="volunteerAreas" value="event-support">
+                                    <span class="checkbox-custom"></span>
+                                    <span>Event Support</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="volunteerAreas" value="administrative">
+                                    <span class="checkbox-custom"></span>
+                                    <span>Administrative Support</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="volunteerAreas" value="mentorship">
+                                    <span class="checkbox-custom"></span>
+                                    <span>Mentorship Programs</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="volunteerAreas" value="fundraising">
+                                    <span class="checkbox-custom"></span>
+                                    <span>Fundraising</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="volunteerAreas" value="marketing">
+                                    <span class="checkbox-custom"></span>
+                                    <span>Marketing & Social Media</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="volunteerAreas" value="technical">
+                                    <span class="checkbox-custom"></span>
+                                    <span>Technical Support</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="volunteerAreas" value="outreach">
+                                    <span class="checkbox-custom"></span>
+                                    <span>Community Outreach</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="skills">Skills & Qualifications</label>
+                            <textarea id="skills" name="skills" rows="4"
+                                placeholder="List any relevant skills, certifications, or qualifications you have..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="availability">Availability *</label>
+                            <select id="availability" name="availability" required>
+                                <option value="">Select your availability...</option>
+                                <option value="weekdays">Weekdays</option>
+                                <option value="weekends">Weekends</option>
+                                <option value="evenings">Evenings</option>
+                                <option value="flexible">Flexible</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="languages">Languages Spoken</label>
+                            <input type="text" id="languages" name="languages" placeholder="English, Spanish, etc.">
+                        </div>
+
+                        <div class="step-error" id="step2Error" style="display: none;"></div>
+
+                        <div class="step-navigation">
+                            <button type="button" class="btn btn-outline btn-back" data-back="1">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                                </svg>
+                                Back
+                            </button>
+                            <button type="button" class="btn btn-primary btn-next" data-next="3">
+                                Continue
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label>Email Address *</label>
-                    <input type="email" name="email" required>
-                </div>
+                    <!-- Step 3: Experience & Motivation -->
+                    <div class="form-step" data-step="3">
+                        <div class="step-header">
+                            <h2>Experience & Motivation</h2>
+                            <p>Share your background and motivation</p>
+                        </div>
 
-                <div class="form-group">
-                    <label>Phone Number *</label>
-                    <input type="tel" name="phone" required>
-                </div>
+                        <div class="form-group">
+                            <label for="experience">Previous Volunteer Experience</label>
+                            <textarea id="experience" name="experience" rows="4"
+                                placeholder="Describe any previous volunteer work or relevant experience..."></textarea>
+                        </div>
 
-                <div class="form-group">
-                    <label>How did you hear about us?</label>
-                    <select name="referral">
-                        <option value="">Select...</option>
-                        <option value="friend">Friend or Family</option>
-                        <option value="social">Social Media</option>
-                        <option value="web">Website</option>
-                        <option value="event">Community Event</option>
-                        <option value="church">Church/Religious Organization</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
+                        <div class="form-group">
+                            <label for="motivation">Why do you want to volunteer with us?</label>
+                            <textarea id="motivation" name="motivation" rows="4"
+                                placeholder="Tell us what draws you to this work and what you hope to achieve..."></textarea>
+                        </div>
 
-                <div class="form-group">
-                    <label>Volunteer Interests (Check all that apply) *</label>
-                    <div style="display: grid; gap: 0.8rem;">
-                        <label style="display: flex; align-items: center; margin: 0;">
-                            <input type="checkbox" name="interests" value="mentorship" style="margin-right: 0.5rem;">
-                            <span>Mentorship Program</span>
-                        </label>
-                        <label style="display: flex; align-items: center; margin: 0;">
-                            <input type="checkbox" name="interests" value="outreach" style="margin-right: 0.5rem;">
-                            <span>Street Outreach</span>
-                        </label>
-                        <label style="display: flex; align-items: center; margin: 0;">
-                            <input type="checkbox" name="interests" value="events" style="margin-right: 0.5rem;">
-                            <span>Event Support</span>
-                        </label>
-                        <label style="display: flex; align-items: center; margin: 0;">
-                            <input type="checkbox" name="interests" value="skills" style="margin-right: 0.5rem;">
-                            <span>Skills-Based Work</span>
-                        </label>
-                        <label style="display: flex; align-items: center; margin: 0;">
-                            <input type="checkbox" name="interests" value="fundraising" style="margin-right: 0.5rem;">
-                            <span>Fundraising</span>
-                        </label>
-                        <label style="display: flex; align-items: center; margin: 0;">
-                            <input type="checkbox" name="interests" value="board" style="margin-right: 0.5rem;">
-                            <span>Board Leadership</span>
-                        </label>
+                        <div class="form-group">
+                            <label for="referral">How did you hear about us?</label>
+                            <select id="referral" name="referral">
+                                <option value="">Select...</option>
+                                <option value="friend">Friend or Family</option>
+                                <option value="social">Social Media</option>
+                                <option value="web">Website</option>
+                                <option value="event">Community Event</option>
+                                <option value="church">Church/Religious Organization</option>
+                                <option value="news">News Article</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emergencyName">Emergency Contact Name *</label>
+                            <input type="text" id="emergencyName" name="emergencyName" required placeholder="Jane Doe">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emergencyPhone">Emergency Contact Phone *</label>
+                            <input type="tel" id="emergencyPhone" name="emergencyPhone" required
+                                placeholder="(555) 987-6543">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emergencyRelation">Emergency Contact Relationship</label>
+                            <input type="text" id="emergencyRelation" name="emergencyRelation"
+                                placeholder="Spouse, Parent, Sibling, etc.">
+                        </div>
+
+                        <div class="step-error" id="step3Error" style="display: none;"></div>
+
+                        <div class="step-navigation">
+                            <button type="button" class="btn btn-outline btn-back" data-back="2">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                                </svg>
+                                Back
+                            </button>
+                            <button type="button" class="btn btn-primary btn-next" data-next="4">
+                                Continue
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label>How many hours per week can you commit? *</label>
-                    <select name="availability" required>
-                        <option value="">Select...</option>
-                        <option value="2-4">2-4 hours</option>
-                        <option value="4-8">4-8 hours</option>
-                        <option value="8+">8+ hours</option>
-                        <option value="flexible">Flexible/Project-based</option>
-                        <option value="one-time">One-time/Events</option>
-                    </select>
-                </div>
+                    <!-- Step 4: Review & Submit -->
+                    <div class="form-step" data-step="4">
+                        <div class="step-header">
+                            <h2>Review Your Application</h2>
+                            <p>Please verify all information is correct before submitting</p>
+                        </div>
 
-                <div class="form-group">
-                    <label>Tell us about your background and why you want to volunteer</label>
-                    <textarea name="message"
-                        placeholder="Share your story and what draws you to this work..."></textarea>
-                </div>
+                        <!-- Personal Info Summary -->
+                        <div class="review-section">
+                            <div class="review-header">
+                                <h3>Personal Information</h3>
+                                <button type="button" class="btn btn-sm btn-outline edit-section"
+                                    data-edit="1">Edit</button>
+                            </div>
+                            <div class="review-content" id="reviewPersonal">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" name="agreement" required>
-                        I agree to a background check and volunteer orientation
-                    </label>
-                </div>
+                        <!-- Interests Summary -->
+                        <div class="review-section">
+                            <div class="review-header">
+                                <h3>Interests & Skills</h3>
+                                <button type="button" class="btn btn-sm btn-outline edit-section"
+                                    data-edit="2">Edit</button>
+                            </div>
+                            <div class="review-content" id="reviewInterests">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" name="newsletter">
-                        Keep me updated about volunteer opportunities
-                    </label>
-                </div>
+                        <!-- Experience Summary -->
+                        <div class="review-section">
+                            <div class="review-header">
+                                <h3>Experience & Motivation</h3>
+                                <button type="button" class="btn btn-sm btn-outline edit-section"
+                                    data-edit="3">Edit</button>
+                            </div>
+                            <div class="review-content" id="reviewExperience">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </div>
 
-                <button type="submit" class="btn btn-primary btn-block" style="padding: 1rem; font-size: 1.1rem;">
-                    Submit Application
-                </button>
-            </form>
+                        <!-- Agreements -->
+                        <div class="form-group" style="margin-top: 1.5rem;">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="termsAgreement" name="termsAgreement" required>
+                                <span class="checkbox-custom"></span>
+                                <span>I agree to the <a href="/privacy.html" target="_blank">Terms and Conditions</a>
+                                    *</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="privacyAgreement" name="privacyAgreement" required>
+                                <span class="checkbox-custom"></span>
+                                <span>I agree to the <a href="/privacy.html" target="_blank">Privacy Policy</a> *</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="backgroundCheck" name="backgroundCheck">
+                                <span class="checkbox-custom"></span>
+                                <span>I consent to a background check if required for my volunteer role</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="newsletter" name="newsletter">
+                                <span class="checkbox-custom"></span>
+                                <span>Keep me updated about volunteer opportunities and organization news</span>
+                            </label>
+                        </div>
+
+                        <div class="step-error" id="step4Error" style="display: none;"></div>
+
+                        <div class="step-navigation">
+                            <button type="button" class="btn btn-outline btn-back" data-back="3">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                                </svg>
+                                Back
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                Submit Application
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Confirmation -->
+                    <div class="form-step" data-step="5">
+                        <div class="confirmation-container">
+                            <div class="confirmation-icon">
+                                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                    <polyline points="22 4 12 14.01 9 11.01" />
+                                </svg>
+                            </div>
+                            <h2>Application Submitted!</h2>
+                            <p class="confirmation-message">Thank you for your interest in volunteering with Restored
+                                Kings Foundation.</p>
+
+                            <div class="reference-number">
+                                <span>Application Reference Number</span>
+                                <strong id="referenceNumber">VOL-XXXXXX</strong>
+                            </div>
+
+                            <div class="next-steps">
+                                <h3>What Happens Next?</h3>
+                                <ul>
+                                    <li>
+                                        <span class="step-icon">📋</span>
+                                        <div>
+                                            <strong>Application Review</strong>
+                                            <p>Our team will review your application within 3-5 business days.</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <span class="step-icon">📞</span>
+                                        <div>
+                                            <strong>Initial Contact</strong>
+                                            <p>We'll reach out to discuss opportunities that match your interests.</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <span class="step-icon">✅</span>
+                                        <div>
+                                            <strong>Background Check</strong>
+                                            <p>If required for your role, we'll initiate a background check.</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <span class="step-icon">🎯</span>
+                                        <div>
+                                            <strong>Orientation</strong>
+                                            <p>You'll be invited to an orientation session to get started.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="email-confirmation">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                    <polyline points="22,6 12,13 2,6" />
+                                </svg>
+                                <p>A confirmation email has been sent to <strong id="confirmEmail">your email
+                                        address</strong>.</p>
+                            </div>
+
+                            <div class="confirmation-actions">
+                                <a href="/" class="btn btn-primary">Return Home</a>
+                                <a href="/programs.html" class="btn btn-outline">Explore Programs</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
         </div>
     </section>
 
@@ -384,6 +715,7 @@
     </footer>
 
     <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/js/volunteer.js"></script>
 </body>
 
 </html>
