@@ -1985,6 +1985,42 @@ footer::before {
   border-left: 4px solid #3b82f6;
 }
 
+/* === CONFIGURATION ERROR === */
+.config-error {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: left;
+  margin: 1rem 0;
+}
+
+.config-error h3 {
+  color: #92400e;
+  margin-bottom: 0.5rem;
+}
+
+.config-error code {
+  background: #f3f4f6;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.config-error a {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+.config-error ol {
+  margin-top: 1rem;
+  padding-left: 1.5rem;
+}
+
+.config-error ol li {
+  margin-bottom: 0.5rem;
+}
+
 /* === CARD CONTENT === */
 .card-content {
   padding: 1.5rem;

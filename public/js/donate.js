@@ -520,6 +520,34 @@ function clearStepError(step) {
     }
 }
 
+// Show configuration error with setup instructions
+function showConfigurationError(message, docsUrl) {
+    const statusEl = document.getElementById('payment-status');
+    if (statusEl) {
+        statusEl.innerHTML = `
+            <div class="config-error">
+                <h3>⚠️ Payment Setup Required</h3>
+                <p>${message}</p>
+                <ol>
+                    <li>Go to <a href="https://vercel.com/dashboard" target="_blank">Vercel Dashboard</a></li>
+                    <li>Select your project → Settings → Environment Variables</li>
+                    <li>Add: <code>STRIPE_SECRET_KEY</code> = your Stripe secret key</li>
+                    <li>Get your key from <a href="${docsUrl || 'https://dashboard.stripe.com/apikeys'}" target="_blank">Stripe Dashboard</a></li>
+                    <li>Redeploy the project</li>
+                </ol>
+            </div>
+        `;
+        statusEl.className = 'payment-status error';
+        statusEl.style.display = 'block';
+    }
+
+    // Also hide the form to prevent further attempts
+    const formContainer = document.querySelector('.donation-form-container');
+    if (formContainer) {
+        formContainer.style.display = 'none';
+    }
+}
+
 // ============================================
 // PAYMENT SUMMARY
 // ============================================
@@ -585,6 +613,11 @@ async function createPaymentIntent(amount, donorInfo) {
         const data = await response.json();
 
         if (!response.ok) {
+            // Check for specific configuration errors
+            if (data.code === 'STRIPE_NOT_CONFIGURED' || data.code === 'STRIPE_AUTH_ERROR') {
+                showConfigurationError(data.message, data.docs);
+                throw new Error(data.message);
+            }
             // Use the message from API if available, otherwise use error
             throw new Error(data.message || data.error || data.details || 'Failed to create payment intent');
         }
