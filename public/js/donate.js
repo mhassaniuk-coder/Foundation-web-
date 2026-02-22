@@ -182,18 +182,59 @@ function initializeMultiStepForm() {
 }
 
 function goToStep(stepNumber) {
+    console.log('[DEBUG] goToStep called with stepNumber:', stepNumber);
+
     // Update current step
     currentStep = stepNumber;
 
+    // Debug: Log all form-step elements
+    const allSteps = document.querySelectorAll('.form-step');
+    console.log('[DEBUG] All form-step elements found:', allSteps.length);
+    allSteps.forEach((step, index) => {
+        console.log(`[DEBUG] Step ${index}: data-step="${step.dataset.step}", class="${step.className}"`);
+    });
+
     // Hide all steps
-    document.querySelectorAll('.form-step').forEach(step => {
+    allSteps.forEach(step => {
         step.classList.remove('active');
     });
 
-    // Show target step
-    const targetStep = document.querySelector(`.form-step[data-step="${stepNumber}"]`);
+    // Show target step - try multiple methods to find the element
+    let targetStep = document.querySelector(`.form-step[data-step="${stepNumber}"]`);
+
+    // Fallback: Try finding by index if data-step query fails
+    if (!targetStep && allSteps.length >= stepNumber) {
+        console.log('[DEBUG] Trying fallback: finding step by index');
+        targetStep = allSteps[stepNumber - 1]; // 0-indexed, so step 4 = index 3
+    }
+
+    // Fallback: For step 4, try finding by confirmation-container
+    if (!targetStep && stepNumber === 4) {
+        console.log('[DEBUG] Trying fallback: finding step by confirmation-container');
+        const confirmationContainer = document.querySelector('.confirmation-container');
+        if (confirmationContainer) {
+            targetStep = confirmationContainer.closest('.form-step');
+        }
+    }
+
+    console.log('[DEBUG] Target step element:', targetStep);
+
     if (targetStep) {
         targetStep.classList.add('active');
+        console.log('[DEBUG] Added active class to step', stepNumber);
+    } else {
+        console.error('[DEBUG] Could not find step element with data-step="' + stepNumber + '"');
+        // Last resort: try to show the confirmation section directly
+        if (stepNumber === 4) {
+            const confirmationContainer = document.querySelector('.confirmation-container');
+            if (confirmationContainer) {
+                const parentStep = confirmationContainer.parentElement;
+                if (parentStep) {
+                    parentStep.classList.add('active');
+                    console.log('[DEBUG] Added active class to parent of confirmation-container');
+                }
+            }
+        }
     }
 
     // Update progress indicator
@@ -708,11 +749,15 @@ async function handleFormSubmit(event) {
 
         const { error, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret, confirmOptions);
 
+        console.log('[DEBUG] Payment confirmation result:', { error, paymentIntent });
+
         if (error) {
+            console.error('[DEBUG] Payment error:', error);
             throw new Error(error.message);
         }
 
         // Payment successful - show confirmation
+        console.log('[DEBUG] Payment successful, calling showConfirmation()');
         showConfirmation(paymentIntent);
 
     } catch (error) {
@@ -731,8 +776,53 @@ async function handleFormSubmit(event) {
 // ============================================
 
 function showConfirmation(paymentIntent) {
-    // Go to step 4
-    goToStep(4);
+    console.log('[DEBUG] showConfirmation called with paymentIntent:', paymentIntent);
+
+    // Hide all form steps first
+    const allSteps = document.querySelectorAll('.form-step');
+    console.log('[DEBUG] Found', allSteps.length, 'form-step elements');
+
+    allSteps.forEach(step => {
+        step.classList.remove('active');
+    });
+
+    // Find Step 4 using multiple methods
+    let step4 = document.querySelector('.form-step[data-step="4"]');
+
+    // Fallback: Find by confirmation container
+    if (!step4) {
+        console.log('[DEBUG] Step 4 not found by data-step, trying confirmation-container');
+        const confirmationContainer = document.querySelector('.confirmation-container');
+        if (confirmationContainer) {
+            step4 = confirmationContainer.closest('.form-step');
+            console.log('[DEBUG] Found step4 via confirmation-container:', step4);
+        }
+    }
+
+    // Fallback: Find by index
+    if (!step4 && allSteps.length >= 4) {
+        console.log('[DEBUG] Using fallback: step at index 3');
+        step4 = allSteps[3];
+    }
+
+    if (step4) {
+        step4.classList.add('active');
+        console.log('[DEBUG] Step 4 activated successfully');
+    } else {
+        console.error('[DEBUG] Could not find Step 4 element!');
+    }
+
+    // Update progress indicator
+    updateProgressIndicator(4);
+
+    // Update current step
+    currentStep = 4;
+
+    // Scroll to top of form to show confirmation
+    const formContainer = document.querySelector('.donation-form-container');
+    if (formContainer) {
+        formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 
     // Populate receipt data
     const transactionId = document.getElementById('transactionId');
