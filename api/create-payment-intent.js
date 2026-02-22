@@ -1,7 +1,7 @@
 // Vercel serverless function for creating Stripe PaymentIntents
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-module.exports = async function handler(req, res) {
+module.exports = async (req, res) => {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
