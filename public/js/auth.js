@@ -20,20 +20,22 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Login Handling
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = loginForm.querySelector('input[type="email"]').value;
-    const password = loginForm.querySelector('input[type="password"]').value;
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = loginForm.querySelector('input[type="email"]').value;
+      const password = loginForm.querySelector('input[type="password"]').value;
 
-    try {
-      const { data, error } = await auth.signIn(email, password);
-      if (error) throw error;
+      try {
+        const { data, error } = await auth.signIn(email, password);
+        if (error) throw error;
 
-      window.location.href = '/dashboard.html';
-    } catch (error) {
-      alert(error.message);
-    }
-  });
+        window.location.href = '/dashboard.html';
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+  }
 
   // Password Strength Oracle (Feature 4)
   const regPassword = document.getElementById('regPassword');
@@ -70,35 +72,37 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Registration Handling
-  registerForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const fullName = registerForm.querySelector('input[type="text"]').value;
-    const email = registerForm.querySelector('input[type="email"]').value;
-    const password = regPassword.value;
+  if (registerForm) {
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fullName = registerForm.querySelector('input[type="text"]').value;
+      const email = registerForm.querySelector('input[type="email"]').value;
+      const password = regPassword.value;
 
-    try {
-      // Security Audit: Log attempt (Feature 3 Mock)
-      console.log(`Security Audit: Registration attempt for ${email}`);
-      const { data, error } = await auth.signUp(email, password);
-      if (error) throw error;
+      try {
+        // Security Audit: Log attempt (Feature 3 Mock)
+        console.log(`Security Audit: Registration attempt for ${email}`);
+        const { data, error } = await auth.signUp(email, password);
+        if (error) throw error;
 
-      if (data.user) {
-        // Create profile entry
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert([{
-            id: data.user.id,
-            full_name: fullName,
-            email: email
-          }]);
+        if (data.user) {
+          // Create profile entry
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .insert([{
+              id: data.user.id,
+              full_name: fullName,
+              email: email
+            }]);
 
-        if (profileError) console.error("Profile creation error:", profileError);
+          if (profileError) console.error("Profile creation error:", profileError);
+        }
+
+        alert('Welcome King! Account created. Please check your email to verify (if enabled) or sign in.');
+        location.reload(); // Switch back to login view
+      } catch (error) {
+        alert(error.message);
       }
-
-      alert('Welcome King! Account created. Please check your email to verify (if enabled) or sign in.');
-      location.reload(); // Switch back to login view
-    } catch (error) {
-      alert(error.message);
-    }
-  });
+    });
+  }
 });

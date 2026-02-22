@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     initVolunteerPortal();
     initStoryCarousel();
     initResourceLibrary();
-    initAIAssistant();
+    // initAIAssistant(); // AI Assistant not yet implemented
     initMemberPortal();
     initActivityStream();
     initImpactCertificates();
@@ -52,10 +52,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             }, 15 * 60 * 1000); // 15 minutes
         };
 
-        window.onload = resetTimer;
-        document.onmousemove = resetTimer;
-        document.onkeypress = resetTimer;
-        document.onclick = resetTimer;
+        window.addEventListener('load', resetTimer);
+        document.addEventListener('mousemove', resetTimer);
+        document.addEventListener('keypress', resetTimer);
+        document.addEventListener('click', resetTimer);
     }
 });
 
@@ -442,6 +442,11 @@ function initNewsletter() {
 window.showNotification = showNotification;
 window.isValidEmail = isValidEmail;
 
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
 function showNotification(message, type = 'info') {
     // Remove existing notifications
     const existing = document.querySelector('.notification');
@@ -451,7 +456,7 @@ function showNotification(message, type = 'info') {
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
         <div class="notification-content">
-            <span class="notification-icon">${type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ'}</span>
+            <span class="notification-icon">${type === 'success' ? '✓' : type === 'error' ? '✕' : type === 'warning' ? '⚠' : 'ℹ'}</span>
             <span class="notification-message">${message}</span>
         </div>
         <button class="notification-close" onclick="this.parentElement.remove()">×</button>
@@ -479,6 +484,7 @@ function showNotification(message, type = 'info') {
         .notification-success { border-left: 4px solid #10b981; }
         .notification-error { border-left: 4px solid #ef4444; }
         .notification-info { border-left: 4px solid #3b82f6; }
+        .notification-warning { border-left: 4px solid #f59e0b; }
         .notification-content {
             display: flex;
             align-items: center;
@@ -497,6 +503,7 @@ function showNotification(message, type = 'info') {
         .notification-success .notification-icon { background: #d1fae5; color: #10b981; }
         .notification-error .notification-icon { background: #fee2e2; color: #ef4444; }
         .notification-info .notification-icon { background: #dbeafe; color: #3b82f6; }
+        .notification-warning .notification-icon { background: #fef3c7; color: #f59e0b; }
         .notification-message { color: #1e293b; font-size: 0.9375rem; }
         .notification-close {
             background: none;
@@ -667,7 +674,9 @@ function initGlobalSearch() {
         }
     };
 
-    searchBtn.addEventListener('click', handleSearch);
+    if (searchBtn) {
+        searchBtn.addEventListener('click', handleSearch);
+    }
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleSearch();
     });

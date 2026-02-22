@@ -93,8 +93,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Logout
-    logoutBtn.addEventListener('click', async () => {
-        await auth.signOut();
-        window.location.href = '/';
-    });
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            await auth.signOut();
+            window.location.href = '/';
+        });
+    }
 });

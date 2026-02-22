@@ -3,7 +3,38 @@
 // Restored Kings Foundation - Phase 8 & 11
 // ============================================
 
-document.addEventListener('DOMContentLoaded', () => {
+import { auth, db } from './supabase.js';
+
+// Show notification helper
+function showNotification(message, type = 'info') {
+    alert(message);
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // --- Authentication Check ---
+    try {
+        const user = await auth.getUser();
+        if (!user) {
+            window.location.href = '/auth.html';
+            return;
+        }
+        // Check for admin role
+        const { data: profile } = await db.getProfile(user.id);
+        if (profile && profile.role !== 'admin') {
+            // Show limited access or redirect
+            showNotification('Access denied. Admin privileges required.', 'error');
+            setTimeout(() => window.location.href = '/dashboard.html', 2000);
+            return;
+        }
+        // Initialize admin panel
+        initializeAdmin();
+    } catch (error) {
+        console.error('Auth check failed:', error);
+        window.location.href = '/auth.html';
+    }
+});
+
+function initializeAdmin() {
     console.log('Admin OS [Operational Engine] Online');
 
     // --- Initializers ---
@@ -60,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-});
+}
 
 // --- Intelligence Foundations ---
 
@@ -199,3 +230,6 @@ function initPredictiveChart() {
         }
     });
 }
+
+// Expose generateGovernanceReport to global window for HTML onclick handlers
+window.generateGovernanceReport = generateGovernanceReport;

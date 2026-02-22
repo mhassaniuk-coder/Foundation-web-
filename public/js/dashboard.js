@@ -1,4 +1,4 @@
-import { auth, db } from './supabase.js';
+import { auth, db, supabase } from './supabase.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const user = await auth.getUser();
@@ -39,10 +39,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     setTimeout(() => sendNotification("Welcome back, King! Your legacy is being calculated."), 3000);
 
     // Logout
-    logoutBtn.addEventListener('click', async () => {
-        await auth.signOut();
-        window.location.href = '/';
-    });
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            await auth.signOut();
+            window.location.href = '/';
+        });
+    }
 
     // Donation Interaction
     const donateBtn = donationList.parentElement.querySelector('.btn-primary');
