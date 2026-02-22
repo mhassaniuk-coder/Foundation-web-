@@ -18,7 +18,12 @@ const getStripePublicKey = () => {
     return '';
 };
 
-const STRIPE_PUBLIC_KEY = getStripePublicKey();
+let stripePublicKey = '';
+
+function refreshStripePublicKey() {
+    stripePublicKey = getStripePublicKey();
+    return stripePublicKey;
+}
 
 // Payment status tracking
 const PaymentStatus = {
@@ -40,6 +45,7 @@ let paymentRequest = null;
 let paymentRequestButton = null;
 let currentStep = 1;
 let selectedPaymentMethod = 'card';
+let isCardComplete = false;
 let donationData = {
     amount: 100,
     frequency: 'one-time',
@@ -164,6 +170,8 @@ const declineCodeMessages = {
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function () {
+    refreshStripePublicKey();
+
     // Try to load Stripe publishable key from API if not already set
     loadStripePublicKey().then(() => {
         initializeStripe();
@@ -194,7 +202,8 @@ async function loadStripePublicKey() {
     // Check if already set
     const cardElementContainer = document.querySelector('.card-element-container');
     if (cardElementContainer?.dataset.stripePublishableKey) {
-        return Promise.resolve();
+        refreshStripePublicKey();
+        return;
     }
 
     // Try to fetch from API
@@ -206,7 +215,8 @@ async function loadStripePublicKey() {
 
         if (!response.ok) {
             console.warn('Failed to fetch Stripe publishable key from API:', response.status);
-            return Promise.reject(new Error('API endpoint returned ' + response.status));
+            refreshStripePublicKey();
+            return;
         }
 
         const data = await response.json();
@@ -217,24 +227,23 @@ async function loadStripePublicKey() {
             } else {
                 window.STRIPE_PUBLIC_KEY = data.publishableKey;
             }
-            return Promise.resolve();
-        } else {
-            return Promise.reject(new Error('No publishable key in response'));
         }
     } catch (error) {
         console.warn('Could not load Stripe key from API, will check DOM:', error.message);
         // If API fails, that's okay—initializeStripe will check DOM and env vars
-        return Promise.resolve();
+        // Ignore here and rely on DOM or window fallback.
     }
+
+    refreshStripePublicKey();
 }
 
 // Initialize Stripe with enhanced card validation
 function initializeStripe() {
-    if (typeof Stripe !== 'undefined' && STRIPE_PUBLIC_KEY) {
-        stripe = Stripe(STRIPE_PUBLIC_KEY);
-        const elements = stripe.elements({
-            fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap' }]
-        });
+    const activeStripeKey = refreshStripePublicKey();
+
+    if (typeof Stripe !== 'undefined' && activeStripeKey) {
+        stripe = Stripe(activeStripeKey);
+        const elements = stripe.elements();
 
         // Custom styling for the Card element
         const style = {
@@ -270,6 +279,7 @@ function initializeStripe() {
                 postalCode: '' // Will be populated from donor info
             }
         });
+        isCardComplete = false;
 
         // Mount card element
         const cardElementContainer = document.getElementById('card-element');
@@ -309,7 +319,7 @@ function initializeStripe() {
     } else if (typeof Stripe === 'undefined') {
         console.error('Stripe.js library not loaded. Ensure <script src="https://js.stripe.com/v3/"></script> is in <head>.');
         showConfigurationError('Stripe library failed to load', 'https://stripe.com/docs/js');
-    } else if (!STRIPE_PUBLIC_KEY) {
+    } else if (!activeStripeKey) {
         console.error('STRIPE_PUBLIC_KEY is not configured. Set it via data-stripe-publishable-key on .card-element-container or window.STRIPE_PUBLIC_KEY');
         showConfigurationError(
             'Stripe is not configured. Please set your Stripe publishable key in the server configuration.',
@@ -323,6 +333,8 @@ function initializeStripe() {
  * @param {Object} event - Stripe element change event
  */
 function handleCardElementChange(event) {
+    isCardComplete = Boolean(event.complete);
+
     // Card brand detection
     const brand = event.brand;
     updateCardBrandDisplay(brand);
@@ -354,6 +366,10 @@ function handleCardElementChange(event) {
     // Update postal code validation
     if (event.value && event.value.postalCode !== undefined) {
         validatePostalCode(event.value.postalCode);
+    }
+
+    if (!event.error && event.complete) {
+        clearStepError(3);
     }
 }
 
@@ -511,40 +527,127 @@ function initializePaymentMethodSelection() {
     const walletPaymentSection = document.getElementById('walletPaymentSection');
     const submitBtn = document.getElementById('submitBtn');
 
-    paymentMethodOptions.forEach(option => {
-        option.addEventListener('click', function() {
-            // Update active state
-            paymentMethodOptions.forEach(opt => opt.classList.remove('active'));
-            this.classList.add('active');
+    const applyMethod = (method) => {
+        selectedPaymentMethod = method || 'card';
 
-            const method = this.dataset.method;
-            selectedPaymentMethod = method;
+        paymentMethodOptions.forEach(option => {
+            const optionMethod = option.dataset.method;
+            const input = option.querySelector('input[name="paymentMethod"]');
+            const isActive = optionMethod === selectedPaymentMethod;
 
-            // Show/hide payment sections
-            if (method === 'card') {
-                if (cardPaymentSection) cardPaymentSection.style.display = 'block';
-                if (walletPaymentSection) walletPaymentSection.style.display = 'none';
-                if (submitBtn) submitBtn.style.display = 'inline-flex';
-            } else {
-                if (cardPaymentSection) cardPaymentSection.style.display = 'none';
-                if (walletPaymentSection) walletPaymentSection.style.display = 'block';
-                if (submitBtn) submitBtn.style.display = 'none';
-                
-                // Initialize payment request for digital wallets
-                initializePaymentRequest();
+            option.classList.toggle('active', isActive);
+            if (input) {
+                input.checked = isActive;
             }
         });
+
+        const isCard = selectedPaymentMethod === 'card';
+        if (cardPaymentSection) cardPaymentSection.style.display = isCard ? 'block' : 'none';
+        if (walletPaymentSection) walletPaymentSection.style.display = isCard ? 'none' : 'block';
+        if (submitBtn) submitBtn.style.display = isCard ? 'inline-flex' : 'none';
+
+        clearStepError(3);
+
+        if (isCard) {
+            resetWalletUI();
+            return;
+        }
+
+        initializePaymentRequest(selectedPaymentMethod);
+    };
+
+    paymentMethodOptions.forEach(option => {
+        option.addEventListener('click', function () {
+            if (this.dataset.method !== selectedPaymentMethod) {
+                applyMethod(this.dataset.method);
+            }
+        });
+
+        const input = option.querySelector('input[name="paymentMethod"]');
+        if (input) {
+            input.addEventListener('change', function () {
+                if (this.checked && option.dataset.method !== selectedPaymentMethod) {
+                    applyMethod(option.dataset.method);
+                }
+            });
+        }
     });
+
+    const checkedMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'card';
+    applyMethod(checkedMethod);
+}
+
+function resetWalletUI() {
+    const walletTitle = document.getElementById('walletTitle');
+    const walletDescription = document.getElementById('walletDescription');
+    const walletNote = document.querySelector('.wallet-note');
+    const buttonContainer = document.getElementById('wallet-button-container');
+
+    if (paymentRequestButton) {
+        if (typeof paymentRequestButton.unmount === 'function') {
+            paymentRequestButton.unmount();
+        }
+        if (typeof paymentRequestButton.destroy === 'function') {
+            paymentRequestButton.destroy();
+        }
+        paymentRequestButton = null;
+    }
+    paymentRequest = null;
+
+    if (walletTitle) walletTitle.textContent = 'Pay with Digital Wallet';
+    if (walletDescription) {
+        walletDescription.textContent = 'Click the button below to complete your donation using your saved payment method.';
+    }
+    if (walletNote) walletNote.style.display = '';
+    if (buttonContainer) buttonContainer.innerHTML = '';
+}
+
+function renderWalletUnavailableMessage(requestedMethod) {
+    const buttonContainer = document.getElementById('wallet-button-container');
+    const walletTitle = document.getElementById('walletTitle');
+    const walletDescription = document.getElementById('walletDescription');
+    const walletNote = document.querySelector('.wallet-note');
+
+    if (!buttonContainer) {
+        return;
+    }
+
+    if (walletTitle) walletTitle.textContent = 'Digital Wallet Unavailable';
+    if (walletDescription) {
+        walletDescription.textContent = requestedMethod === 'applepay'
+            ? 'Apple Pay is not available on this device. Please use Safari on a Mac or iOS device.'
+            : 'Google Pay is not available. Please use a supported browser with a configured payment method.';
+    }
+    if (walletNote) walletNote.style.display = 'none';
+
+    buttonContainer.innerHTML = `
+        <div class="wallet-unavailable">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="warning-icon">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <p>${requestedMethod === 'applepay'
+            ? 'Apple Pay is unavailable right now.'
+            : 'Google Pay is unavailable right now.'}</p>
+            <button type="button" class="btn btn-secondary" onclick="switchToCardPayment()">
+                Pay with Card Instead
+            </button>
+        </div>
+    `;
 }
 
 /**
  * Initialize Stripe Payment Request for Apple Pay and Google Pay
  */
-function initializePaymentRequest() {
+function initializePaymentRequest(requestedMethod) {
     if (!stripe) {
         console.warn('Stripe not initialized for payment request');
+        renderWalletUnavailableMessage(requestedMethod);
         return;
     }
+
+    resetWalletUI();
 
     const amount = Math.round(donationData.amount * 100);
 
@@ -565,67 +668,58 @@ function initializePaymentRequest() {
     });
 
     // Check if payment request is available
-    paymentRequest.canMakePayment().then(function(result) {
-        if (result) {
-            // Update wallet UI based on available method
-            const walletTitle = document.getElementById('walletTitle');
-            const walletDescription = document.getElementById('walletDescription');
-            
-            if (result.applePay) {
-                if (walletTitle) walletTitle.textContent = 'Pay with Apple Pay';
-                if (walletDescription) walletDescription.textContent = 
-                    'Use Face ID or Touch ID to complete your donation securely.';
-            } else if (result.googlePay) {
-                if (walletTitle) walletTitle.textContent = 'Pay with Google Pay';
-                if (walletDescription) walletDescription.textContent = 
-                    'Complete your donation quickly and securely with Google Pay.';
-            } else {
-                if (walletTitle) walletTitle.textContent = 'Pay with Digital Wallet';
-                if (walletDescription) walletDescription.textContent = 
-                    'Click the button below to complete your donation.';
-            }
+    paymentRequest.canMakePayment().then(function (result) {
+        const supportsRequestedMethod = Boolean(result) && (
+            requestedMethod === 'applepay'
+                ? Boolean(result.applePay)
+                : requestedMethod === 'googlepay'
+                    ? Boolean(result.googlePay)
+                    : Boolean(result.applePay || result.googlePay)
+        );
 
-            // Create and mount payment request button
-            const buttonContainer = document.getElementById('wallet-button-container');
-            if (buttonContainer) {
-                buttonContainer.innerHTML = ''; // Clear any existing button
-                
-                paymentRequestButton = stripe.elements()
-                    .create('paymentRequestButton', {
-                        paymentRequest: paymentRequest,
-                        style: {
-                            paymentRequestButton: {
-                                type: 'donate',
-                                theme: 'dark',
-                                height: '48px',
-                            },
-                        },
-                    });
+        if (!supportsRequestedMethod) {
+            renderWalletUnavailableMessage(requestedMethod);
+            return;
+        }
 
-                paymentRequestButton.mount('#wallet-button-container');
+        // Update wallet UI based on selected method
+        const walletTitle = document.getElementById('walletTitle');
+        const walletDescription = document.getElementById('walletDescription');
+
+        if (requestedMethod === 'applepay') {
+            if (walletTitle) walletTitle.textContent = 'Pay with Apple Pay';
+            if (walletDescription) {
+                walletDescription.textContent = 'Use Face ID or Touch ID to complete your donation securely.';
             }
         } else {
-            // Payment request not available, show message
-            const walletSection = document.getElementById('walletPaymentSection');
-            if (walletSection) {
-                walletSection.innerHTML = `
-                    <div class="wallet-unavailable">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="warning-icon">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                        </svg>
-                        <h3>Digital Wallet Unavailable</h3>
-                        <p>${selectedPaymentMethod === 'applepay' ? 
-                            'Apple Pay is not available on this device. Please use Safari on a Mac or iOS device.' : 
-                            'Google Pay is not available. Please ensure you have a supported browser and payment method set up.'}</p>
-                        <button type="button" class="btn btn-secondary" onclick="switchToCardPayment()">
-                            Pay with Card Instead
-                        </button>
-                    </div>
-                `;
+            if (walletTitle) walletTitle.textContent = 'Pay with Google Pay';
+            if (walletDescription) {
+                walletDescription.textContent = 'Complete your donation quickly and securely with Google Pay.';
             }
         }
+
+        // Create and mount payment request button
+        const buttonContainer = document.getElementById('wallet-button-container');
+        if (!buttonContainer) {
+            return;
+        }
+
+        buttonContainer.innerHTML = '';
+        paymentRequestButton = stripe.elements().create('paymentRequestButton', {
+            paymentRequest: paymentRequest,
+            style: {
+                paymentRequestButton: {
+                    type: 'donate',
+                    theme: 'dark',
+                    height: '48px',
+                },
+            },
+        });
+
+        paymentRequestButton.mount('#wallet-button-container');
+    }).catch(error => {
+        console.warn('Wallet availability check failed:', error);
+        renderWalletUnavailableMessage(requestedMethod);
     });
 
     // Handle payment request events
@@ -940,7 +1034,6 @@ function validateStep2() {
     const email = document.getElementById('email')?.value.trim();
 
     let isValid = true;
-    let errorMessages = [];
 
     // Validate full name
     if (!fullName) {
@@ -979,9 +1072,18 @@ function validateStep2() {
 }
 
 function validateStep3() {
+    if (selectedPaymentMethod !== 'card') {
+        return true;
+    }
+
     const cardHolderName = document.getElementById('cardHolderName')?.value.trim();
 
     let isValid = true;
+
+    if (!stripe || !cardElement) {
+        showStepError(3, 'Payment form is not ready yet. Please refresh and try again.');
+        return false;
+    }
 
     // Validate card holder name
     if (!cardHolderName) {
@@ -992,10 +1094,10 @@ function validateStep3() {
         donationData.cardHolderName = cardHolderName;
     }
 
-    // Check if card element is valid
-    if (cardElement) {
-        // Card validation is handled by Stripe's element
-        // We'll do additional validation during submission
+    // Require complete card details before submitting
+    if (!isCardComplete) {
+        showStepError(3, 'Please complete your card details before continuing.');
+        isValid = false;
     }
 
     // Collect billing address if different
@@ -1267,7 +1369,7 @@ function updatePaymentSummary() {
  * @param {object} donorInfo - Donor information
  * @returns {Promise<object>} - Payment intent data
  */
-async function createPaymentIntent(amount, donorInfo) {
+async function createPaymentIntent(amount, donorInfo = {}) {
     try {
         // Build dedication object if applicable
         const dedication = donationData.dedicateDonation ? {
@@ -1278,20 +1380,40 @@ async function createPaymentIntent(amount, donorInfo) {
             message: donationData.dedicationMessage
         } : null;
 
+        const hasMailingAddress = Boolean(
+            donationData.street || donationData.city || donationData.state || donationData.zip
+        );
+
+        const payload = {
+            amount: Math.round(amount),
+            currency: 'usd',
+            donorEmail: donorInfo.email,
+            donorName: donorInfo.name,
+            donationType: donationData.frequency || 'one-time',
+            dedication: dedication,
+            saveCard: Boolean(donationData.saveCard)
+        };
+
+        if (donationData.phone || hasMailingAddress) {
+            payload.donorInfo = {
+                phone: donationData.phone || undefined,
+                address: hasMailingAddress ? {
+                    line1: donationData.street || '',
+                    city: donationData.city || '',
+                    state: donationData.state || '',
+                    postal_code: donationData.zip || '',
+                    country: donationData.country || 'US'
+                } : undefined
+            };
+        }
+
         const response = await fetch('/api/create-payment-intent', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({
-                amount: Math.round(amount),
-                currency: 'usd',
-                donorEmail: donorInfo.email,
-                donorName: donorInfo.name,
-                donationType: donationData.frequency || 'one-time',
-                dedication: dedication
-            })
+            body: JSON.stringify(payload)
         });
 
         // Check if response is JSON
@@ -1373,11 +1495,25 @@ function updatePaymentStatus(status, message = '') {
 async function handleFormSubmit(event) {
     event.preventDefault();
 
+    if (selectedPaymentMethod !== 'card') {
+        showStepError(3, 'Please use the selected wallet button to complete payment.');
+        return;
+    }
+
+    if (!stripe || !cardElement) {
+        showStepError(3, 'Payment form is not ready. Please refresh and try again.');
+        return;
+    }
+
     if (!validateStep(3)) {
         return;
     }
 
     const submitBtn = document.getElementById('submitBtn');
+    if (!submitBtn) {
+        return;
+    }
+
     const btnText = submitBtn.querySelector('.btn-text');
     const btnLoader = submitBtn.querySelector('.btn-loader');
 
@@ -1630,13 +1766,24 @@ async function pollPaymentStatus(paymentIntentId) {
                 body: JSON.stringify({ paymentIntentId })
             });
 
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `Status check failed (${response.status})`);
+            }
+
             const data = await response.json();
 
             if (data.status === 'succeeded') {
                 updatePaymentStatus(PaymentStatus.SUCCEEDED, 'Payment successful!');
-                showConfirmation({ id: paymentIntentId, amount: data.amount });
+                showConfirmation({
+                    id: paymentIntentId,
+                    amount: data.amount,
+                    currency: data.currency
+                });
                 return;
-            } else if (data.status === 'failed' || data.status === 'canceled') {
+            }
+
+            if (data.status === 'canceled' || data.status === 'requires_payment_method') {
                 updatePaymentStatus(PaymentStatus.FAILED, data.message || 'Payment failed');
                 showStepError(3, data.message || 'Payment failed');
                 return;

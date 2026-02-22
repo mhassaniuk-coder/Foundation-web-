@@ -3090,6 +3090,13 @@ footer::before {
   animation: none;
 }
 
+.payment-status-indicator .status-spinner {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .payment-status-indicator[data-status="succeeded"] .status-spinner::after {
   content: '✓';
   position: absolute;
@@ -3236,7 +3243,10 @@ footer::before {
 
 .wallet-unavailable {
   text-align: center;
-  padding: 2rem;
+  padding: 1.25rem;
+  border: 1px solid var(--warning);
+  border-radius: var(--radius-md);
+  background: var(--warning-light);
 }
 
 .wallet-unavailable .warning-icon {
@@ -3253,7 +3263,12 @@ footer::before {
 
 .wallet-unavailable p {
   color: var(--neutral-600);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.wallet-unavailable .btn {
+  width: 100%;
+  max-width: 260px;
 }
 
 /* Dedication Section */
@@ -3387,6 +3402,14 @@ footer::before {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.step-navigation .btn:only-child {
+  margin-left: auto;
+  margin-right: auto;
+  flex: 1;
+  max-width: 320px;
+  justify-content: center;
 }
 
 .step-navigation .btn svg {
@@ -3742,6 +3765,31 @@ footer::before {
   .step-line {
     min-width: 20px;
     max-width: 50px;
+    margin: 0 0.35rem 1rem;
+  }
+
+  .progress-steps .step:not(.active) .step-label {
+    display: none;
+  }
+
+  .payment-methods-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .step-navigation {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .step-navigation .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-next,
+  .btn-submit {
+    max-width: none;
   }
 
   .trust-badges {
@@ -4045,3 +4093,40 @@ footer::before {
     text-align: center;
   }
 }
+
+/* ============================================
+   AUTH PAGES RESPONSIVE STYLES
+   ============================================ */
+
+@media (max-width: 768px) {
+    .auth-card, .gateway-card {
+        padding: 2rem !important;
+    }
+
+    .gateway-card h1 {
+        font-size: 2rem;
+    }
+
+    .gateway-card p {
+        font-size: 1rem;
+    }
+
+    .auth-card h1 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-container, .auth-gateway {
+        padding: 1rem;
+    }
+
+    .auth-card, .gateway-card {
+        padding: 1.5rem !important;
+    }
+
+    .gateway-actions {
+        gap: 1rem;
+    }
+}
+

@@ -1,54 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Login — Restored Kings Foundation</title>
-  <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Restored Kings Foundation</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/premium.css">
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: var(--primary-900);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.3) blur(5px);
+            z-index: 0;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 450px;
+            z-index: 1;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-md);
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--gold-500);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .social-auth {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .btn-google {
+            width: 100%;
+            background: white;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.8rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-google:hover {
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 <body>
-  <main class="container auth-container">
-    <div class="auth-hero">
-      <h1>Restore dignity. Rebuild lives.</h1>
-      <p style="opacity:.95; max-width:36rem;">Members get priority access to programs, volunteer opportunities, and events. Secure your account to manage your profile and donations.</p>
-      <p style="margin-top:1rem;"><a href="/donate.html" class="btn btn-primary">Donate</a></p>
+    <div class="auth-container">
+        <div class="auth-bg"></div>
+        <div class="auth-card glass-panel" style="padding: 3rem;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <a href="/" class="logo" style="justify-content: center;">
+                    <div class="logo-icon">♔</div>
+                    <div class="logo-text">Restored <span>Kings</span></div>
+                </a>
+                <h1 style="color: white; font-size: 1.75rem; margin-top: 1.5rem; margin-bottom: 0.5rem;">Welcome Back, King</h1>
+                <p style="color: rgba(255,255,255,0.6);">Access your royal court.</p>
+            </div>
+
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label style="color: rgba(255,255,255,0.8);">Email Address</label>
+                    <input type="email" class="form-input" placeholder="king@restoredkings.org" required>
+                </div>
+                <div class="form-group">
+                    <label style="color: rgba(255,255,255,0.8);">Password</label>
+                    <input type="password" class="form-input" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Sign In</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                    <a href="/auth/reset.html" style="font-size: 0.875rem; color: var(--gold-400);">Forgot Password?</a>
+                    <a href="/auth/signup.html" style="font-size: 0.875rem; color: var(--neutral-400);">Create Account</a>
+                </div>
+            </form>
+
+            <div class="social-auth">
+                <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Or continue with</p>
+                <div class="btn-google">
+                    <img src="https://www.google.com/favicon.ico" width="20" height="20" alt="Google">
+                    Sign in with Google
+                </div>
+            </div>
+        </div>
     </div>
 
-    <aside class="auth-card" aria-labelledby="login-heading">
-      <h2 id="login-heading">Welcome back</h2>
-      <p style="color:var(--neutral-500); margin-bottom:1rem;">Sign in to your member dashboard</p>
-      <form id="loginForm" novalidate>
-        <div class="form-row">
-          <label for="loginEmail">Email</label>
-          <input type="email" id="loginEmail" name="email" required placeholder="name@domain.org" autocomplete="email">
-        </div>
-
-        <div class="form-row">
-          <label for="loginPassword">Password</label>
-          <div style="display:flex; gap:.5rem; align-items:center;">
-            <input type="password" id="loginPassword" name="password" required placeholder="Enter your password" autocomplete="current-password" style="flex:1;">
-            <button type="button" class="show-pass" id="toggleLoginPass" aria-label="Show password">Show</button>
-          </div>
-        </div>
-
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:.25rem;">
-          <label style="font-size:.9rem; display:flex; align-items:center; gap:.5rem;"><input type="checkbox" id="rememberMe"> Remember me</label>
-          <a href="/auth/reset.html" class="btn btn-outline">Forgot?</a>
-        </div>
-
-        <div class="auth-actions" style="margin-top:1rem;">
-          <button type="submit" class="btn btn-primary" style="flex:1;">Log In</button>
-        </div>
-
-        <div class="social-row">
-          <button type="button" class="social-btn" id="socialGoogle">Continue with Google</button>
-          <button type="button" class="social-btn" id="socialFacebook">Continue with Facebook</button>
-        </div>
-      </form>
-
-      <p style="margin-top:1rem; font-size:.95rem;">New here? <a href="/auth/signup.html">Create an account</a></p>
-    </aside>
-  </main>
-  <script src="/js/auth.js"></script>
+    <script type="module" src="/js/auth.js"></script>
 </body>
 </html>

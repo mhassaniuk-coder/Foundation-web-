@@ -1,54 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Sign Up — Restored Kings Foundation</title>
-  <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the Kingdom | Restored Kings Foundation</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/premium.css">
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: var(--primary-900);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.3) blur(5px);
+            z-index: 0;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 450px;
+            z-index: 1;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-md);
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--gold-500);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .social-auth {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .btn-google {
+            width: 100%;
+            background: white;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.8rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-google:hover {
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 <body>
-  <main class="container auth-container">
-    <div class="auth-hero">
-      <h1>Create an account</h1>
-      <p style="opacity:.95; max-width:36rem;">Join our community to receive mentorship updates, volunteer opportunities, and program invitations.</p>
+    <div class="auth-container">
+        <div class="auth-bg"></div>
+        <div class="auth-card glass-panel" style="padding: 3rem;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <a href="/" class="logo" style="justify-content: center;">
+                    <div class="logo-icon">♔</div>
+                    <div class="logo-text">Restored <span>Kings</span></div>
+                </a>
+                <h1 style="color: white; font-size: 1.75rem; margin-top: 1.5rem; margin-bottom: 0.5rem;">Join the Kingdom</h1>
+                <p style="color: rgba(255,255,255,0.6);">Create your account and start your journey.</p>
+            </div>
+
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label style="color: rgba(255,255,255,0.8);">Full Name</label>
+                    <input type="text" class="form-input" placeholder="Marcus Aurelius" required>
+                </div>
+                <div class="form-group">
+                    <label style="color: rgba(255,255,255,0.8);">Email Address</label>
+                    <input type="email" class="form-input" placeholder="king@restoredkings.org" required>
+                </div>
+                <div class="form-group">
+                    <label style="color: rgba(255,255,255,.8);">Password</label>
+                    <input type="password" class="form-input" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Create Account</button>
+                <div style="text-align: center; margin-top: 0.5rem;">
+                    <a href="/auth/login.html" style="font-size: 0.875rem; color: var(--neutral-400);">Already have an account?</a>
+                </div>
+            </form>
+
+            <div class="social-auth">
+                <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Or continue with</p>
+                <div class="btn-google">
+                    <img src="https://www.google.com/favicon.ico" width="20" height="20" alt="Google">
+                    Sign up with Google
+                </div>
+            </div>
+        </div>
     </div>
 
-    <aside class="auth-card" aria-labelledby="signup-heading">
-      <h2 id="signup-heading">Sign up</h2>
-      <form id="signupForm" novalidate>
-        <div class="form-row">
-          <label for="signupName">Full name</label>
-          <input type="text" id="signupName" name="name" required placeholder="Your full name" autocomplete="name">
-        </div>
-
-        <div class="form-row">
-          <label for="signupEmail">Email</label>
-          <input type="email" id="signupEmail" name="email" required placeholder="name@domain.org" autocomplete="email">
-        </div>
-
-        <div class="form-row">
-          <label for="signupPassword">Password</label>
-          <input type="password" id="signupPassword" name="password" required placeholder="Choose a strong password" autocomplete="new-password">
-          <div class="password-meter" aria-hidden="true"><i id="signupStrength"></i></div>
-        </div>
-
-        <div class="form-row">
-          <label for="signupConfirm">Confirm password</label>
-          <input type="password" id="signupConfirm" name="confirm" required placeholder="Confirm password" autocomplete="new-password">
-        </div>
-
-        <div class="auth-actions">
-          <button class="btn btn-primary" type="submit" style="flex:1">Create Account</button>
-        </div>
-
-        <div class="social-row">
-          <button type="button" class="social-btn" id="socialGoogleSign">Continue with Google</button>
-          <button type="button" class="social-btn" id="socialFacebookSign">Continue with Facebook</button>
-        </div>
-      </form>
-      <p style="margin-top:1rem;">Already have an account? <a href="/auth/login.html">Log in</a></p>
-    </aside>
-  </main>
-  <script src="/js/auth.js"></script>
+    <script type="module" src="/js/auth.js"></script>
 </body>
 </html>
