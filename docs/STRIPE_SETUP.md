@@ -1,144 +1,168 @@
-# Stripe Payment Integration - Setup Guide
+# Stripe Payment Integration Setup Guide
 
-## What Was Implemented
+This guide explains how to properly configure Stripe for the Restored Kings Foundation donation system.
 
-### Frontend (donate.html & donate.js)
-✅ **Stripe Card Element**
-- Real-time card input validation using Stripe Elements
-- Real-time card brand detection (Visa, Mastercard, Amex, etc.) with visual brand icon
-- Clear error messages for invalid cards
-- Custom styling matching your foundation's color scheme
+## Prerequisites
 
-✅ **Card Holder Name Field**
-- Required input for cardholder name before payment submission
+1. A Stripe account (sign up at https://stripe.com)
+2. Access to Stripe Dashboard (https://dashboard.stripe.com)
 
-✅ **Save Card Option**
-- Checkbox to save card for future donations (secure tokenization via Stripe)
-- When enabled, allows Stripe to set up the card for off-session use
+## Step 1: Get Your API Keys
 
-✅ **Secure Key Injection**
-- Publishable key loaded via `/api/stripe-keys` endpoint (secure server-side injection)
-- Fallback to DOM data attribute for testing: `data-stripe-publishable-key="pk_test_..."`
-- Fallback to window.STRIPE_PUBLIC_KEY for direct window injection
-- Graceful error handling with setup instructions if Stripe isn't configured
+1. Log in to your Stripe Dashboard
+2. Navigate to **Developers** → **API Keys**
+3. You'll see two types of keys:
+   - **Publishable key** (starts with `pk_test_` or `pk_live_`)
+   - **Secret key** (starts with `sk_test_` or `sk_live_`)
 
-✅ **Multi-Step Form with Confirmation**
-- Step 1: Donation amount & frequency
-- Step 2: Donor information (name, email, address)
-- Step 3: Payment details (card entry, billing address toggle)
-- Step 4: Confirmation receipt with transaction ID
+### Test Mode vs Live Mode
 
-### Backend (api/*)
-✅ **Payment Intent Creation** (`create-payment-intent.js`)
-- Creates Stripe PaymentIntent securely on backend
-- Validates donor info, amount, currency, donation type
-- Returns clientSecret for frontend card confirmation
+- **Test Mode**: Use keys starting with `pk_test_` and `sk_test_` for development
+- **Live Mode**: Use keys starting with `pk_live_` and `sk_live_` for production
 
-✅ **Stripe Keys Endpoint** (`stripe-keys.js`)
-- Safely returns publishable key to frontend
-- Reads from `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` environment variable
-- Only allows GET requests, caches response for 1 hour
+## Step 2: Configure Environment Variables
 
-✅ **Confirma Payment Status** (`confirm-payment.js`)
-- Retrieves PaymentIntent status from Stripe
-- Returns user-friendly status messages
-- Includes charge & receipt details for succeeded payments
+### For Vercel Deployment
 
-✅ **Webhook Handler** (`webhook.js`)
-- Securely verifies Stripe webhook signature
-- Idempotent event processing (prevents duplicate processing)
-- Handles: payment_intent.succeeded, payment_intent.payment_failed, charge.refunded, charge.disputed
+1. Go to your Vercel project dashboard
+2. Navigate to **Settings** → **Environment Variables**
+3. Add the following variables:
 
-✅ **Security Hardening** (`stripe-config.js`)
-- CORS headers with Origin validation (respects ALLOWED_ORIGIN)
-- Varies: Origin header for proper caching
-- X-Content-Type-Options: nosniff
-- X-Frame-Options: DENY
-- Strict-Transport-Security: max-age=31536000
-- Comprehensive input validation for amounts, emails, phone, names
-
-## Setup Instructions
-
-### 1. Get Stripe Keys
-Visit: https://dashboard.stripe.com/apikeys
-
-### 2. Set Environment Variables in Vercel
-
-Go to **Vercel Dashboard** → Your Project → **Settings** → **Environment Variables**
-
-Add the following:
 ```
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_... (or pk_live_...)
-STRIPE_SECRET_KEY=sk_test_... (or sk_live_...)
-STRIPE_WEBHOOK_SECRET=whsec_... (optional, for webhooks)
-ALLOWED_ORIGIN=https://yourdomain.com
-NODE_ENV=production
+STRIPE_SECRET_KEY=sk_test_your_secret_key_here
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key_here
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
 ```
 
-### 3. Deploy to Vercel
+### For Local Development
 
-Push to your repo - Vercel will automatically redeploy:
-```bash
-git add .
-git commit -m "Add Stripe integration environment vars"
-git push
-```
+1. Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
 
-### 4. Test the Flow
+2. Update the following values in `.env`:
+   ```
+   STRIPE_SECRET_KEY=sk_test_your_secret_key_here
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key_here
+   ```
 
-1. Visit your `/donate.html` page
-2. Enter a test donation amount (e.g., $25)
-3. Fill in your information
-4. On payment step, enter a Stripe test card:
-   - **Visa**: `4242 4242 4242 4242`
-   - **Mastercard**: `5555 5555 5555 4444`
-   - **Amex**: `3782 822463 10005`
-   - **Exp**: Any future date (e.g., 12/25)
-   - **CVC**: Any 3 digits (e.g., 123)
+## Step 3: Set Up Webhooks (Production)
 
-5. Click "Complete Donation"
-6. You should see the confirmation receipt with transaction ID
+Webhooks are essential for receiving payment events from Stripe.
 
-## Security Checklist
+1. In Stripe Dashboard, go to **Developers** → **Webhooks**
+2. Click **Add endpoint**
+3. Enter your webhook URL:
+   ```
+   https://your-domain.com/api/webhook
+   ```
+4. Select these events to listen to:
+   - `payment_intent.succeeded`
+   - `payment_intent.payment_failed`
+   - `payment_intent.canceled`
+   - `charge.refunded`
+   - `charge.dispute.created`
 
-✅ Stripe secret key never exposed to frontend (only on backend)
-✅ Publishable key injected via secure `/api/stripe-keys` endpoint
-✅ Card data never touches your servers (Stripe Elements handles this)
-✅ CSP headers configured to only allow Stripe scripts
-✅ CORS properly restricted with Origin validation
-✅ Webhook signature verification for secure event handling
-✅ All inputs validated (amounts, emails, phone numbers, names)
-✅ Error messages safe and user-friendly (don't expose sensitive system info)
+5. After creating, copy the **Signing secret** (starts with `whsec_`)
+6. Add it to your environment variables as `STRIPE_WEBHOOK_SECRET`
 
-## Environment Variables Checklist
+### Local Webhook Testing
 
-| Variable | Type | Required | Notes |
-|----------|------|----------|-------|
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Public | Yes | Stripe publishable key (can be seen in client JS) |
-| `STRIPE_SECRET_KEY` | Secret | Yes | Stripe secret key (backend only) |
-| `STRIPE_WEBHOOK_SECRET` | Secret | No | For Stripe webhook verification |
-| `ALLOWED_ORIGIN` | String | No | Restricts CORS to specific origin (e.g., https://example.com) |
-
-## Next Steps
-
-1. **Webhook Setup**: Configure Stripe webhooks to point to `https://your-domain.com/api/webhook`
-   - Select events: `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.refunded`, `charge.disputed`
-
-2. **Email Receipts**: In production, send donation receipts via email (integrate SendGrid, Mailgun, etc.)
-
-3. **Database**: Store donation records in Supabase or another database
-
-4. **Analytics**: Track donation metrics and donor info
-
-## Testing Stripe Webhooks Locally (Optional)
+For local development, use Stripe CLI:
 
 ```bash
-# Install Stripe CLI: https://stripe.com/docs/stripe-cli
+# Install Stripe CLI, then:
 stripe login
-stripe listen --forward-to http://localhost:3000/api/webhook
-stripe trigger payment_intent.succeeded
+stripe listen --forward-to localhost:3000/api/webhook
 ```
 
----
-**Documentation generated**: February 22, 2026
-**Last updated by**: GitHub Copilot
+This will give you a webhook signing secret for local testing.
+
+## Step 4: Test Your Integration
+
+### Test Card Numbers
+
+Use these test card numbers with any future expiry date and any 3-digit CVC:
+
+| Card Number | Result |
+|-------------|--------|
+| 4242 4242 4242 4242 | Successful payment |
+| 4000 0000 0000 0002 | Decline |
+| 4000 0000 0000 9995 | Insufficient funds |
+| 4000 0000 0000 0069 | Expired card |
+| 4000 0000 0000 0127 | Incorrect CVC |
+
+### Test the Donation Flow
+
+1. Go to your donation page: `/donate.html`
+2. Select an amount and fill in donor information
+3. Use a test card number
+4. Complete the donation
+5. Verify the confirmation page shows
+
+## Step 5: Go Live
+
+Before going live:
+
+1. **Complete Stripe verification** in your Stripe Dashboard
+2. **Switch to live mode** in Stripe Dashboard
+3. **Update environment variables** with live keys:
+   ```
+   STRIPE_SECRET_KEY=sk_live_your_live_secret_key
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_your_live_publishable_key
+   STRIPE_WEBHOOK_SECRET=whsec_your_live_webhook_secret
+   ```
+4. **Update webhook endpoint** to use your production URL
+5. **Test with a real card** (you can refund it immediately)
+
+## Security Best Practices
+
+1. **Never expose your secret key** in frontend code
+2. **Always use HTTPS** in production
+3. **Verify webhook signatures** to prevent fraud
+4. **Keep your keys secure** and rotate them periodically
+5. **Monitor your Stripe Dashboard** for suspicious activity
+
+## Troubleshooting
+
+### "Stripe is not configured" Error
+
+- Verify `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` is set in Vercel
+- Redeploy after adding environment variables
+- Check browser console for specific errors
+
+### Payment Fails with "Invalid request"
+
+- Ensure `STRIPE_SECRET_KEY` is correctly set
+- Verify the key is valid and not expired
+- Check Stripe Dashboard for API errors
+
+### Webhook Not Working
+
+- Verify webhook URL is accessible from internet
+- Check webhook secret matches
+- Review Stripe Dashboard → Webhooks for delivery attempts
+
+### Card Element Not Loading
+
+- Check if Stripe.js is loaded (should see in Network tab)
+- Verify publishable key format (should start with `pk_`)
+- Check browser console for errors
+
+## API Endpoints
+
+The donation system uses these API endpoints:
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/stripe-keys` | GET | Returns publishable key |
+| `/api/create-payment-intent` | POST | Creates payment intent |
+| `/api/confirm-payment` | POST | Confirms payment status |
+| `/api/webhook` | POST | Handles Stripe events |
+
+## Support
+
+- Stripe Documentation: https://stripe.com/docs
+- Stripe Support: https://support.stripe.com
+- For issues with this integration, check the project's GitHub issues

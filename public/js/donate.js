@@ -20,6 +20,19 @@ const getStripePublicKey = () => {
 
 const STRIPE_PUBLIC_KEY = getStripePublicKey();
 
+// Payment status tracking
+const PaymentStatus = {
+    IDLE: 'idle',
+    CREATING_INTENT: 'creating_intent',
+    CONFIRMING: 'confirming',
+    PROCESSING: 'processing',
+    SUCCEEDED: 'succeeded',
+    FAILED: 'failed',
+    CANCELED: 'canceled'
+};
+
+let currentPaymentStatus = PaymentStatus.IDLE;
+
 // Global state
 let stripe = null;
 let cardElement = null;
@@ -54,16 +67,83 @@ const impactMessages = {
     500: "Your $500 donation provides emergency housing assistance for a family in crisis."
 };
 
-// Card brand symbols for visual display
+// Card brand symbols for visual display with SVG icons
 const cardBrandSymbols = {
-    'visa': '💳 VISA',
-    'mastercard': '💳 Mastercard',
-    'amex': '💳 Amex',
-    'discover': '💳 Discover',
-    'diners': '💳 Diners',
-    'jcb': '💳 JCB',
-    'unionpay': '💳 UnionPay',
-    'unknown': '💳'
+    'visa': '<svg viewBox="0 0 48 48" class="card-brand-svg"><path fill="#1A1F71" d="M18.5 32.4l2.1-13h3.4l-2.1 13h-3.4zm14.4-12.7c-.7-.3-1.7-.5-3-.5-3.3 0-5.7 1.8-5.7 4.3 0 1.9 1.7 2.9 2.9 3.5 1.3.6 1.7 1 1.7 1.6 0 .8-1 1.2-2 1.2-1.3 0-2-.2-3.1-.7l-.4-.2-.5 2.9c.8.4 2.2.7 3.7.7 3.5 0 5.8-1.7 5.8-4.4 0-1.5-.9-2.6-2.8-3.5-1.2-.6-1.9-1-1.9-1.6 0-.5.6-1.1 1.9-1.1 1.1 0 1.9.2 2.5.5l.3.1.6-2.8zm8.6-.3h-2.6c-.8 0-1.4.2-1.8 1l-5 12h3.5l.7-1.9h4.3l.4 1.9h3.1l-2.6-13zm-4.1 8.4c.3-.8 1.4-3.7 1.4-3.7s.3-.8.5-1.3l.2 1.2s.7 3.3.8 4h-2.9v-.2zM16.4 19.4l-3.3 8.9-.3-1.8c-.6-2-2.5-4.2-4.6-5.3l3 11.2h3.5l5.3-13h-3.6z"/><path fill="#F9A533" d="M10.3 19.4H5l-.1.3c4.2 1.1 7 3.7 8.1 6.8l-1.2-5.9c-.2-.8-.8-1.1-1.5-1.2z"/></svg>',
+    'mastercard': '<svg viewBox="0 0 48 48" class="card-brand-svg"><circle cx="17" cy="24" r="10" fill="#EB001B"/><circle cx="31" cy="24" r="10" fill="#F79E1B"/><path fill="#FF5F00" d="M24 16.5c2.5 2 4 5 4 8.5s-1.5 6.5-4 8.5c-2.5-2-4-5-4-8.5s1.5-6.5 4-8.5z"/></svg>',
+    'amex': '<svg viewBox="0 0 48 48" class="card-brand-svg"><rect width="48" height="32" rx="4" fill="#006FCF"/><path fill="white" d="M12 18l-4 8h6l.6-1.5h-3.2l.6-1.5h3.2l.6-1.5h-3.2l.6-1.5H16l-2.5 6h3l2.5-6h-4l-.5 1.5h2l-.5 1.5h-2l-.5 1.5h2l-.5 1.5h-3l2.5-6h-3zm9 0l-3 6h3l.5-1h2l.5 1h3l-3-6h-3zm1.5 1.5l1 2h-2l1-2zm5.5 4.5l-2.5-6h3l1.5 3.5 1.5-3.5h3l-2.5 6h-3l-1-2.5-1 2.5h-3z"/></svg>',
+    'discover': '<svg viewBox="0 0 48 48" class="card-brand-svg"><rect width="48" height="32" rx="4" fill="#fff" stroke="#ddd"/><ellipse cx="30" cy="24" rx="10" ry="8" fill="#F47216"/><text x="8" y="26" font-size="8" font-weight="bold" fill="#000">DISCOVER</text></svg>',
+    'diners': '<svg viewBox="0 0 48 48" class="card-brand-svg"><rect width="48" height="32" rx="4" fill="#0079BE"/><ellipse cx="24" cy="24" rx="10" ry="12" fill="#fff"/><ellipse cx="20" cy="24" rx="6" ry="8" fill="#0079BE"/><ellipse cx="28" cy="24" rx="6" ry="8" fill="#0079BE"/></svg>',
+    'jcb': '<svg viewBox="0 0 48 48" class="card-brand-svg"><rect width="48" height="32" rx="4" fill="#fff" stroke="#ddd"/><rect x="4" y="8" width="12" height="24" rx="2" fill="#0E4C96"/><rect x="18" y="8" width="12" height="24" rx="2" fill="#E00B36"/><rect x="32" y="8" width="12" height="24" rx="2" fill="#00A94F"/></svg>',
+    'unionpay': '<svg viewBox="0 0 48 48" class="card-brand-svg"><rect width="48" height="32" rx="4" fill="#fff" stroke="#ddd"/><rect x="4" y="8" width="12" height="24" fill="#E21836"/><rect x="18" y="8" width="12" height="24" fill="#00447C"/><rect x="32" y="8" width="12" height="24" fill="#007B84"/></svg>',
+    'unknown': '<svg viewBox="0 0 48 48" class="card-brand-svg"><rect width="48" height="32" rx="4" fill="#f3f4f6" stroke="#d1d5db"/><text x="24" y="26" text-anchor="middle" font-size="12" fill="#6b7280">💳</text></svg>'
+};
+
+// Card brand display names
+const cardBrandNames = {
+    'visa': 'Visa',
+    'mastercard': 'Mastercard',
+    'amex': 'American Express',
+    'discover': 'Discover',
+    'diners': 'Diners Club',
+    'jcb': 'JCB',
+    'unionpay': 'UnionPay',
+    'unknown': 'Card'
+};
+
+// CVC length requirements by card brand
+const cvcLengthRequirements = {
+    'visa': 3,
+    'mastercard': 3,
+    'amex': 4,
+    'discover': 3,
+    'diners': 3,
+    'jcb': 3,
+    'unionpay': 3,
+    'unknown': 3
+};
+
+// User-friendly decline code messages
+const declineCodeMessages = {
+    'insufficient_funds': 'Your card has insufficient funds for this transaction. Please try a different card or add funds to your account.',
+    'lost_card': 'This card has been reported as lost. Please contact your bank or use a different card.',
+    'stolen_card': 'This card has been reported as stolen. Please contact your bank immediately.',
+    'expired_card': 'Your card has expired. Please use a different card with a valid expiration date.',
+    'incorrect_cvc': 'The security code (CVC) you entered is incorrect. Please check the 3-digit code on the back of your card (4 digits on the front for American Express).',
+    'processing_error': 'A processing error occurred. Please wait a moment and try again.',
+    'card_not_supported': 'This card type is not supported. Please try a different card (Visa, Mastercard, Amex, or Discover).',
+    'do_not_honor': 'Your bank has declined this transaction. Please contact your bank or try a different card.',
+    'generic_decline': 'Your card was declined. Please try a different card or contact your bank.',
+    'invalid_card': 'Invalid card number. Please check your card number and try again.',
+    'invalid_expiry_month': 'Invalid expiration month. Please check your card\'s expiration date.',
+    'invalid_expiry_year': 'Invalid expiration year. Please check your card\'s expiration date.',
+    'invalid_number': 'Invalid card number. Please check your card number and try again.',
+    'invalid_cvc': 'Invalid security code. Please check the CVC on your card.',
+    'card_declined': 'Your card was declined. Please try a different card.',
+    'authentication_required': 'This transaction requires additional authentication. Please complete the verification process.',
+    'approve_with_id': 'Your bank requires identification for this transaction. Please contact your bank.',
+    'call_issuer': 'Your bank requires you to call them to authorize this transaction.',
+    'card_velocity_exceeded': 'Your card has exceeded its spending limit. Please try a smaller amount or different card.',
+    'currency_not_supported': 'This card does not support the selected currency. Please try a different card.',
+    'duplicate_transaction': 'This appears to be a duplicate transaction. If this was intentional, please wait a moment and try again.',
+    'fraudulent': 'This transaction was flagged as potentially fraudulent. Please contact your bank.',
+    'merchant_blacklist': 'This card cannot be used for donations at this time. Please try a different card.',
+    'new_account_information_available': 'Your bank has updated information about your account. Please contact your bank.',
+    'no_action_taken': 'Your bank could not process this transaction. Please try again or use a different card.',
+    'not_permitted': 'This transaction is not permitted on your card. Please contact your bank or try a different card.',
+    'pickup_card': 'Your card has been flagged. Please contact your bank immediately.',
+    'pin_try_exceeded': 'Too many PIN attempts. Please contact your bank or try a different card.',
+    'reenter_transaction': 'Please try your transaction again.',
+    'restricted_card': 'This card is restricted. Please contact your bank or try a different card.',
+    'revocation_of_all_authorizations': 'Your bank has revoked authorization for this card. Please contact your bank.',
+    'revocation_of_authorization': 'Your bank has revoked authorization for this transaction. Please contact your bank.',
+    'security_violation': 'A security violation was detected. Please contact your bank.',
+    'service_not_allowed': 'This service is not allowed on your card. Please contact your bank.',
+    'stop_payment_order': 'A stop payment has been placed on this transaction. Please contact your bank.',
+    'testmode_decline': 'This is a test card that always declines. Please use a real card.',
+    'transaction_not_allowed': 'This transaction is not allowed on your card. Please contact your bank.',
+    'try_again_later': 'Please wait a moment and try your transaction again.',
+    'withdrawal_count_limit_exceeded': 'Your card has reached its withdrawal limit. Please try a different card.'
 };
 
 // ============================================
@@ -133,11 +213,13 @@ async function loadStripePublicKey() {
     }
 }
 
-// Initialize Stripe
+// Initialize Stripe with enhanced card validation
 function initializeStripe() {
     if (typeof Stripe !== 'undefined' && STRIPE_PUBLIC_KEY) {
         stripe = Stripe(STRIPE_PUBLIC_KEY);
-        const elements = stripe.elements();
+        const elements = stripe.elements({
+            fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap' }]
+        });
 
         // Custom styling for the Card element
         const style = {
@@ -148,18 +230,30 @@ function initializeStripe() {
                 fontSize: '16px',
                 '::placeholder': {
                     color: '#94a3b8'
+                },
+                ':focus': {
+                    color: '#1a3a5c'
                 }
             },
             invalid: {
                 color: '#ef4444',
                 iconColor: '#ef4444'
+            },
+            complete: {
+                color: '#10b981',
+                iconColor: '#10b981'
             }
         };
 
-        // Create card element
+        // Create card element with enhanced options
         cardElement = elements.create('card', {
             style: style,
-            hidePostalCode: true
+            hidePostalCode: false, // Show postal code for better validation
+            disableLink: true,
+            iconStyle: 'default',
+            value: {
+                postalCode: '' // Will be populated from donor info
+            }
         });
 
         // Mount card element
@@ -169,34 +263,32 @@ function initializeStripe() {
 
             // Handle real-time validation errors and card brand detection
             cardElement.on('change', function (event) {
-                // Card brand detection
-                const brand = event.brand;
-                const brandIcon = document.getElementById('card-brand-icon');
-                if (brandIcon) {
-                    brandIcon.className = `card-brand-icon ${brand || ''}`;
-                    brandIcon.textContent = getCardBrandSymbol(brand);
-                }
+                handleCardElementChange(event);
+            });
 
-                // Show validation errors
-                const displayError = document.getElementById('card-errors');
-                if (displayError) {
-                    if (event.error) {
-                        displayError.textContent = event.error.message;
-                        displayError.classList.add('visible');
-                        displayError.style.display = 'block';
-                    } else {
-                        displayError.textContent = '';
-                        displayError.classList.remove('visible');
-                        displayError.style.display = 'none';
-                    }
+            // Handle focus events for visual feedback
+            cardElement.on('focus', function () {
+                const cardContainer = document.querySelector('.card-element-container');
+                if (cardContainer) {
+                    cardContainer.classList.add('focused');
                 }
+            });
 
-                // Update card complete status
-                if (event.complete) {
-                    displayError.textContent = '';
-                    displayError.classList.remove('visible');
-                    displayError.style.display = 'none';
+            // Handle blur events
+            cardElement.on('blur', function () {
+                const cardContainer = document.querySelector('.card-element-container');
+                if (cardContainer) {
+                    cardContainer.classList.remove('focused');
                 }
+            });
+
+            // Handle ready state
+            cardElement.on('ready', function () {
+                const cardContainer = document.querySelector('.card-element-container');
+                if (cardContainer) {
+                    cardContainer.classList.add('ready');
+                }
+                updateCardValidationUI({ ready: true });
             });
         }
     } else if (typeof Stripe === 'undefined') {
@@ -209,6 +301,167 @@ function initializeStripe() {
             'https://dashboard.stripe.com/apikeys'
         );
     }
+}
+
+/**
+ * Handle card element change events with enhanced validation feedback
+ * @param {Object} event - Stripe element change event
+ */
+function handleCardElementChange(event) {
+    // Card brand detection
+    const brand = event.brand;
+    updateCardBrandDisplay(brand);
+
+    // Update validation UI
+    updateCardValidationUI(event);
+
+    // Show validation errors
+    const displayError = document.getElementById('card-errors');
+    if (displayError) {
+        if (event.error) {
+            const errorMessage = getEnhancedErrorMessage(event.error);
+            displayError.innerHTML = `<span class="error-icon">⚠️</span> ${errorMessage}`;
+            displayError.classList.add('visible', 'error');
+            displayError.classList.remove('success');
+            displayError.style.display = 'block';
+        } else if (event.complete) {
+            displayError.innerHTML = '<span class="success-icon">✓</span> Card details valid';
+            displayError.classList.add('visible', 'success');
+            displayError.classList.remove('error');
+            displayError.style.display = 'block';
+        } else {
+            displayError.textContent = '';
+            displayError.classList.remove('visible', 'error', 'success');
+            displayError.style.display = 'none';
+        }
+    }
+
+    // Update postal code validation
+    if (event.value && event.value.postalCode !== undefined) {
+        validatePostalCode(event.value.postalCode);
+    }
+}
+
+/**
+ * Update card brand display with visual indicator
+ * @param {string} brand - Card brand identifier
+ */
+function updateCardBrandDisplay(brand) {
+    const brandIcon = document.getElementById('card-brand-icon');
+    const brandName = document.getElementById('card-brand-name');
+
+    if (brandIcon) {
+        brandIcon.className = `card-brand-icon ${brand || 'unknown'}`;
+        brandIcon.innerHTML = getCardBrandSymbol(brand);
+    }
+
+    if (brandName) {
+        brandName.textContent = cardBrandNames[brand] || 'Card';
+        brandName.className = `card-brand-name ${brand || 'unknown'}`;
+    }
+
+    // Update CVC placeholder based on card type
+    updateCVCPlaceholder(brand);
+}
+
+/**
+ * Update CVC placeholder text based on card brand
+ * @param {string} brand - Card brand identifier
+ */
+function updateCVCPlaceholder(brand) {
+    const cvcHint = document.getElementById('cvc-hint');
+    if (cvcHint) {
+        const requiredLength = cvcLengthRequirements[brand] || 3;
+        if (brand === 'amex') {
+            cvcHint.textContent = '4 digits on front of card';
+        } else {
+            cvcHint.textContent = '3 digits on back of card';
+        }
+    }
+}
+
+/**
+ * Update card validation UI with visual indicators
+ * @param {Object} event - Stripe element event
+ */
+function updateCardValidationUI(event) {
+    const cardContainer = document.querySelector('.card-element-container');
+    const validationIndicator = document.getElementById('card-validation-indicator');
+
+    if (cardContainer) {
+        cardContainer.classList.remove('valid', 'invalid', 'processing');
+
+        if (event.complete) {
+            cardContainer.classList.add('valid');
+        } else if (event.error) {
+            cardContainer.classList.add('invalid');
+        }
+    }
+
+    if (validationIndicator) {
+        if (event.complete) {
+            validationIndicator.innerHTML = '<span class="validation-check">✓</span>';
+            validationIndicator.className = 'card-validation-indicator valid';
+        } else if (event.error) {
+            validationIndicator.innerHTML = '<span class="validation-x">✗</span>';
+            validationIndicator.className = 'card-validation-indicator invalid';
+        } else if (event.empty !== false) {
+            validationIndicator.innerHTML = '';
+            validationIndicator.className = 'card-validation-indicator';
+        }
+    }
+}
+
+/**
+ * Validate postal code format
+ * @param {string} postalCode - Postal code to validate
+ */
+function validatePostalCode(postalCode) {
+    const postalCodeError = document.getElementById('postal-code-error');
+    const postalCodeContainer = document.querySelector('.StripeElement--postal-code')?.parentElement;
+
+    if (!postalCode) {
+        if (postalCodeError) {
+            postalCodeError.textContent = '';
+            postalCodeError.style.display = 'none';
+        }
+        return;
+    }
+
+    // Basic validation - can be enhanced for specific countries
+    const isValid = postalCode.length >= 3 && postalCode.length <= 10;
+
+    if (postalCodeError) {
+        if (!isValid) {
+            postalCodeError.textContent = 'Please enter a valid postal code';
+            postalCodeError.style.display = 'block';
+        } else {
+            postalCodeError.textContent = '';
+            postalCodeError.style.display = 'none';
+        }
+    }
+}
+
+/**
+ * Get enhanced error message from Stripe error object
+ * @param {Object} error - Stripe error object
+ * @returns {string} User-friendly error message
+ */
+function getEnhancedErrorMessage(error) {
+    // Check for specific error codes
+    if (error.code) {
+        const codeMessage = declineCodeMessages[error.code];
+        if (codeMessage) return codeMessage;
+    }
+
+    // Check for decline code
+    if (error.decline_code) {
+        const declineMessage = declineCodeMessages[error.decline_code];
+        if (declineMessage) return declineMessage;
+    }
+
+    // Return the message from Stripe or a generic error
+    return error.message || 'An error occurred with your card. Please try again.';
 }
 
 // Get card brand symbol for display
