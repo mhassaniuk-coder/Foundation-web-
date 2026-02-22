@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     initVolunteerPortal();
     initStoryCarousel();
     initResourceLibrary();
-    // initAIAssistant(); // AI Assistant not yet implemented
+    initAIAssistant();
     initMemberPortal();
     initActivityStream();
     initImpactCertificates();
@@ -892,6 +892,103 @@ function initImpactCertificates() {
             document.getElementById('closeCert').addEventListener('click', () => certiDiv.remove());
             showNotification('Certificate generated successfully!', 'success');
         }, 1500);
+    });
+}
+
+function initAIAssistant() {
+    const container = document.getElementById('aiAssistant');
+    const openBtn = document.getElementById('openAssistant');
+    const closeBtn = document.getElementById('closeAssistant');
+    const input = document.getElementById('assistantInput');
+    const sendBtn = document.getElementById('sendAssistant');
+    const chat = document.getElementById('assistantChat');
+
+    if (!container || !openBtn || !input || !sendBtn || !chat) return;
+
+    const toggleVisibility = (show) => {
+        container.style.display = show ? 'flex' : 'none';
+        openBtn.style.display = show ? 'none' : 'block';
+        if (show) {
+            input.focus();
+        }
+    };
+
+    const appendMessage = (text, from) => {
+        const bubble = document.createElement('p');
+        bubble.textContent = text;
+        bubble.style.padding = '8px';
+        bubble.style.borderRadius = '8px';
+        bubble.style.marginBottom = '8px';
+        bubble.style.maxWidth = '85%';
+        bubble.style.fontSize = '0.9rem';
+
+        if (from === 'user') {
+            bubble.style.background = 'rgba(212,165,116,0.25)';
+            bubble.style.alignSelf = 'flex-end';
+        } else {
+            bubble.style.background = 'rgba(255,255,255,0.08)';
+            bubble.style.alignSelf = 'flex-start';
+        }
+
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'flex';
+        wrapper.style.justifyContent = from === 'user' ? 'flex-end' : 'flex-start';
+        wrapper.appendChild(bubble);
+
+        chat.appendChild(wrapper);
+        chat.scrollTop = chat.scrollHeight;
+    };
+
+    const buildResponse = (question) => {
+        const q = question.toLowerCase();
+
+        if (q.includes('donate') || q.includes('give')) {
+            return 'You can make a secure donation on our Donate page. Every gift helps provide outreach, mentorship, and practical support. Use the Donate button in the top navigation or visit the Donate page directly.';
+        }
+
+        if (q.includes('volunteer') || q.includes('help') || q.includes('serve')) {
+            return 'Thank you for wanting to help. Our Volunteer page lists current opportunities and a simple form to get started. After you submit, our team will follow up with next steps.';
+        }
+
+        if (q.includes('program') || q.includes('mentorship') || q.includes('services')) {
+            return 'You can explore our programs on the Programs page, including street outreach, mentorship, education, and job training. Each program card explains who it serves and how to get connected.';
+        }
+
+        if (q.includes('contact') || q.includes('email') || q.includes('phone')) {
+            return 'You can reach the foundation through the Contact page, where you will find a secure form and our primary email address. Messages submitted there go directly to the team.';
+        }
+
+        if (q.includes('impact') || q.includes('story') || q.includes('results')) {
+            return 'For stories and outcomes, visit the Impact page. You will find success stories, key statistics, and how donations are used across programs.';
+        }
+
+        return 'I can help you find the right place on the site. Ask me about donating, volunteering, programs, impact, or how to contact the team.';
+    };
+
+    const handleSend = () => {
+        const value = input.value.trim();
+        if (!value) return;
+
+        appendMessage(value, 'user');
+        input.value = '';
+
+        const response = buildResponse(value);
+        setTimeout(() => {
+            appendMessage(response, 'assistant');
+        }, 400);
+    };
+
+    openBtn.addEventListener('click', () => toggleVisibility(true));
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => toggleVisibility(false));
+    }
+
+    sendBtn.addEventListener('click', handleSend);
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSend();
+        }
     });
 }
 
