@@ -225,7 +225,9 @@ module.exports = async (req, res) => {
             donorName,
             donationType,
             saveCard,
-            donorInfo
+            donorInfo,
+            // Dedication fields
+            dedication
         } = body;
 
         // Validate amount
@@ -330,7 +332,13 @@ module.exports = async (req, res) => {
                 integration: 'restored-kings-foundation',
                 createdAt: new Date().toISOString(),
                 riskLevel: fraudCheckResult.riskLevel,
-                fraudFlags: fraudCheckResult.flags.join(',') || 'none'
+                fraudFlags: fraudCheckResult.flags.join(',') || 'none',
+                // Dedication metadata
+                dedicationType: dedication?.type || '',
+                honoreeName: dedication?.honoreeName || '',
+                recipientName: dedication?.recipientName || '',
+                recipientEmail: dedication?.recipientEmail || '',
+                dedicationMessage: dedication?.message || ''
             },
             automatic_payment_methods: {
                 enabled: true

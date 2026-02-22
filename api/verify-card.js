@@ -26,6 +26,8 @@ const {
 
 /**
  * User-friendly decline code messages
+ * NOTE: This is also defined in public/js/config.js and public/js/donate.js.
+ * Keep all copies in sync when updating.
  */
 const DECLINE_CODE_MESSAGES = {
     'insufficient_funds': 'Your card has insufficient funds for this transaction.',

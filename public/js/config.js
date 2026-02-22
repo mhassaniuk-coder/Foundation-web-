@@ -101,6 +101,8 @@ const PAYMENT_ERRORS = {
 };
 
 // Decline code to user-friendly message mapping
+// NOTE: This is also defined in donate.js (non-ES module) and api/verify-card.js (backend).
+// Keep all copies in sync when updating.
 const DECLINE_CODE_MESSAGES = {
     'insufficient_funds': 'Your card has insufficient funds for this transaction. Please try a different card or add funds to your account.',
     'lost_card': 'This card has been reported as lost. Please contact your bank or use a different card.',

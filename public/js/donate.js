@@ -36,7 +36,10 @@ let currentPaymentStatus = PaymentStatus.IDLE;
 // Global state
 let stripe = null;
 let cardElement = null;
+let paymentRequest = null;
+let paymentRequestButton = null;
 let currentStep = 1;
+let selectedPaymentMethod = 'card';
 let donationData = {
     amount: 100,
     frequency: 'one-time',
@@ -55,7 +58,15 @@ let donationData = {
     billingState: '',
     billingZip: '',
     billingCountry: 'US',
-    saveCard: false
+    saveCard: false,
+    // Dedication fields
+    dedicateDonation: false,
+    dedicationType: 'in-honor',
+    honoreeName: '',
+    notifyRecipient: false,
+    recipientName: '',
+    recipientEmail: '',
+    dedicationMessage: ''
 };
 
 // Impact messages based on amount
@@ -104,6 +115,8 @@ const cvcLengthRequirements = {
 };
 
 // User-friendly decline code messages
+// NOTE: This is duplicated from config.js because this file is not an ES module.
+// Keep both copies in sync. See also: api/verify-card.js for backend version.
 const declineCodeMessages = {
     'insufficient_funds': 'Your card has insufficient funds for this transaction. Please try a different card or add funds to your account.',
     'lost_card': 'This card has been reported as lost. Please contact your bank or use a different card.',
@@ -162,6 +175,8 @@ document.addEventListener('DOMContentLoaded', function () {
         initializeSaveCardOption();
         initializeShareButtons();
         initializePrintButton();
+        initializePaymentMethodSelection();
+        initializeDedicationSection();
     }).catch(error => {
         console.error('Failed to initialize donation form:', error);
         showConfigurationError(
@@ -483,6 +498,321 @@ function initializeSaveCardOption() {
         saveCardCheckbox.addEventListener('change', function () {
             donationData.saveCard = this.checked;
         });
+    }
+}
+
+// ============================================
+// PAYMENT METHOD SELECTION
+// ============================================
+
+function initializePaymentMethodSelection() {
+    const paymentMethodOptions = document.querySelectorAll('.payment-method-option');
+    const cardPaymentSection = document.getElementById('cardPaymentSection');
+    const walletPaymentSection = document.getElementById('walletPaymentSection');
+    const submitBtn = document.getElementById('submitBtn');
+
+    paymentMethodOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            // Update active state
+            paymentMethodOptions.forEach(opt => opt.classList.remove('active'));
+            this.classList.add('active');
+
+            const method = this.dataset.method;
+            selectedPaymentMethod = method;
+
+            // Show/hide payment sections
+            if (method === 'card') {
+                if (cardPaymentSection) cardPaymentSection.style.display = 'block';
+                if (walletPaymentSection) walletPaymentSection.style.display = 'none';
+                if (submitBtn) submitBtn.style.display = 'inline-flex';
+            } else {
+                if (cardPaymentSection) cardPaymentSection.style.display = 'none';
+                if (walletPaymentSection) walletPaymentSection.style.display = 'block';
+                if (submitBtn) submitBtn.style.display = 'none';
+                
+                // Initialize payment request for digital wallets
+                initializePaymentRequest();
+            }
+        });
+    });
+}
+
+/**
+ * Initialize Stripe Payment Request for Apple Pay and Google Pay
+ */
+function initializePaymentRequest() {
+    if (!stripe) {
+        console.warn('Stripe not initialized for payment request');
+        return;
+    }
+
+    const amount = Math.round(donationData.amount * 100);
+
+    // Create payment request
+    paymentRequest = stripe.paymentRequest({
+        country: 'US',
+        currency: 'usd',
+        total: {
+            label: donationData.frequency === 'monthly' ? 
+                `Monthly Donation to Restored Kings Foundation` : 
+                `Donation to Restored Kings Foundation`,
+            amount: amount,
+        },
+        requestPayerName: true,
+        requestPayerEmail: true,
+        requestPayerPhone: true,
+        requestShipping: false,
+    });
+
+    // Check if payment request is available
+    paymentRequest.canMakePayment().then(function(result) {
+        if (result) {
+            // Update wallet UI based on available method
+            const walletTitle = document.getElementById('walletTitle');
+            const walletDescription = document.getElementById('walletDescription');
+            
+            if (result.applePay) {
+                if (walletTitle) walletTitle.textContent = 'Pay with Apple Pay';
+                if (walletDescription) walletDescription.textContent = 
+                    'Use Face ID or Touch ID to complete your donation securely.';
+            } else if (result.googlePay) {
+                if (walletTitle) walletTitle.textContent = 'Pay with Google Pay';
+                if (walletDescription) walletDescription.textContent = 
+                    'Complete your donation quickly and securely with Google Pay.';
+            } else {
+                if (walletTitle) walletTitle.textContent = 'Pay with Digital Wallet';
+                if (walletDescription) walletDescription.textContent = 
+                    'Click the button below to complete your donation.';
+            }
+
+            // Create and mount payment request button
+            const buttonContainer = document.getElementById('wallet-button-container');
+            if (buttonContainer) {
+                buttonContainer.innerHTML = ''; // Clear any existing button
+                
+                paymentRequestButton = stripe.elements()
+                    .create('paymentRequestButton', {
+                        paymentRequest: paymentRequest,
+                        style: {
+                            paymentRequestButton: {
+                                type: 'donate',
+                                theme: 'dark',
+                                height: '48px',
+                            },
+                        },
+                    });
+
+                paymentRequestButton.mount('#wallet-button-container');
+            }
+        } else {
+            // Payment request not available, show message
+            const walletSection = document.getElementById('walletPaymentSection');
+            if (walletSection) {
+                walletSection.innerHTML = `
+                    <div class="wallet-unavailable">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="warning-icon">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <h3>Digital Wallet Unavailable</h3>
+                        <p>${selectedPaymentMethod === 'applepay' ? 
+                            'Apple Pay is not available on this device. Please use Safari on a Mac or iOS device.' : 
+                            'Google Pay is not available. Please ensure you have a supported browser and payment method set up.'}</p>
+                        <button type="button" class="btn btn-secondary" onclick="switchToCardPayment()">
+                            Pay with Card Instead
+                        </button>
+                    </div>
+                `;
+            }
+        }
+    });
+
+    // Handle payment request events
+    paymentRequest.on('paymentmethod', function(ev) {
+        handleWalletPayment(ev);
+    });
+
+    // Update payment request when amount changes
+    paymentRequest.on('shippingaddresschange', function(ev) {
+        // No shipping needed for donations
+        ev.updateWith({
+            status: 'success',
+        });
+    });
+}
+
+/**
+ * Switch back to card payment
+ */
+function switchToCardPayment() {
+    const cardOption = document.querySelector('.payment-method-option[data-method="card"]');
+    if (cardOption) {
+        cardOption.click();
+    }
+}
+
+// Make switchToCardPayment available globally
+window.switchToCardPayment = switchToCardPayment;
+
+/**
+ * Handle wallet payment (Apple Pay / Google Pay)
+ * @param {Object} ev - Payment method event from Stripe
+ */
+async function handleWalletPayment(ev) {
+    updatePaymentStatus(PaymentStatus.CREATING_INTENT, 'Creating payment intent...');
+
+    try {
+        // Create payment intent
+        const data = await createPaymentIntent(donationData.amount * 100, {
+            name: ev.paymentMethod.billing_details.name || donationData.fullName,
+            email: ev.paymentMethod.billing_details.email || donationData.email
+        });
+
+        if (data.error) {
+            ev.complete('fail');
+            throw new Error(data.error);
+        }
+
+        updatePaymentStatus(PaymentStatus.CONFIRMING, 'Confirming payment...');
+
+        // Confirm the payment
+        const { error, paymentIntent } = await stripe.confirmCardPayment(
+            data.clientSecret,
+            { payment_method: ev.paymentMethod.id },
+            { handleActions: false }
+        );
+
+        if (error) {
+            ev.complete('fail');
+            await handlePaymentError(error);
+        } else {
+            ev.complete('success');
+            
+            if (paymentIntent.status === 'succeeded') {
+                updatePaymentStatus(PaymentStatus.SUCCEEDED, 'Payment successful!');
+                showConfirmation(paymentIntent);
+            } else if (paymentIntent.status === 'requires_action') {
+                // Handle additional authentication
+                const { error: actionError, paymentIntent: actionIntent } = 
+                    await stripe.confirmCardPayment(data.clientSecret);
+                
+                if (actionError) {
+                    await handlePaymentError(actionError);
+                } else {
+                    updatePaymentStatus(PaymentStatus.SUCCEEDED, 'Payment successful!');
+                    showConfirmation(actionIntent);
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Wallet payment error:', error);
+        ev.complete('fail');
+        await handlePaymentError(error);
+    }
+}
+
+// ============================================
+// DEDICATION SECTION
+// ============================================
+
+function initializeDedicationSection() {
+    const dedicateCheckbox = document.getElementById('dedicateDonation');
+    const dedicationSection = document.getElementById('dedicationSection');
+    const notifyCheckbox = document.getElementById('notifyRecipient');
+    const notificationSection = document.getElementById('notificationSection');
+    const dedicationTypeOptions = document.querySelectorAll('.dedication-type-option');
+    const messageTextarea = document.getElementById('dedicationMessage');
+    const charCount = document.getElementById('messageCharCount');
+
+    // Toggle dedication section
+    if (dedicateCheckbox && dedicationSection) {
+        dedicateCheckbox.addEventListener('change', function() {
+            dedicationSection.style.display = this.checked ? 'block' : 'none';
+            donationData.dedicateDonation = this.checked;
+            
+            // Update summary
+            updateDedicationSummary();
+        });
+    }
+
+    // Toggle notification section
+    if (notifyCheckbox && notificationSection) {
+        notifyCheckbox.addEventListener('change', function() {
+            notificationSection.style.display = this.checked ? 'block' : 'none';
+            donationData.notifyRecipient = this.checked;
+        });
+    }
+
+    // Dedication type selection
+    dedicationTypeOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            dedicationTypeOptions.forEach(opt => opt.classList.remove('active'));
+            this.classList.add('active');
+            
+            const type = this.querySelector('input').value;
+            donationData.dedicationType = type;
+            updateDedicationSummary();
+        });
+    });
+
+    // Character count for message
+    if (messageTextarea && charCount) {
+        messageTextarea.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = count;
+            
+            if (count > 450) {
+                charCount.classList.add('warning');
+            } else {
+                charCount.classList.remove('warning');
+            }
+            
+            donationData.dedicationMessage = this.value;
+        });
+    }
+
+    // Honoree name input
+    const honoreeName = document.getElementById('honoreeName');
+    if (honoreeName) {
+        honoreeName.addEventListener('input', function() {
+            donationData.honoreeName = this.value;
+            updateDedicationSummary();
+        });
+    }
+
+    // Recipient details
+    const recipientName = document.getElementById('recipientName');
+    const recipientEmail = document.getElementById('recipientEmail');
+    
+    if (recipientName) {
+        recipientName.addEventListener('input', function() {
+            donationData.recipientName = this.value;
+        });
+    }
+    
+    if (recipientEmail) {
+        recipientEmail.addEventListener('input', function() {
+            donationData.recipientEmail = this.value;
+        });
+    }
+}
+
+/**
+ * Update dedication summary in payment step
+ */
+function updateDedicationSummary() {
+    const dedicationRow = document.getElementById('dedicationSummaryRow');
+    const summaryDedication = document.getElementById('summaryDedication');
+    
+    if (donationData.dedicateDonation && donationData.honoreeName) {
+        if (dedicationRow) dedicationRow.style.display = 'flex';
+        if (summaryDedication) {
+            const typeText = donationData.dedicationType === 'in-memory' ? 'In Memory of' : 'In Honor of';
+            summaryDedication.textContent = `${typeText} ${donationData.honoreeName}`;
+        }
+    } else {
+        if (dedicationRow) dedicationRow.style.display = 'none';
     }
 }
 
@@ -939,6 +1269,15 @@ function updatePaymentSummary() {
  */
 async function createPaymentIntent(amount, donorInfo) {
     try {
+        // Build dedication object if applicable
+        const dedication = donationData.dedicateDonation ? {
+            type: donationData.dedicationType,
+            honoreeName: donationData.honoreeName,
+            recipientName: donationData.recipientName,
+            recipientEmail: donationData.recipientEmail,
+            message: donationData.dedicationMessage
+        } : null;
+
         const response = await fetch('/api/create-payment-intent', {
             method: 'POST',
             headers: {
@@ -950,7 +1289,8 @@ async function createPaymentIntent(amount, donorInfo) {
                 currency: 'usd',
                 donorEmail: donorInfo.email,
                 donorName: donorInfo.name,
-                donationType: donationData.frequency || 'one-time'
+                donationType: donationData.frequency || 'one-time',
+                dedication: dedication
             })
         });
 
