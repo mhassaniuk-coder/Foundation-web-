@@ -27,7 +27,8 @@ let donationData = {
     billingCity: '',
     billingState: '',
     billingZip: '',
-    billingCountry: 'US'
+    billingCountry: 'US',
+    saveCard: false
 };
 
 // Impact messages based on amount
@@ -37,6 +38,18 @@ const impactMessages = {
     100: "Your $100 donation can provide a week of meals and shelter for a man in need.",
     250: "Your $250 donation funds a month of mentorship sessions for at-risk youth.",
     500: "Your $500 donation provides emergency housing assistance for a family in crisis."
+};
+
+// Card brand symbols for visual display
+const cardBrandSymbols = {
+    'visa': '💳 VISA',
+    'mastercard': '💳 Mastercard',
+    'amex': '💳 Amex',
+    'discover': '💳 Discover',
+    'diners': '💳 Diners',
+    'jcb': '💳 JCB',
+    'unionpay': '💳 UnionPay',
+    'unknown': '💳'
 };
 
 // ============================================
@@ -50,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeFrequencyToggle();
     initializeBillingToggle();
     initializeFormValidation();
+    initializeSaveCardOption();
 });
 
 // Initialize Stripe
@@ -86,20 +100,54 @@ function initializeStripe() {
         if (cardElementContainer) {
             cardElement.mount('#card-element');
 
-            // Handle real-time validation errors
+            // Handle real-time validation errors and card brand detection
             cardElement.on('change', function (event) {
+                // Card brand detection
+                const brand = event.brand;
+                const brandIcon = document.getElementById('card-brand-icon');
+                if (brandIcon) {
+                    brandIcon.className = `card-brand-icon ${brand || ''}`;
+                    brandIcon.textContent = getCardBrandSymbol(brand);
+                }
+
+                // Show validation errors
                 const displayError = document.getElementById('card-errors');
                 if (displayError) {
                     if (event.error) {
                         displayError.textContent = event.error.message;
+                        displayError.classList.add('visible');
                         displayError.style.display = 'block';
                     } else {
                         displayError.textContent = '';
+                        displayError.classList.remove('visible');
                         displayError.style.display = 'none';
                     }
                 }
+
+                // Update card complete status
+                if (event.complete) {
+                    displayError.textContent = '';
+                    displayError.classList.remove('visible');
+                    displayError.style.display = 'none';
+                }
             });
         }
+    }
+}
+
+// Get card brand symbol for display
+function getCardBrandSymbol(brand) {
+    if (!brand) return cardBrandSymbols['unknown'];
+    return cardBrandSymbols[brand] || cardBrandSymbols['unknown'];
+}
+
+// Initialize save card option
+function initializeSaveCardOption() {
+    const saveCardCheckbox = document.getElementById('saveCard');
+    if (saveCardCheckbox) {
+        saveCardCheckbox.addEventListener('change', function () {
+            donationData.saveCard = this.checked;
+        });
     }
 }
 
@@ -495,6 +543,54 @@ function updatePaymentSummary() {
 }
 
 // ============================================
+// API HELPER FUNCTIONS
+// ============================================
+
+/**
+ * Create a payment intent by calling the API
+ * @param {number} amount - Amount in cents
+ * @param {object} donorInfo - Donor information
+ * @returns {Promise<object>} - Payment intent data
+ */
+async function createPaymentIntent(amount, donorInfo) {
+    try {
+        const response = await fetch('/api/create-payment-intent', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                amount: Math.round(amount),
+                currency: 'usd',
+                donorEmail: donorInfo.email,
+                donorName: donorInfo.name,
+                donationType: donationData.frequency || 'one-time'
+            })
+        });
+
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            const text = await response.text();
+            console.error('Non-JSON response:', text);
+            throw new Error('Server returned an invalid response. Please try again.');
+        }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || data.details || 'Failed to create payment intent');
+        }
+
+        return data;
+    } catch (error) {
+        console.error('Payment intent error:', error);
+        throw error;
+    }
+}
+
+// ============================================
 // FORM SUBMISSION & STRIPE PAYMENT
 // ============================================
 
@@ -515,32 +611,11 @@ async function handleFormSubmit(event) {
     btnLoader.style.display = 'inline-flex';
 
     try {
-        // Create payment intent
-        const response = await fetch('/api/create-payment-intent', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                amount: Math.round(donationData.amount * 100), // Convert to cents
-                currency: 'usd',
-                donationType: donationData.frequency,
-                donor: {
-                    name: donationData.fullName,
-                    email: donationData.email,
-                    phone: donationData.phone,
-                    address: {
-                        street: donationData.street,
-                        city: donationData.city,
-                        state: donationData.state,
-                        zip: donationData.zip,
-                        country: donationData.country
-                    }
-                }
-            })
+        // Create payment intent using the helper function
+        const data = await createPaymentIntent(donationData.amount * 100, {
+            name: donationData.fullName,
+            email: donationData.email
         });
-
-        const data = await response.json();
 
         if (data.error) {
             throw new Error(data.error);
@@ -571,12 +646,22 @@ async function handleFormSubmit(event) {
             };
         }
 
-        const { error, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret, {
-            payment_method: {
-                card: cardElement,
-                billing_details: billingDetails
-            }
-        });
+        // Payment method options
+        const paymentMethodOptions = {
+            card: cardElement,
+            billing_details: billingDetails
+        };
+
+        // Setup future usage if save card is checked
+        const confirmOptions = {
+            payment_method: paymentMethodOptions
+        };
+
+        if (donationData.saveCard) {
+            confirmOptions.setup_future_usage = 'off_session';
+        }
+
+        const { error, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret, confirmOptions);
 
         if (error) {
             throw new Error(error.message);
@@ -692,5 +777,6 @@ function debounce(func, wait) {
 window.DonationPage = {
     getDonationData: () => donationData,
     getCurrentStep: () => currentStep,
-    goToStep: goToStep
+    goToStep: goToStep,
+    getCardBrandSymbol: getCardBrandSymbol
 };

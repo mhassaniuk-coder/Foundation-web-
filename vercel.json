@@ -1,45 +1,30 @@
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "public/**",
-      "use": "@vercel/static"
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
     },
     {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
+      "source": "/js/(.*)",
+      "destination": "/public/js/$1"
+    },
+    {
+      "source": "/css/(.*)",
+      "destination": "/public/css/$1"
+    },
+    {
+      "source": "/images/(.*)",
+      "destination": "/public/images/$1"
+    },
+    {
+      "source": "/(.*).html",
+      "destination": "/public/$1.html"
     }
   ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/js/(.*)",
-      "dest": "/public/js/$1"
-    },
-    {
-      "src": "/css/(.*)",
-      "dest": "/public/css/$1"
-    },
-    {
-      "src": "/images/(.*)",
-      "dest": "/public/images/$1"
-    },
-    {
-      "src": "/(.*).html",
-      "dest": "/public/$1.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/public/$1",
-      "continue": true
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/public/index.html"
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "@vercel/node@3"
     }
-  ],
+  },
   "public": true
 }

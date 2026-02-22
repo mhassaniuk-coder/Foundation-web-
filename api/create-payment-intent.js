@@ -1,11 +1,12 @@
 // Vercel serverless function for creating Stripe PaymentIntents
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Content-Type', 'application/json');
 
     // Handle preflight request
     if (req.method === 'OPTIONS') {
@@ -17,16 +18,18 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { amount, currency = 'usd', donorEmail, donorName, donationType } = req.body;
+        // Parse body if it's a string (Vercel sometimes sends it as string)
+        const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+        const { amount, currency = 'usd', donorEmail, donorName, donationType } = body;
 
         // Validate amount
-        if (!amount || amount < 100) { // Minimum $1.00
+        if (!amount || amount < 100) {
             return res.status(400).json({ error: 'Invalid amount. Minimum donation is $1.00' });
         }
 
         // Create PaymentIntent
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: Math.round(amount), // Amount in cents
+            amount: Math.round(amount),
             currency: currency,
             metadata: {
                 donorEmail: donorEmail || 'anonymous',
@@ -39,15 +42,15 @@ export default async function handler(req, res) {
             }
         });
 
-        res.status(200).json({
+        return res.status(200).json({
             clientSecret: paymentIntent.client_secret,
             paymentIntentId: paymentIntent.id
         });
     } catch (error) {
         console.error('PaymentIntent creation error:', error);
-        res.status(500).json({
+        return res.status(500).json({
             error: 'Failed to create payment intent',
             details: error.message
         });
     }
-}
+};
