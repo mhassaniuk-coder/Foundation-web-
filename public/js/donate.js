@@ -64,6 +64,8 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeBillingToggle();
     initializeFormValidation();
     initializeSaveCardOption();
+    initializeShareButtons();
+    initializePrintButton();
 });
 
 // Initialize Stripe
@@ -182,59 +184,25 @@ function initializeMultiStepForm() {
 }
 
 function goToStep(stepNumber) {
-    console.log('[DEBUG] goToStep called with stepNumber:', stepNumber);
-
     // Update current step
     currentStep = stepNumber;
-
-    // Debug: Log all form-step elements
     const allSteps = document.querySelectorAll('.form-step');
-    console.log('[DEBUG] All form-step elements found:', allSteps.length);
-    allSteps.forEach((step, index) => {
-        console.log(`[DEBUG] Step ${index}: data-step="${step.dataset.step}", class="${step.className}"`);
-    });
+    allSteps.forEach(step => step.classList.remove('active'));
 
-    // Hide all steps
-    allSteps.forEach(step => {
-        step.classList.remove('active');
-    });
-
-    // Show target step - try multiple methods to find the element
+    // Show target step
     let targetStep = document.querySelector(`.form-step[data-step="${stepNumber}"]`);
-
-    // Fallback: Try finding by index if data-step query fails
     if (!targetStep && allSteps.length >= stepNumber) {
-        console.log('[DEBUG] Trying fallback: finding step by index');
-        targetStep = allSteps[stepNumber - 1]; // 0-indexed, so step 4 = index 3
+        targetStep = allSteps[stepNumber - 1];
     }
-
-    // Fallback: For step 4, try finding by confirmation-container
     if (!targetStep && stepNumber === 4) {
-        console.log('[DEBUG] Trying fallback: finding step by confirmation-container');
         const confirmationContainer = document.querySelector('.confirmation-container');
-        if (confirmationContainer) {
-            targetStep = confirmationContainer.closest('.form-step');
-        }
+        if (confirmationContainer) targetStep = confirmationContainer.closest('.form-step');
     }
-
-    console.log('[DEBUG] Target step element:', targetStep);
 
     if (targetStep) {
         targetStep.classList.add('active');
-        console.log('[DEBUG] Added active class to step', stepNumber);
     } else {
-        console.error('[DEBUG] Could not find step element with data-step="' + stepNumber + '"');
-        // Last resort: try to show the confirmation section directly
-        if (stepNumber === 4) {
-            const confirmationContainer = document.querySelector('.confirmation-container');
-            if (confirmationContainer) {
-                const parentStep = confirmationContainer.parentElement;
-                if (parentStep) {
-                    parentStep.classList.add('active');
-                    console.log('[DEBUG] Added active class to parent of confirmation-container');
-                }
-            }
-        }
+        console.error('Could not find step element with data-step="' + stepNumber + '"');
     }
 
     // Update progress indicator
@@ -776,41 +744,18 @@ async function handleFormSubmit(event) {
 // ============================================
 
 function showConfirmation(paymentIntent) {
-    console.log('[DEBUG] showConfirmation called with paymentIntent:', paymentIntent);
-
     // Hide all form steps first
     const allSteps = document.querySelectorAll('.form-step');
-    console.log('[DEBUG] Found', allSteps.length, 'form-step elements');
+    allSteps.forEach(step => step.classList.remove('active'));
 
-    allSteps.forEach(step => {
-        step.classList.remove('active');
-    });
-
-    // Find Step 4 using multiple methods
+    // Find Step 4
     let step4 = document.querySelector('.form-step[data-step="4"]');
-
-    // Fallback: Find by confirmation container
     if (!step4) {
-        console.log('[DEBUG] Step 4 not found by data-step, trying confirmation-container');
         const confirmationContainer = document.querySelector('.confirmation-container');
-        if (confirmationContainer) {
-            step4 = confirmationContainer.closest('.form-step');
-            console.log('[DEBUG] Found step4 via confirmation-container:', step4);
-        }
+        if (confirmationContainer) step4 = confirmationContainer.closest('.form-step');
     }
-
-    // Fallback: Find by index
-    if (!step4 && allSteps.length >= 4) {
-        console.log('[DEBUG] Using fallback: step at index 3');
-        step4 = allSteps[3];
-    }
-
-    if (step4) {
-        step4.classList.add('active');
-        console.log('[DEBUG] Step 4 activated successfully');
-    } else {
-        console.error('[DEBUG] Could not find Step 4 element!');
-    }
+    if (!step4 && allSteps.length >= 4) step4 = allSteps[3];
+    if (step4) step4.classList.add('active'); else console.error('Could not find Step 4 element!');
 
     // Update progress indicator
     updateProgressIndicator(4);
@@ -867,30 +812,29 @@ function showConfirmation(paymentIntent) {
 // SOCIAL SHARING
 // ============================================
 
-function shareOnFacebook(event) {
-    event.preventDefault();
-    const url = encodeURIComponent(window.location.origin);
-    const text = encodeURIComponent(`I just donated to Restored Kings Foundation! Help restore dignity and rebuild lives.`);
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank', 'width=600,height=400');
+function initializeShareButtons() {
+    document.querySelectorAll('.share-btn[data-share]').forEach(btn => {
+        btn.addEventListener('click', function (event) {
+            event.preventDefault();
+            const share = this.dataset.share;
+            const url = encodeURIComponent(window.location.origin);
+            if (share === 'facebook') {
+                const text = encodeURIComponent('I just donated to Restored Kings Foundation! Help restore dignity and rebuild lives.');
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank', 'width=600,height=400');
+            } else if (share === 'twitter') {
+                const text = encodeURIComponent('I just donated to @RestoredKings! Help restore dignity and rebuild lives. #RestoredKings #GiveBack');
+                window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'width=600,height=400');
+            } else if (share === 'linkedin') {
+                window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank', 'width=600,height=400');
+            }
+        });
+    });
 }
 
-function shareOnTwitter(event) {
-    event.preventDefault();
-    const url = encodeURIComponent(window.location.origin);
-    const text = encodeURIComponent(`I just donated to @RestoredKings! Help restore dignity and rebuild lives. #RestoredKings #GiveBack`);
-    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'width=600,height=400');
+function initializePrintButton() {
+    const printBtn = document.getElementById('printReceiptBtn');
+    if (printBtn) printBtn.addEventListener('click', function () { window.print(); });
 }
-
-function shareOnLinkedIn(event) {
-    event.preventDefault();
-    const url = encodeURIComponent(window.location.origin);
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank', 'width=600,height=400');
-}
-
-// Make sharing functions global
-window.shareOnFacebook = shareOnFacebook;
-window.shareOnTwitter = shareOnTwitter;
-window.shareOnLinkedIn = shareOnLinkedIn;
 
 // ============================================
 // UTILITY FUNCTIONS
