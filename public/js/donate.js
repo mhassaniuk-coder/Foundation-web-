@@ -573,19 +573,31 @@ async function createPaymentIntent(amount, donorInfo) {
         const contentType = response.headers.get('content-type');
         if (!contentType || !contentType.includes('application/json')) {
             const text = await response.text();
-            console.error('Non-JSON response:', text);
-            throw new Error('Server returned an invalid response. Please try again.');
+            console.error('Non-JSON response:', text.substring(0, 500));
+
+            // Provide helpful error message based on response
+            if (text.includes('<!DOCTYPE') || text.includes('<html')) {
+                throw new Error('Server configuration error. The API endpoint is not properly deployed. Please ensure STRIPE_SECRET_KEY is set in Vercel environment variables.');
+            }
+            throw new Error('Server returned an invalid response. Please try again later.');
         }
 
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.error || data.details || 'Failed to create payment intent');
+            // Use the message from API if available, otherwise use error
+            throw new Error(data.message || data.error || data.details || 'Failed to create payment intent');
         }
 
         return data;
     } catch (error) {
         console.error('Payment intent error:', error);
+
+        // Re-throw with more context if it's a network error
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            throw new Error('Unable to connect to the server. Please check your internet connection and try again.');
+        }
+
         throw error;
     }
 }
