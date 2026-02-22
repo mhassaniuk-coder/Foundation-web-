@@ -2751,11 +2751,280 @@ footer::before {
   text-align: center;
 }
 
+/* Card Brand SVG Icons */
+.card-brand-svg {
+  width: 48px;
+  height: 32px;
+  vertical-align: middle;
+}
+
+.card-brand-icon.visa .card-brand-svg,
+.card-brand-icon.mastercard .card-brand-svg,
+.card-brand-icon.amex .card-brand-svg,
+.card-brand-icon.discover .card-brand-svg {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+/* Card Brand Name Display */
+.card-brand-name {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--neutral-500);
+  margin-top: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-brand-name.visa {
+  color: #1A1F71;
+}
+
+.card-brand-name.mastercard {
+  color: #EB001B;
+}
+
+.card-brand-name.amex {
+  color: #006FCF;
+}
+
+.card-brand-name.discover {
+  color: #F47216;
+}
+
+/* Card Validation Indicator */
+.card-validation-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 0.875rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.card-validation-indicator.valid {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.card-validation-indicator.invalid {
+  background: var(--danger-light);
+  color: var(--danger);
+}
+
+.card-validation-indicator .validation-check {
+  animation: checkmark 0.3s ease-in-out;
+}
+
+.card-validation-indicator .validation-x {
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes checkmark {
+  0% {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Card Element Container States */
+.card-element-container.valid {
+  border-color: var(--success);
+  background: rgba(16, 185, 129, 0.02);
+}
+
+.card-element-container.invalid {
+  border-color: var(--danger);
+  background: rgba(239, 68, 68, 0.02);
+}
+
+.card-element-container.focused {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.card-element-container.processing {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* CVC Hint */
+#cvc-hint {
+  font-size: 0.75rem;
+  color: var(--neutral-500);
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+#cvc-hint::before {
+  content: 'ℹ️';
+  font-size: 0.875rem;
+}
+
+/* Card Errors with Enhanced Styling */
 .card-errors {
   font-size: 0.85rem;
   color: var(--danger);
   margin-top: 0.5rem;
   display: none;
+  padding: 0.5rem 0.75rem;
+  background: var(--danger-light);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--danger);
+}
+
+.card-errors.visible {
+  display: block;
+  animation: shake 0.3s ease-in-out;
+}
+
+.card-errors.success {
+  color: var(--success);
+  background: var(--success-light);
+  border-left-color: var(--success);
+}
+
+.card-errors .error-icon,
+.card-errors .success-icon {
+  margin-right: 0.5rem;
+}
+
+.card-errors .success-icon {
+  color: var(--success);
+}
+
+/* Payment Status Message */
+.payment-status-message {
+  margin-bottom: 1rem;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.payment-status-message .status-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.payment-status-message .status-processing {
+  background: var(--info-light);
+  border: 1px solid var(--info);
+}
+
+.payment-status-message .status-auth_required {
+  background: var(--warning-light);
+  border: 1px solid var(--warning);
+}
+
+.payment-status-message .status-error {
+  background: var(--danger-light);
+  border: 1px solid var(--danger);
+}
+
+.payment-status-message .status-success {
+  background: var(--success-light);
+  border: 1px solid var(--success);
+}
+
+.payment-status-message .status-icon {
+  font-size: 1.25rem;
+}
+
+.payment-status-message .status-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* 3D Secure Modal Overlay */
+.three-ds-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+  animation: fadeIn 0.2s ease;
+}
+
+.three-ds-modal {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: var(--shadow-2xl);
+  animation: slideUp 0.3s ease;
+}
+
+.three-ds-modal h3 {
+  color: var(--primary-700);
+  margin-bottom: 1rem;
+}
+
+.three-ds-modal p {
+  color: var(--neutral-600);
+  margin-bottom: 1.5rem;
+}
+
+.three-ds-modal .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--neutral-200);
+  border-top-color: var(--primary-500);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Postal Code Error */
+#postal-code-error {
+  font-size: 0.75rem;
+  color: var(--danger);
+  margin-top: 0.25rem;
+  display: none;
+}
+
+#postal-code-error:not(:empty) {
+  display: block;
 }
 
 .card-errors.visible {
@@ -2764,9 +3033,74 @@ footer::before {
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Payment Status Indicator */
+.payment-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+  background: var(--info-light);
+  border: 1px solid var(--info);
+}
+
+.payment-status-indicator[data-status="succeeded"] {
+  background: var(--success-light);
+  border-color: var(--success);
+}
+
+.payment-status-indicator[data-status="failed"] {
+  background: var(--danger-light);
+  border-color: var(--danger);
+}
+
+.status-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--info);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.payment-status-indicator[data-status="succeeded"] .status-spinner {
+  border-color: var(--success);
+  border-top-color: transparent;
+}
+
+.payment-status-indicator[data-status="failed"] .status-spinner {
+  border-color: var(--danger);
+  border-top-color: transparent;
+  animation: none;
+}
+
+.payment-status-indicator[data-status="succeeded"] .status-spinner::after {
+  content: '✓';
+  position: absolute;
+  color: var(--success);
+  font-weight: bold;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Billing Address Section */

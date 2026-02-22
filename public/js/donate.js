@@ -464,10 +464,16 @@ function getEnhancedErrorMessage(error) {
     return error.message || 'An error occurred with your card. Please try again.';
 }
 
-// Get card brand symbol for display
+// Get card brand symbol for display (returns SVG HTML)
 function getCardBrandSymbol(brand) {
     if (!brand) return cardBrandSymbols['unknown'];
     return cardBrandSymbols[brand] || cardBrandSymbols['unknown'];
+}
+
+// Get card brand name for display
+function getCardBrandName(brand) {
+    if (!brand) return cardBrandNames['unknown'];
+    return cardBrandNames[brand] || cardBrandNames['unknown'];
 }
 
 // Initialize save card option
@@ -990,6 +996,40 @@ async function createPaymentIntent(amount, donorInfo) {
 // FORM SUBMISSION & STRIPE PAYMENT
 // ============================================
 
+/**
+ * Update payment status and UI
+ * @param {string} status - Payment status from PaymentStatus enum
+ * @param {string} [message] - Optional status message
+ */
+function updatePaymentStatus(status, message = '') {
+    currentPaymentStatus = status;
+    const statusEl = document.getElementById('payment-status');
+
+    if (statusEl) {
+        statusEl.dataset.status = status;
+        statusEl.style.display = 'flex';
+
+        const messageEl = statusEl.querySelector('.status-message');
+        if (messageEl) {
+            messageEl.textContent = message;
+        } else {
+            statusEl.innerHTML = `
+                <div class="status-spinner"></div>
+                <span class="status-message">${message}</span>
+            `;
+        }
+
+        // Hide for terminal states
+        if (status === PaymentStatus.SUCCEEDED) {
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 2000);
+        }
+    }
+
+    console.log(`[Payment Status] ${status}: ${message}`);
+}
+
 async function handleFormSubmit(event) {
     event.preventDefault();
 
@@ -1006,6 +1046,9 @@ async function handleFormSubmit(event) {
     btnText.style.display = 'none';
     btnLoader.style.display = 'inline-flex';
 
+    // Update payment status
+    updatePaymentStatus(PaymentStatus.CREATING_INTENT, 'Creating payment intent...');
+
     try {
         // Create payment intent using the helper function
         const data = await createPaymentIntent(donationData.amount * 100, {
@@ -1016,6 +1059,8 @@ async function handleFormSubmit(event) {
         if (data.error) {
             throw new Error(data.error);
         }
+
+        updatePaymentStatus(PaymentStatus.CONFIRMING, 'Confirming payment...');
 
         // Confirm card payment
         const billingDetails = {
@@ -1057,28 +1102,212 @@ async function handleFormSubmit(event) {
             confirmOptions.setup_future_usage = 'off_session';
         }
 
+        updatePaymentStatus(PaymentStatus.PROCESSING, 'Processing payment...');
+
         const { error, paymentIntent } = await stripe.confirmCardPayment(data.clientSecret, confirmOptions);
 
         console.log('[DEBUG] Payment confirmation result:', { error, paymentIntent });
 
         if (error) {
             console.error('[DEBUG] Payment error:', error);
-            throw new Error(error.message);
+            await handlePaymentError(error);
+            // Reset button state
+            submitBtn.disabled = false;
+            btnText.style.display = 'inline';
+            btnLoader.style.display = 'none';
+            return;
         }
 
-        // Payment successful - show confirmation
-        console.log('[DEBUG] Payment successful, calling showConfirmation()');
-        showConfirmation(paymentIntent);
+        // Check payment intent status
+        if (paymentIntent.status === 'succeeded') {
+            updatePaymentStatus(PaymentStatus.SUCCEEDED, 'Payment successful!');
+            console.log('[DEBUG] Payment successful, calling showConfirmation()');
+            showConfirmation(paymentIntent);
+        } else if (paymentIntent.status === 'requires_action' || paymentIntent.status === 'requires_source_action') {
+            // Handle 3D Secure authentication
+            updatePaymentStatus(PaymentStatus.PROCESSING, 'Additional authentication required...');
+            const actionResult = await handle3DSecure(paymentIntent);
+
+            if (actionResult.error) {
+                await handlePaymentError(actionResult.error);
+                submitBtn.disabled = false;
+                btnText.style.display = 'inline';
+                btnLoader.style.display = 'none';
+            } else if (actionResult.paymentIntent && actionResult.paymentIntent.status === 'succeeded') {
+                updatePaymentStatus(PaymentStatus.SUCCEEDED, 'Payment successful!');
+                showConfirmation(actionResult.paymentIntent);
+            } else {
+                // Payment still processing after 3DS
+                updatePaymentStatus(PaymentStatus.PROCESSING, 'Payment is processing...');
+                pollPaymentStatus(actionResult.paymentIntent?.id || paymentIntent.id);
+            }
+        } else if (paymentIntent.status === 'processing') {
+            updatePaymentStatus(PaymentStatus.PROCESSING, 'Payment is processing...');
+            // Poll for status or wait for webhook
+            pollPaymentStatus(paymentIntent.id);
+        } else {
+            updatePaymentStatus(PaymentStatus.FAILED, `Payment status: ${paymentIntent.status}`);
+            throw new Error(`Payment status: ${paymentIntent.status}`);
+        }
 
     } catch (error) {
         console.error('Payment error:', error);
-        showStepError(3, error.message || 'Payment failed. Please try again.');
+        await handlePaymentError(error);
 
         // Reset button state
         submitBtn.disabled = false;
         btnText.style.display = 'inline';
         btnLoader.style.display = 'none';
     }
+}
+
+/**
+ * Handle 3D Secure authentication with timeout
+ * @param {Object} paymentIntent - Stripe PaymentIntent
+ * @returns {Promise<Object>} Result with paymentIntent or error
+ */
+async function handle3DSecure(paymentIntent) {
+    const THREE_DS_TIMEOUT = 5 * 60 * 1000; // 5 minutes timeout
+
+    return new Promise(async (resolve) => {
+        // Set up timeout
+        const timeoutId = setTimeout(() => {
+            resolve({
+                error: {
+                    message: 'Authentication timed out. Please try again and complete the verification within 5 minutes.',
+                    code: 'authentication_timeout'
+                }
+            });
+        }, THREE_DS_TIMEOUT);
+
+        try {
+            const { error, paymentIntent: confirmedIntent } = await stripe.handleCardAction(
+                paymentIntent.client_secret
+            );
+
+            clearTimeout(timeoutId);
+
+            if (error) {
+                resolve({ error });
+            } else {
+                resolve({ paymentIntent: confirmedIntent });
+            }
+        } catch (err) {
+            clearTimeout(timeoutId);
+            resolve({
+                error: {
+                    message: err.message || 'An error occurred during authentication.',
+                    code: 'authentication_error'
+                }
+            });
+        }
+    });
+}
+
+/**
+ * Handle payment errors with user-friendly messages
+ * @param {Object|Error} error - Payment error
+ */
+async function handlePaymentError(error) {
+    let userMessage = 'Payment failed. Please try again.';
+    let errorCode = 'unknown';
+    let declineCode = null;
+
+    // Extract error details
+    if (error.decline_code) {
+        declineCode = error.decline_code;
+    }
+    if (error.code) {
+        errorCode = error.code;
+    }
+
+    // Get user-friendly message
+    if (declineCode && declineCodeMessages[declineCode]) {
+        userMessage = declineCodeMessages[declineCode];
+    } else if (errorCode && declineCodeMessages[errorCode]) {
+        userMessage = declineCodeMessages[errorCode];
+    } else if (error.message) {
+        // Check if the message is already user-friendly
+        if (error.message.includes('insufficient') ||
+            error.message.includes('declined') ||
+            error.message.includes('expired')) {
+            userMessage = error.message;
+        } else {
+            // Map common Stripe error messages
+            userMessage = mapStripeErrorMessage(error.message);
+        }
+    }
+
+    // Show error to user
+    showStepError(3, userMessage);
+    updatePaymentStatus(PaymentStatus.FAILED, userMessage);
+
+    // Log error for debugging
+    console.error('[PAYMENT_ERROR]', {
+        code: errorCode,
+        decline_code: declineCode,
+        message: error.message,
+        type: error.type
+    });
+}
+
+/**
+ * Map Stripe error messages to user-friendly messages
+ * @param {string} message - Original error message
+ * @returns {string} User-friendly message
+ */
+function mapStripeErrorMessage(message) {
+    const messageMap = {
+        'Your card number is invalid.': 'Invalid card number. Please check your card and try again.',
+        'Your card\'s expiration date is invalid.': 'Invalid expiration date. Please check your card\'s expiry.',
+        'Your card\'s security code is invalid.': 'Invalid security code. Please check the CVC on your card.',
+        'Your card was declined.': 'Your card was declined. Please try a different card.',
+        'Your card does not support this type of purchase.': 'This card type is not supported for donations. Please try a different card.',
+        'An error occurred while processing your card.': 'A processing error occurred. Please wait a moment and try again.',
+        'Your card has insufficient funds.': 'Insufficient funds. Please try a different card or add funds to your account.',
+        'Your card has expired.': 'Your card has expired. Please use a different card.',
+        'Your card was declined for an unknown reason.': 'Your card was declined. Please contact your bank or try a different card.'
+    };
+
+    return messageMap[message] || message;
+}
+
+/**
+ * Poll for payment status when processing
+ * @param {string} paymentIntentId - The payment intent ID to check
+ */
+async function pollPaymentStatus(paymentIntentId) {
+    const maxAttempts = 10;
+    const delay = 2000; // 2 seconds
+
+    for (let i = 0; i < maxAttempts; i++) {
+        await new Promise(resolve => setTimeout(resolve, delay));
+
+        try {
+            const response = await fetch('/api/confirm-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paymentIntentId })
+            });
+
+            const data = await response.json();
+
+            if (data.status === 'succeeded') {
+                updatePaymentStatus(PaymentStatus.SUCCEEDED, 'Payment successful!');
+                showConfirmation({ id: paymentIntentId, amount: data.amount });
+                return;
+            } else if (data.status === 'failed' || data.status === 'canceled') {
+                updatePaymentStatus(PaymentStatus.FAILED, data.message || 'Payment failed');
+                showStepError(3, data.message || 'Payment failed');
+                return;
+            }
+        } catch (error) {
+            console.error('Error polling payment status:', error);
+        }
+    }
+
+    // If we get here, payment is still processing
+    updatePaymentStatus(PaymentStatus.PROCESSING, 'Payment is still processing. You will receive an email confirmation shortly.');
 }
 
 // ============================================
@@ -1148,6 +1377,229 @@ function showConfirmation(paymentIntent) {
             day: 'numeric'
         });
     }
+
+    // Store receipt data for download
+    storeReceiptData(paymentIntent);
+
+    // Initialize download receipt button
+    initializeDownloadReceipt();
+}
+
+/**
+ * Store receipt data for download/print
+ * @param {Object} paymentIntent - The payment intent object
+ */
+function storeReceiptData(paymentIntent) {
+    const receiptData = {
+        transactionId: paymentIntent.id,
+        donorName: donationData.fullName,
+        donorEmail: donationData.email,
+        amount: paymentIntent.amount / 100,
+        currency: paymentIntent.currency || 'usd',
+        frequency: donationData.frequency,
+        date: new Date().toISOString(),
+        organization: {
+            name: 'Restored Kings Foundation',
+            ein: '12-3456789',
+            address: '123 Main St, City, ST 12345',
+            phone: '(555) 123-4567',
+            email: 'donations@restoredkings.org',
+            website: 'https://restoredkings.org'
+        }
+    };
+
+    // Store in session storage for receipt page
+    sessionStorage.setItem('donationReceipt', JSON.stringify(receiptData));
+
+    // Also store in window for immediate access
+    window.lastDonationReceipt = receiptData;
+}
+
+/**
+ * Initialize download receipt functionality
+ */
+function initializeDownloadReceipt() {
+    const downloadBtn = document.getElementById('downloadReceiptBtn');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', downloadReceipt);
+    }
+}
+
+/**
+ * Download receipt as PDF (opens print dialog)
+ */
+function downloadReceipt() {
+    const receipt = window.lastDonationReceipt || JSON.parse(sessionStorage.getItem('donationReceipt') || '{}');
+
+    if (!receipt.transactionId) {
+        alert('No receipt data available. Please try printing from your browser.');
+        return;
+    }
+
+    // Create a printable receipt
+    const printWindow = window.open('', '_blank');
+    const amount = receipt.amount.toFixed(2);
+    const date = new Date(receipt.date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Donation Receipt - ${receipt.transactionId}</title>
+            <style>
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 40px 20px;
+                    color: #1a3a5c;
+                }
+                .receipt-header {
+                    text-align: center;
+                    border-bottom: 2px solid #d4a574;
+                    padding-bottom: 20px;
+                    margin-bottom: 30px;
+                }
+                .logo {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #1a3a5c;
+                }
+                .logo span {
+                    color: #d4a574;
+                }
+                h1 {
+                    font-size: 28px;
+                    margin: 20px 0 10px;
+                    color: #1a3a5c;
+                }
+                .receipt-id {
+                    font-size: 14px;
+                    color: #64748b;
+                }
+                .receipt-details {
+                    background: #f8fafc;
+                    padding: 20px;
+                    border-radius: 8px;
+                    margin: 20px 0;
+                }
+                .detail-row {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 10px 0;
+                    border-bottom: 1px solid #e2e8f0;
+                }
+                .detail-row:last-child {
+                    border-bottom: none;
+                }
+                .detail-label {
+                    color: #64748b;
+                }
+                .detail-value {
+                    font-weight: 600;
+                    color: #1a3a5c;
+                }
+                .amount-section {
+                    text-align: center;
+                    padding: 30px;
+                    background: linear-gradient(135deg, #1a3a5c 0%, #0d2137 100%);
+                    color: white;
+                    border-radius: 8px;
+                    margin: 20px 0;
+                }
+                .amount-label {
+                    font-size: 14px;
+                    opacity: 0.9;
+                }
+                .amount-value {
+                    font-size: 36px;
+                    font-weight: bold;
+                    margin: 10px 0;
+                }
+                .footer {
+                    text-align: center;
+                    margin-top: 40px;
+                    padding-top: 20px;
+                    border-top: 1px solid #e2e8f0;
+                    font-size: 12px;
+                    color: #64748b;
+                }
+                .tax-notice {
+                    background: #d1fae5;
+                    padding: 15px;
+                    border-radius: 8px;
+                    margin: 20px 0;
+                    font-size: 14px;
+                    color: #065f46;
+                }
+                @media print {
+                    body { padding: 20px; }
+                    .no-print { display: none; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="receipt-header">
+                <div class="logo">♔ Restored <span>Kings</span> Foundation</div>
+                <h1>Donation Receipt</h1>
+                <div class="receipt-id">Transaction ID: ${receipt.transactionId}</div>
+            </div>
+            
+            <div class="amount-section">
+                <div class="amount-label">Donation Amount</div>
+                <div class="amount-value">$${amount}</div>
+                <div class="amount-label">${receipt.frequency === 'monthly' ? 'Monthly Donation' : 'One-Time Donation'}</div>
+            </div>
+            
+            <div class="receipt-details">
+                <div class="detail-row">
+                    <span class="detail-label">Date</span>
+                    <span class="detail-value">${date}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Donor Name</span>
+                    <span class="detail-value">${receipt.donorName}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Email</span>
+                    <span class="detail-value">${receipt.donorEmail}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Payment Method</span>
+                    <span class="detail-value">Credit/Debit Card via Stripe</span>
+                </div>
+            </div>
+            
+            <div class="tax-notice">
+                <strong>Tax Deductible:</strong> Restored Kings Foundation is a 501(c)(3) nonprofit organization. 
+                Your donation is tax-deductible to the extent allowed by law. EIN: ${receipt.organization.ein}
+            </div>
+            
+            <div class="footer">
+                <p><strong>${receipt.organization.name}</strong></p>
+                <p>${receipt.organization.address}</p>
+                <p>Phone: ${receipt.organization.phone} | Email: ${receipt.organization.email}</p>
+                <p>Website: ${receipt.organization.website}</p>
+                <br>
+                <p>Thank you for your generous support!</p>
+            </div>
+            
+            <div class="no-print" style="text-align: center; margin-top: 20px;">
+                <button onclick="window.print()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
+                    Print Receipt
+                </button>
+            </div>
+        </body>
+        </html>
+    `);
+
+    printWindow.document.close();
 }
 
 // ============================================
@@ -1199,5 +1651,47 @@ window.DonationPage = {
     getDonationData: () => donationData,
     getCurrentStep: () => currentStep,
     goToStep: goToStep,
-    getCardBrandSymbol: getCardBrandSymbol
+    getCardBrandSymbol: getCardBrandSymbol,
+    getCardBrandName: getCardBrandName,
+    declineCodeMessages: declineCodeMessages,
+    handlePaymentError: handlePaymentError,
+    handle3DSecure: handle3DSecure
 };
+
+/**
+ * Verify card before payment (optional pre-check)
+ * @returns {Promise<Object|null>} Verification result or null if skipped
+ */
+async function verifyCardBeforePayment() {
+    try {
+        // Skip verification for small amounts or if not configured
+        if (donationData.amount < 100) {
+            return { valid: true };
+        }
+
+        const response = await fetch('/api/verify-card', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                email: donationData.email,
+                amount: donationData.amount * 100
+            })
+        });
+
+        if (!response.ok) {
+            // Don't block payment on verification failure, just log it
+            console.warn('Card verification check failed, proceeding with payment');
+            return { valid: true };
+        }
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.warn('Card verification error:', error);
+        // Don't block payment on verification error
+        return { valid: true };
+    }
+}

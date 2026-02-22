@@ -14,6 +14,7 @@ const API_ENDPOINTS = {
     CREATE_PAYMENT_INTENT: '/api/create-payment-intent',
     CONFIRM_PAYMENT: '/api/confirm-payment',
     WEBHOOK: '/api/webhook',
+    VERIFY_CARD: '/api/verify-card',
 
     // Base API path
     BASE_URL: window.location.origin
@@ -71,6 +72,10 @@ const PAYMENT_ERRORS = {
     EXPIRED_CARD: 'Your card has expired. Please use a different card.',
     INCORRECT_CVC: 'Your card\'s security code is incorrect.',
     PROCESSING_ERROR: 'An error occurred while processing your card. Please try again.',
+    LOST_CARD: 'This card has been reported as lost. Please contact your bank.',
+    STOLEN_CARD: 'This card has been reported as stolen. Please contact your bank immediately.',
+    CARD_NOT_SUPPORTED: 'This card type is not supported. Please try a different card.',
+    DO_NOT_HONOR: 'Your bank has declined this transaction. Please contact your bank or try a different card.',
 
     // Network errors
     NETWORK_ERROR: 'Unable to connect to the payment service. Please check your internet connection and try again.',
@@ -79,17 +84,63 @@ const PAYMENT_ERRORS = {
     // 3D Secure errors
     AUTHENTICATION_FAILED: 'Card authentication failed. Please try again.',
     AUTHENTICATION_REQUIRED: 'Please complete the authentication to proceed.',
+    AUTHENTICATION_TIMEOUT: 'Authentication timed out. Please try again and complete the verification within 5 minutes.',
 
     // Validation errors
     INVALID_AMOUNT: 'Please enter a valid donation amount.',
     MIN_AMOUNT: 'Minimum donation amount is $1.00.',
     MAX_AMOUNT: 'Maximum single donation is $10,000.',
+    INVALID_EMAIL: 'Please enter a valid email address.',
+    INVALID_POSTAL_CODE: 'Please enter a valid postal code.',
 
     // Configuration errors
     STRIPE_NOT_CONFIGURED: 'Payment system is not properly configured. Please contact support.',
 
     // Generic error
     UNKNOWN_ERROR: 'An unexpected error occurred. Please try again.'
+};
+
+// Decline code to user-friendly message mapping
+const DECLINE_CODE_MESSAGES = {
+    'insufficient_funds': 'Your card has insufficient funds for this transaction. Please try a different card or add funds to your account.',
+    'lost_card': 'This card has been reported as lost. Please contact your bank or use a different card.',
+    'stolen_card': 'This card has been reported as stolen. Please contact your bank immediately.',
+    'expired_card': 'Your card has expired. Please use a different card with a valid expiration date.',
+    'incorrect_cvc': 'The security code (CVC) you entered is incorrect. Please check the 3-digit code on the back of your card (4 digits on the front for American Express).',
+    'processing_error': 'A processing error occurred. Please wait a moment and try again.',
+    'card_not_supported': 'This card type is not supported. Please try a different card (Visa, Mastercard, Amex, or Discover).',
+    'do_not_honor': 'Your bank has declined this transaction. Please contact your bank or try a different card.',
+    'generic_decline': 'Your card was declined. Please try a different card or contact your bank.',
+    'invalid_card': 'Invalid card number. Please check your card number and try again.',
+    'invalid_expiry_month': 'Invalid expiration month. Please check your card\'s expiration date.',
+    'invalid_expiry_year': 'Invalid expiration year. Please check your card\'s expiration date.',
+    'invalid_number': 'Invalid card number. Please check your card number and try again.',
+    'invalid_cvc': 'Invalid security code. Please check the CVC on your card.',
+    'card_declined': 'Your card was declined. Please try a different card.',
+    'authentication_required': 'This transaction requires additional authentication. Please complete the verification process.',
+    'approve_with_id': 'Your bank requires identification for this transaction. Please contact your bank.',
+    'call_issuer': 'Your bank requires you to call them to authorize this transaction.',
+    'card_velocity_exceeded': 'Your card has exceeded its spending limit. Please try a smaller amount or different card.',
+    'currency_not_supported': 'This card does not support the selected currency. Please try a different card.',
+    'duplicate_transaction': 'This appears to be a duplicate transaction. If this was intentional, please wait a moment and try again.',
+    'fraudulent': 'This transaction was flagged as potentially fraudulent. Please contact your bank.',
+    'merchant_blacklist': 'This card cannot be used for donations at this time. Please try a different card.',
+    'new_account_information_available': 'Your bank has updated information about your account. Please contact your bank.',
+    'no_action_taken': 'Your bank could not process this transaction. Please try again or use a different card.',
+    'not_permitted': 'This transaction is not permitted on your card. Please contact your bank or try a different card.',
+    'pickup_card': 'Your card has been flagged. Please contact your bank immediately.',
+    'pin_try_exceeded': 'Too many PIN attempts. Please contact your bank or try a different card.',
+    'reenter_transaction': 'Please try your transaction again.',
+    'restricted_card': 'This card is restricted. Please contact your bank or try a different card.',
+    'revocation_of_all_authorizations': 'Your bank has revoked authorization for this card. Please contact your bank.',
+    'revocation_of_authorization': 'Your bank has revoked authorization for this transaction. Please contact your bank.',
+    'security_violation': 'A security violation was detected. Please contact your bank.',
+    'service_not_allowed': 'This service is not allowed on your card. Please contact your bank.',
+    'stop_payment_order': 'A stop payment has been placed on this transaction. Please contact your bank.',
+    'testmode_decline': 'This is a test card that always declines. Please use a real card.',
+    'transaction_not_allowed': 'This transaction is not allowed on your card. Please contact your bank.',
+    'try_again_later': 'Please wait a moment and try your transaction again.',
+    'withdrawal_count_limit_exceeded': 'Your card has reached its withdrawal limit. Please try a different card.'
 };
 
 // Export configuration
@@ -99,5 +150,6 @@ export {
     STRIPE_PUBLIC_KEY,
     API_ENDPOINTS,
     PAYMENT_CONFIG,
-    PAYMENT_ERRORS
+    PAYMENT_ERRORS,
+    DECLINE_CODE_MESSAGES
 };

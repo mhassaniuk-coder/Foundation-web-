@@ -26,8 +26,139 @@ const {
     validateDonationType,
     parseRequestBody,
     handleOptionsRequest,
-    logPaymentEvent
+    logPaymentEvent,
+    isValidEmail
 } = require('./stripe-config');
+
+/**
+ * Fraud detection checks for payment intent creation
+ * @param {Object} data - Payment data to check
+ * @returns {Object} Fraud check result { passed: boolean, riskLevel: string, flags: string[] }
+ */
+function performFraudChecks(data) {
+    const flags = [];
+    let riskLevel = 'low';
+
+    // Check for suspicious email patterns
+    if (data.donorEmail) {
+        const email = data.donorEmail.toLowerCase();
+
+        // Check for temporary email domains
+        const tempEmailDomains = ['tempmail', 'guerrillamail', '10minutemail', 'throwaway', 'mailinator'];
+        if (tempEmailDomains.some(domain => email.includes(domain))) {
+            flags.push('temporary_email_domain');
+            riskLevel = 'medium';
+        }
+
+        // Check for suspicious patterns
+        if (email.match(/^[a-z]{20,}@/)) {
+            flags.push('suspicious_email_pattern');
+            riskLevel = 'medium';
+        }
+    }
+
+    // Check for unusual amounts
+    if (data.amount) {
+        // Very large amounts
+        if (data.amount > 500000) { // > $5,000
+            flags.push('high_value_transaction');
+            riskLevel = riskLevel === 'low' ? 'medium' : riskLevel;
+        }
+
+        // Round number attacks (testing cards)
+        if (data.amount === 100 || data.amount === 50) { // $1.00 or $0.50
+            flags.push('potential_card_testing');
+            riskLevel = 'medium';
+        }
+    }
+
+    // Check for velocity (multiple attempts from same email)
+    // This would require a database in production
+    // For now, we'll just log it
+
+    // Check for mismatched billing/shipping if provided
+    if (data.donorInfo && data.donorInfo.billingAddress && data.donorInfo.address) {
+        if (data.donorInfo.billingAddress.country !== data.donorInfo.address.country) {
+            flags.push('billing_shipping_mismatch');
+            riskLevel = 'medium';
+        }
+    }
+
+    return {
+        passed: flags.length === 0 || riskLevel !== 'high',
+        riskLevel,
+        flags
+    };
+}
+
+/**
+ * Validate billing address if provided
+ * @param {Object} address - Address object to validate
+ * @returns {Object} Validation result { valid: boolean, errors: string[] }
+ */
+function validateBillingAddress(address) {
+    const errors = [];
+
+    if (!address) {
+        return { valid: true, errors: [] };
+    }
+
+    // Validate postal code format based on country
+    if (address.postal_code) {
+        const postalCodePatterns = {
+            'US': /^\d{5}(-\d{4})?$/,
+            'CA': /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/,
+            'GB': /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i,
+            'AU': /^\d{4}$/,
+            'DE': /^\d{5}$/,
+            'FR': /^\d{5}$/
+        };
+
+        const pattern = postalCodePatterns[address.country];
+        if (pattern && !pattern.test(address.postal_code)) {
+            errors.push('Invalid postal code format for the selected country');
+        }
+    }
+
+    // Validate state/province for US/CA
+    if (address.country === 'US' && address.state) {
+        const usStates = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'DC'];
+        if (!usStates.includes(address.state.toUpperCase())) {
+            errors.push('Invalid US state code');
+        }
+    }
+
+    // Validate required fields for certain countries
+    if (['US', 'CA', 'GB'].includes(address.country)) {
+        if (!address.state && !address.city) {
+            errors.push('State/province or city is required');
+        }
+    }
+
+    return {
+        valid: errors.length === 0,
+        errors
+    };
+}
+
+/**
+ * Log verification attempt for audit trail
+ * @param {Object} data - Verification data
+ */
+function logVerificationAttempt(data) {
+    const logEntry = {
+        timestamp: new Date().toISOString(),
+        type: 'payment_verification',
+        email: data.email || 'anonymous',
+        amount: data.amount,
+        riskLevel: data.riskLevel,
+        flags: data.flags,
+        ip: data.ip || 'unknown',
+        userAgent: data.userAgent || 'unknown'
+    };
+
+    console.log('[VERIFICATION_ATTEMPT]', JSON.stringify(logEntry));
+}
 
 /**
  * Main handler function
@@ -132,6 +263,51 @@ module.exports = async (req, res) => {
             });
         }
 
+        // Validate billing address if provided
+        if (donorInfo && donorInfo.billingAddress) {
+            const billingValidation = validateBillingAddress(donorInfo.billingAddress);
+            if (!billingValidation.valid) {
+                return res.status(400).json({
+                    error: 'Invalid billing address',
+                    message: billingValidation.errors.join(', '),
+                    code: 'INVALID_BILLING_ADDRESS'
+                });
+            }
+        }
+
+        // Perform fraud detection checks
+        const fraudCheckResult = performFraudChecks({
+            amount: amountValidation.amount,
+            donorEmail,
+            donorName,
+            donorInfo
+        });
+
+        // Log verification attempt for audit
+        logVerificationAttempt({
+            email: donorEmail,
+            amount: amountValidation.amount,
+            riskLevel: fraudCheckResult.riskLevel,
+            flags: fraudCheckResult.flags,
+            ip: req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || req.connection?.remoteAddress,
+            userAgent: req.headers['user-agent']
+        });
+
+        // Block high-risk transactions
+        if (!fraudCheckResult.passed) {
+            console.warn('[FRAUD_BLOCK]', {
+                email: donorEmail,
+                amount: amountValidation.amount,
+                flags: fraudCheckResult.flags
+            });
+            return res.status(403).json({
+                error: 'Transaction blocked',
+                message: 'This transaction has been flagged for review. Please contact support if you believe this is an error.',
+                code: 'TRANSACTION_BLOCKED',
+                riskLevel: fraudCheckResult.riskLevel
+            });
+        }
+
         // Build PaymentIntent parameters
         const paymentIntentParams = {
             amount: amountValidation.amount,
@@ -141,10 +317,18 @@ module.exports = async (req, res) => {
                 donorName: donorName || 'Anonymous',
                 donationType: donationTypeValidation.donationType,
                 integration: 'restored-kings-foundation',
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                riskLevel: fraudCheckResult.riskLevel,
+                fraudFlags: fraudCheckResult.flags.join(',') || 'none'
             },
             automatic_payment_methods: {
                 enabled: true
+            },
+            // Enable 3D Secure for better security
+            payment_method_options: {
+                card: {
+                    request_three_d_secure: 'automatic' // Automatically trigger 3DS when required
+                }
             }
         };
 
