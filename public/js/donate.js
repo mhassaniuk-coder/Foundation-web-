@@ -1426,6 +1426,18 @@ function initializeDownloadReceipt() {
 }
 
 /**
+ * Escape HTML special characters to prevent XSS
+ * @param {string} text - Text to escape
+ * @returns {string} Escaped text
+ */
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+/**
  * Download receipt as PDF (opens print dialog)
  */
 function downloadReceipt() {
@@ -1447,11 +1459,16 @@ function downloadReceipt() {
         minute: '2-digit'
     });
 
+    // Escape user-provided data to prevent XSS
+    const safeDonorName = escapeHtml(receipt.donorName);
+    const safeDonorEmail = escapeHtml(receipt.donorEmail);
+    const safeTransactionId = escapeHtml(receipt.transactionId);
+
     printWindow.document.write(`
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Donation Receipt - ${receipt.transactionId}</title>
+            <title>Donation Receipt - ${safeTransactionId}</title>
             <style>
                 body {
                     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -1548,7 +1565,7 @@ function downloadReceipt() {
             <div class="receipt-header">
                 <div class="logo">♔ Restored <span>Kings</span> Foundation</div>
                 <h1>Donation Receipt</h1>
-                <div class="receipt-id">Transaction ID: ${receipt.transactionId}</div>
+                <div class="receipt-id">Transaction ID: ${safeTransactionId}</div>
             </div>
             
             <div class="amount-section">
@@ -1564,11 +1581,11 @@ function downloadReceipt() {
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Donor Name</span>
-                    <span class="detail-value">${receipt.donorName}</span>
+                    <span class="detail-value">${safeDonorName}</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Email</span>
-                    <span class="detail-value">${receipt.donorEmail}</span>
+                    <span class="detail-value">${safeDonorEmail}</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Payment Method</span>

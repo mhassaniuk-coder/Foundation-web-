@@ -47,13 +47,18 @@ function performFraudChecks(data) {
         const tempEmailDomains = ['tempmail', 'guerrillamail', '10minutemail', 'throwaway', 'mailinator'];
         if (tempEmailDomains.some(domain => email.includes(domain))) {
             flags.push('temporary_email_domain');
-            riskLevel = 'medium';
+            // HIGH risk if using temp email with large amount
+            if (data.amount > 100000) { // > $1,000
+                riskLevel = 'high';
+            } else {
+                riskLevel = 'medium';
+            }
         }
 
         // Check for suspicious patterns
         if (email.match(/^[a-z]{20,}@/)) {
             flags.push('suspicious_email_pattern');
-            riskLevel = 'medium';
+            riskLevel = riskLevel === 'high' ? 'high' : 'medium';
         }
     }
 
@@ -62,7 +67,7 @@ function performFraudChecks(data) {
         // Very large amounts
         if (data.amount > 500000) { // > $5,000
             flags.push('high_value_transaction');
-            riskLevel = riskLevel === 'low' ? 'medium' : riskLevel;
+            riskLevel = riskLevel === 'high' ? 'high' : 'medium';
         }
 
         // Round number attacks (testing cards)
@@ -72,20 +77,26 @@ function performFraudChecks(data) {
         }
     }
 
-    // Check for velocity (multiple attempts from same email)
-    // This would require a database in production
-    // For now, we'll just log it
-
     // Check for mismatched billing/shipping if provided
     if (data.donorInfo && data.donorInfo.billingAddress && data.donorInfo.address) {
         if (data.donorInfo.billingAddress.country !== data.donorInfo.address.country) {
             flags.push('billing_shipping_mismatch');
-            riskLevel = 'medium';
+            // HIGH risk for billing/shipping mismatch with high value
+            if (data.amount > 100000) { // > $1,000
+                riskLevel = 'high';
+            } else {
+                riskLevel = riskLevel === 'high' ? 'high' : 'medium';
+            }
         }
     }
 
+    // Multiple flags = higher risk
+    if (flags.length >= 3) {
+        riskLevel = 'high';
+    }
+
     return {
-        passed: flags.length === 0 || riskLevel !== 'high',
+        passed: riskLevel !== 'high',
         riskLevel,
         flags
     };

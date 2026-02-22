@@ -271,7 +271,11 @@ module.exports = async (req, res) => {
 
                 // Check if card is expired
                 const now = new Date();
-                const expDate = new Date(cardCheck.expYear, cardCheck.expMonth - 1);
+                // Card is valid until the END of the expiration month
+                // Using day 0 of the next month gives us the last day of the expiration month
+                const expDate = new Date(cardCheck.expYear, cardCheck.expMonth, 0);
+                // Set to end of that day
+                expDate.setHours(23, 59, 59, 999);
                 if (expDate < now) {
                     return res.status(200).json({
                         valid: false,
