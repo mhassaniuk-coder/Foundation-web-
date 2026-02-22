@@ -3,8 +3,22 @@
 // Stripe Integration & Form Validation
 // ============================================
 
-// Stripe public key - configurable via environment variables
-const STRIPE_PUBLIC_KEY = window.STRIPE_PUBLIC_KEY || '';
+// Stripe public key - read from DOM or environment, fallback to empty
+// If empty, Stripe will not initialize and user will see helpful error message
+const getStripePublicKey = () => {
+    // Try reading from data attribute on card container
+    const cardElementContainer = document.querySelector('.card-element-container');
+    if (cardElementContainer && cardElementContainer.dataset.stripePublishableKey) {
+        return cardElementContainer.dataset.stripePublishableKey;
+    }
+    // Try reading from window object (script injection from server)
+    if (window.STRIPE_PUBLIC_KEY) {
+        return window.STRIPE_PUBLIC_KEY;
+    }
+    return '';
+};
+
+const STRIPE_PUBLIC_KEY = getStripePublicKey();
 
 // Global state
 let stripe = null;
@@ -57,16 +71,67 @@ const cardBrandSymbols = {
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function () {
-    initializeStripe();
-    initializeMultiStepForm();
-    initializeAmountButtons();
-    initializeFrequencyToggle();
-    initializeBillingToggle();
-    initializeFormValidation();
-    initializeSaveCardOption();
-    initializeShareButtons();
-    initializePrintButton();
+    // Try to load Stripe publishable key from API if not already set
+    loadStripePublicKey().then(() => {
+        initializeStripe();
+        initializeMultiStepForm();
+        initializeAmountButtons();
+        initializeFrequencyToggle();
+        initializeBillingToggle();
+        initializeFormValidation();
+        initializeSaveCardOption();
+        initializeShareButtons();
+        initializePrintButton();
+    }).catch(error => {
+        console.error('Failed to initialize donation form:', error);
+        showConfigurationError(
+            'Unable to initialize payment processing. Please refresh the page and try again.',
+            'https://stripe.com/docs'
+        );
+    });
 });
+
+/**
+ * Load Stripe publishable key from API endpoint
+ * Falls back to DOM data attribute if already set
+ */
+async function loadStripePublicKey() {
+    // Check if already set
+    const cardElementContainer = document.querySelector('.card-element-container');
+    if (cardElementContainer?.dataset.stripePublishableKey) {
+        return Promise.resolve();
+    }
+
+    // Try to fetch from API
+    try {
+        const response = await fetch('/api/stripe-keys', {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' }
+        });
+
+        if (!response.ok) {
+            console.warn('Failed to fetch Stripe publishable key from API:', response.status);
+            return Promise.reject(new Error('API endpoint returned ' + response.status));
+        }
+
+        const data = await response.json();
+        if (data.publishableKey) {
+            // Set the key in the DOM for initializeStripe to find
+            if (cardElementContainer) {
+                cardElementContainer.dataset.stripePublishableKey = data.publishableKey;
+            } else {
+                window.STRIPE_PUBLIC_KEY = data.publishableKey;
+            }
+            return Promise.resolve();
+        } else {
+            return Promise.reject(new Error('No publishable key in response'));
+        }
+    } catch (error) {
+        console.warn('Could not load Stripe key from API, will check DOM:', error.message);
+        // If API fails, that's okay—initializeStripe will check DOM and env vars
+        return Promise.resolve();
+    }
+}
 
 // Initialize Stripe
 function initializeStripe() {
@@ -134,6 +199,15 @@ function initializeStripe() {
                 }
             });
         }
+    } else if (typeof Stripe === 'undefined') {
+        console.error('Stripe.js library not loaded. Ensure <script src="https://js.stripe.com/v3/"></script> is in <head>.');
+        showConfigurationError('Stripe library failed to load', 'https://stripe.com/docs/js');
+    } else if (!STRIPE_PUBLIC_KEY) {
+        console.error('STRIPE_PUBLIC_KEY is not configured. Set it via data-stripe-publishable-key on .card-element-container or window.STRIPE_PUBLIC_KEY');
+        showConfigurationError(
+            'Stripe is not configured. Please set your Stripe publishable key in the server configuration.',
+            'https://dashboard.stripe.com/apikeys'
+        );
     }
 }
 
@@ -531,30 +605,45 @@ function clearStepError(step) {
 
 // Show configuration error with setup instructions
 function showConfigurationError(message, docsUrl) {
-    const statusEl = document.getElementById('payment-status');
+    const statusEl = document.getElementById('payment-status') || createConfigErrorContainer();
     if (statusEl) {
         statusEl.innerHTML = `
             <div class="config-error">
                 <h3>⚠️ Payment Setup Required</h3>
                 <p>${message}</p>
                 <ol>
-                    <li>Go to <a href="https://vercel.com/dashboard" target="_blank">Vercel Dashboard</a></li>
-                    <li>Select your project → Settings → Environment Variables</li>
-                    <li>Add: <code>STRIPE_SECRET_KEY</code> = your Stripe secret key</li>
-                    <li>Get your key from <a href="${docsUrl || 'https://dashboard.stripe.com/apikeys'}" target="_blank">Stripe Dashboard</a></li>
-                    <li>Redeploy the project</li>
+                    <li>Go to <a href="https://dashboard.stripe.com/register" target="_blank">Stripe Dashboard</a></li>
+                    <li>Get your <strong>Publishable Key</strong> from Settings → API Keys</li>
+                    <li>In production: Set <code>NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY</code> in your Vercel environment variables</li>
+                    <li>Redeploy your application</li>
                 </ol>
+                <p style="margin-top:1rem;font-size:0.9rem;color:#666;">
+                    Or for testing: Add <code>data-stripe-publishable-key="pk_test_..."</code> to the card-element-container div.
+                </p>
             </div>
         `;
         statusEl.className = 'payment-status error';
         statusEl.style.display = 'block';
     }
 
-    // Also hide the form to prevent further attempts
+    // Hide the form to prevent submission attempts
     const formContainer = document.querySelector('.donation-form-container');
     if (formContainer) {
         formContainer.style.display = 'none';
     }
+}
+
+function createConfigErrorContainer() {
+    let statusEl = document.getElementById('payment-status');
+    if (!statusEl) {
+        statusEl = document.createElement('div');
+        statusEl.id = 'payment-status';
+        const section = document.querySelector('.donation-section');
+        if (section) {
+            section.insertBefore(statusEl, section.firstChild);
+        }
+    }
+    return statusEl;
 }
 
 // ============================================
