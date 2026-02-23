@@ -8,6 +8,12 @@ const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5c
 // Get your publishable key from: https://dashboard.stripe.com/apikeys
 const STRIPE_PUBLIC_KEY = window.STRIPE_PUBLIC_KEY || '';
 
+// Access control configuration
+// Update this to the single Gmail that should own admin access.
+const ADMIN_BOOTSTRAP_EMAIL = (window.ADMIN_BOOTSTRAP_EMAIL || 'mustafaclienttechfin@gmail.com').trim().toLowerCase();
+const USER_STATUS_ACTIVE = 'active';
+const USER_STATUS_PENDING = 'pending';
+
 // API Endpoint URLs
 const API_ENDPOINTS = {
     // Payment endpoints
@@ -150,6 +156,9 @@ export {
     SUPABASE_URL,
     SUPABASE_ANON_KEY,
     STRIPE_PUBLIC_KEY,
+    ADMIN_BOOTSTRAP_EMAIL,
+    USER_STATUS_ACTIVE,
+    USER_STATUS_PENDING,
     API_ENDPOINTS,
     PAYMENT_CONFIG,
     PAYMENT_ERRORS,

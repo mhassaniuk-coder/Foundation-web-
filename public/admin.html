@@ -30,6 +30,7 @@
                 <li><a href="#" class="nav-link active" data-suite="users"><span>👥</span> Users</a></li>
                 <li><a href="#" class="nav-link" data-suite="content"><span>📝</span> Content</a></li>
                 <li><a href="#" class="nav-link" data-suite="donations"><span>💰</span> Donations</a></li>
+                <li><a href="#" class="nav-link" data-suite="accounts"><span>🏦</span> Bank Accounts</a></li>
                 <li><a href="#" class="nav-link" data-suite="volunteers"><span>🤝</span> Volunteers</a></li>
                 <li><a href="#" class="nav-link" data-suite="analytics"><span>📊</span> Analytics</a></li>
                 <li><a href="#" class="nav-link" data-suite="settings"><span>⚙️</span> Settings</a></li>
@@ -69,9 +70,16 @@
                 <span class="section-label">User Management</span>
                 <h1 style="color: white; margin-top: 0.5rem;">Foundation Members</h1>
             </div>
-            <div class="card glass-master" style="padding: 2rem;">
+            <div class="card glass-master" style="padding: 2rem; margin-bottom: 2rem;">
                 <div id="userList" class="data-table-container">
                     <p style="color: rgba(255,255,255,0.5);">Syncing member records...</p>
+                </div>
+            </div>
+            <!-- Phase 15: User Audit Logs -->
+            <div class="card glass-panel" style="padding: 2rem;">
+                <h3>Sovereign Audit Log</h3>
+                <div id="auditLogContainer" class="data-table-container">
+                    <p style="color: rgba(255,255,255,0.4);">Accessing audit stream...</p>
                 </div>
             </div>
         </div>
@@ -126,6 +134,23 @@
                     <button id="addDonationTrigger" class="btn btn-primary btn-sm">+ record heritage</button>
                 </div>
                 <div id="donationLedger"></div>
+            </div>
+        </div>
+
+        <!-- SUITE: Bank Accounts -->
+        <div id="accountsSuite" class="suite-section" style="display: none;">
+            <div class="section-header" style="text-align: left; margin-bottom: 3rem;">
+                <span class="section-label">Financial Logistics</span>
+                <h1 style="color: white; margin-top: 0.5rem;">Foundation Treasury</h1>
+            </div>
+            <div class="card glass-master" style="padding: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h3 style="margin: 0;">Bank Accounts</h3>
+                    <button id="addAccountTrigger" class="btn btn-primary btn-sm">+ add foundation account</button>
+                </div>
+                <div id="accountsList" class="data-table-container">
+                    <p style="color: rgba(255,255,255,0.4);">Synchronizing financial accounts...</p>
+                </div>
             </div>
         </div>
 
@@ -252,11 +277,9 @@
             </div>
         </div>
 
-
-
     </main>
 
-    <!-- User Edit Modal (Phase 2) -->
+    <!-- User Edit Modal -->
     <div id="userEditModal" class="modal-overlay" style="display: none;">
         <div class="modal-content glass-master">
             <div class="modal-header">
@@ -283,6 +306,7 @@
                     <label>Operational Status</label>
                     <select id="editUserStatus" class="form-input"
                         style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                        <option value="pending">Pending Approval</option>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive / Deauthorized</option>
                     </select>
@@ -294,7 +318,7 @@
         </div>
     </div>
 
-    <!-- Blog Edit Modal (Phase 3) -->
+    <!-- Blog Edit Modal -->
     <div id="blogModal" class="modal-overlay" style="display: none;">
         <div class="modal-content glass-master" style="width: 600px;">
             <div class="modal-header">
@@ -334,7 +358,7 @@
         </div>
     </div>
 
-    <!-- Program Edit Modal (Phase 3) -->
+    <!-- Program Edit Modal -->
     <div id="programModal" class="modal-overlay" style="display: none;">
         <div class="modal-content glass-master">
             <div class="modal-header">
@@ -370,7 +394,7 @@
         </div>
     </div>
 
-    <!-- Donation Modal (Phase 4) -->
+    <!-- Donation Modal -->
     <div id="donationModal" class="modal-overlay" style="display: none;">
         <div class="modal-content glass-master">
             <div class="modal-header">
@@ -417,7 +441,52 @@
         </div>
     </div>
 
-    <!-- Volunteer Review Modal (Phase 5) -->
+    <!-- Account Modal (Phase 15) -->
+    <div id="accountModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content glass-master">
+            <div class="modal-header">
+                <h3>Foundation Treasury: Account</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem;">
+                <input type="hidden" id="accountId">
+                <div class="form-group">
+                    <label>Account Name</label>
+                    <input type="text" id="accountName" class="form-input" placeholder="Main Operational House..."
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                </div>
+                <div class="form-group">
+                    <label>Account Type</label>
+                    <select id="accountType" class="form-input"
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                        <option value="Checking">Checking</option>
+                        <option value="Savings">Savings</option>
+                        <option value="Investment">Investment</option>
+                        <option value="Endowment">Endowment</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Current Balance (USD)</label>
+                    <input type="number" id="accountBalance" class="form-input" placeholder="0.00" step="0.01"
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="accountStatus" class="form-input"
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="frozen">Frozen</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button id="saveAccountBtn" class="btn btn-primary btn-block">Sync Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Volunteer Review Modal -->
     <div id="volunteerModal" class="modal-overlay" style="display: none;">
         <div class="modal-content glass-master" style="width: 500px;">
             <div class="modal-header">
@@ -473,36 +542,6 @@
             transform: translateX(5px);
         }
 
-        .audit-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.75rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .ping {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: var(--gold-500);
-            border-radius: 50%;
-            box-shadow: 0 0 20px var(--gold-500);
-            animation: radar-ping 2s infinite;
-        }
-
-        @keyframes radar-ping {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-
-            100% {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
         .status-pill {
             padding: 2px 8px;
             border-radius: 4px;
@@ -523,19 +562,17 @@
             border: 1px solid rgba(96, 165, 250, 0.2);
         }
 
+        .status-danger {
+            background: rgba(248, 113, 113, 0.12);
+            color: #f87171;
+            border: 1px solid rgba(248, 113, 113, 0.25);
+        }
+
         kbd {
             font-family: sans-serif;
             background: rgba(255, 255, 255, 0.1);
             padding: 2px 6px;
             border-radius: 4px;
-        }
-
-        .funnel-step {
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.7);
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
         }
 
         /* Admin Table Styles */
@@ -574,7 +611,7 @@
         }
 
         .data-table-container {
-            max-height: 600px;
+            max-height: 400px;
             overflow-y: auto;
         }
 

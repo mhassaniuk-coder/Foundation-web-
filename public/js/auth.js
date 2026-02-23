@@ -1,10 +1,97 @@
 import { auth, supabase } from './supabase.js';
+import { ADMIN_BOOTSTRAP_EMAIL, USER_STATUS_ACTIVE, USER_STATUS_PENDING } from './config.js';
+
+function normalizeEmail(email) {
+  return (email || '').trim().toLowerCase();
+}
+
+function isBootstrapAdminEmail(email) {
+  return normalizeEmail(email) === ADMIN_BOOTSTRAP_EMAIL;
+}
+
+async function ensureUserProfile(user, fullName = '') {
+  if (!user?.id || !user?.email) {
+    return null;
+  }
+
+  const normalizedEmail = normalizeEmail(user.email);
+  const shouldBeAdmin = isBootstrapAdminEmail(normalizedEmail);
+  const defaultName = normalizedEmail.split('@')[0];
+  const resolvedName = (fullName || defaultName).trim();
+
+  const { data: existingProfile, error: fetchError } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (fetchError) {
+    throw fetchError;
+  }
+
+  if (!existingProfile) {
+    const profilePayload = {
+      id: user.id,
+      full_name: resolvedName,
+      email: normalizedEmail,
+      role: shouldBeAdmin ? 'admin' : 'user',
+      status: shouldBeAdmin ? USER_STATUS_ACTIVE : USER_STATUS_PENDING
+    };
+
+    const { error: insertError } = await supabase
+      .from('profiles')
+      .insert([profilePayload]);
+
+    if (insertError) {
+      throw insertError;
+    }
+
+    return profilePayload;
+  }
+
+  const profileUpdates = {};
+
+  if (existingProfile.email !== normalizedEmail) {
+    profileUpdates.email = normalizedEmail;
+  }
+  if (!existingProfile.full_name && resolvedName) {
+    profileUpdates.full_name = resolvedName;
+  }
+  if (!existingProfile.status) {
+    profileUpdates.status = shouldBeAdmin ? USER_STATUS_ACTIVE : USER_STATUS_PENDING;
+  }
+  if (shouldBeAdmin) {
+    if (existingProfile.role !== 'admin') {
+      profileUpdates.role = 'admin';
+    }
+    if (existingProfile.status !== USER_STATUS_ACTIVE) {
+      profileUpdates.status = USER_STATUS_ACTIVE;
+    }
+  }
+
+  if (Object.keys(profileUpdates).length > 0) {
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update(profileUpdates)
+      .eq('id', user.id);
+
+    if (updateError) {
+      throw updateError;
+    }
+  }
+
+  return { ...existingProfile, ...profileUpdates };
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   const tabs = document.querySelectorAll('.auth-tab');
   const forms = document.querySelectorAll('.auth-form');
   const loginForm = document.getElementById('loginForm');
   const registerForm = document.getElementById('registerForm');
+  const regPassword = registerForm ? registerForm.querySelector('input[type="password"]') : null;
+  const strengthBar = document.getElementById('strengthBar');
+  const strengthText = document.getElementById('strengthText');
+  const strengthContainer = document.getElementById('passwordStrength');
 
   // Tab Switching
   tabs.forEach(tab => {
@@ -30,6 +117,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const { data, error } = await auth.signIn(email, password);
         if (error) throw error;
 
+        const signedInUser = data?.user || await auth.getUser();
+        const profile = await ensureUserProfile(signedInUser);
+        const isAdmin = profile?.role === 'admin' || isBootstrapAdminEmail(signedInUser?.email);
+
+        if (isAdmin) {
+          window.location.href = '/admin.html';
+          return;
+        }
+
+        if (profile?.status !== USER_STATUS_ACTIVE) {
+          await auth.signOut();
+          alert('Your account is pending admin approval. Please wait until your status is activated.');
+          return;
+        }
+
         window.location.href = '/dashboard.html';
       } catch (error) {
         alert(error.message);
@@ -38,12 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Password Strength Oracle (Feature 4)
-  const regPassword = document.getElementById('regPassword');
-  const strengthBar = document.getElementById('strengthBar');
-  const strengthText = document.getElementById('strengthText');
-  const strengthContainer = document.getElementById('passwordStrength');
-
-  if (regPassword) {
+  if (regPassword && strengthBar && strengthText && strengthContainer) {
     regPassword.addEventListener('input', () => {
       const val = regPassword.value;
       if (!val) {
@@ -77,7 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const fullName = registerForm.querySelector('input[type="text"]').value;
       const email = registerForm.querySelector('input[type="email"]').value;
-      const password = regPassword.value;
+      const passwordInput = registerForm.querySelector('input[type="password"]');
+      const password = passwordInput ? passwordInput.value : '';
 
       try {
         // Security Audit: Log attempt (Feature 3 Mock)
@@ -86,20 +184,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (error) throw error;
 
         if (data.user) {
-          // Create profile entry
-          const { error: profileError } = await supabase
-            .from('profiles')
-            .insert([{
-              id: data.user.id,
-              full_name: fullName,
-              email: email
-            }]);
-
-          if (profileError) console.error("Profile creation error:", profileError);
+          const profile = await ensureUserProfile(data.user, fullName);
+          if (profile?.role === 'admin') {
+            alert('Admin account created successfully. You can log in and open the Admin Console.');
+            window.location.href = '/auth/login.html';
+            return;
+          }
         }
 
-        alert('Welcome King! Account created. Please check your email to verify (if enabled) or sign in.');
-        location.reload(); // Switch back to login view
+        alert('Account created successfully. Your access is pending admin approval.');
+        window.location.href = '/auth/login.html';
       } catch (error) {
         alert(error.message);
       }

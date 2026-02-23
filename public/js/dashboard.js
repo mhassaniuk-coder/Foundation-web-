@@ -1,9 +1,50 @@
 import { auth, db, supabase } from './supabase.js';
+import { ADMIN_BOOTSTRAP_EMAIL, USER_STATUS_ACTIVE } from './config.js';
+
+function normalizeEmail(email) {
+    return (email || '').trim().toLowerCase();
+}
+
+function isBootstrapAdminEmail(email) {
+    return normalizeEmail(email) === ADMIN_BOOTSTRAP_EMAIL;
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     const user = await auth.getUser();
     if (!user) {
         window.location.href = '/auth.html';
+        return;
+    }
+
+    const normalizedEmail = normalizeEmail(user.email);
+    let accessProfile = null;
+
+    try {
+        const { data: profile, error: profileError } = await db.getProfile(user.id);
+        if (profileError) {
+            throw profileError;
+        }
+        accessProfile = profile;
+    } catch (error) {
+        console.error('Profile access check failed', error);
+    }
+
+    const hasAdminAccess = accessProfile?.role === 'admin' || isBootstrapAdminEmail(normalizedEmail);
+    if (hasAdminAccess && accessProfile && (accessProfile.role !== 'admin' || accessProfile.status !== USER_STATUS_ACTIVE)) {
+        try {
+            await supabase
+                .from('profiles')
+                .update({ role: 'admin', status: USER_STATUS_ACTIVE })
+                .eq('id', user.id);
+        } catch (error) {
+            console.warn('Admin bootstrap profile sync failed', error);
+        }
+    }
+
+    if (!hasAdminAccess && accessProfile?.status !== USER_STATUS_ACTIVE) {
+        await auth.signOut();
+        alert('Your dashboard access is pending admin approval. Please wait until an admin activates your account.');
+        window.location.href = '/auth/login.html';
         return;
     }
 
@@ -16,7 +57,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // UI Updates
     userName.innerText = `King ${user.email.split('@')[0]}`;
-    greeting.innerText = `Greetings, King. Your legacy is growing.`;
+    greeting.innerText = hasAdminAccess
+        ? 'Welcome, Admin. Command systems are online.'
+        : 'Greetings, King. Your legacy is growing.';
 
     // Security Audit Trigger (Feature 3)
     const lastLoginTime = document.getElementById('lastLoginTime');
@@ -131,7 +174,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             // Role-Based UI (Feature 5 & 22)
-            if (profile.role === 'admin') {
+            if (profile.role === 'admin' || isBootstrapAdminEmail(user.email)) {
                 document.querySelector('.container').insertAdjacentHTML('afterbegin', `
                     <div class="glass-panel" style="background: rgba(212, 165, 116, 0.1); border-color: var(--gold-500); padding: 1rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: var(--gold-400); font-weight: 700;">ADMIN PRIVILEGES DETECTED</span>

@@ -5,6 +5,15 @@
 
 import { auth, db, supabase } from './supabase.js';
 import { AdminAPI } from './admin-api.js';
+import { ADMIN_BOOTSTRAP_EMAIL, USER_STATUS_ACTIVE } from './config.js';
+
+function normalizeEmail(email) {
+    return (email || '').trim().toLowerCase();
+}
+
+function isBootstrapAdminEmail(email) {
+    return normalizeEmail(email) === ADMIN_BOOTSTRAP_EMAIL;
+}
 
 // Show notification helper
 function showNotification(message, type = 'info') {
@@ -21,13 +30,52 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.location.href = '/auth.html';
             return;
         }
-        // Authenticated access enabled for admin console.
-        // If role data exists, still log it for audit visibility.
-        const { data: profile } = await db.getProfile(user.id);
-        if (profile?.role) {
-            console.log(`Admin access granted for authenticated user role: ${profile.role}`);
+
+        const normalizedEmail = normalizeEmail(user.email);
+        const isBootstrapAdmin = isBootstrapAdminEmail(normalizedEmail);
+
+        let profile = null;
+        const { data: fetchedProfile, error: profileError } = await db.getProfile(user.id);
+        if (profileError && profileError.code !== 'PGRST116') {
+            throw profileError;
+        }
+        profile = fetchedProfile;
+
+        // Auto-bootstrap a single configured Gmail into admin.
+        if (isBootstrapAdmin && !profile) {
+            const bootstrapProfile = {
+                id: user.id,
+                full_name: normalizedEmail.split('@')[0],
+                email: normalizedEmail,
+                role: 'admin',
+                status: USER_STATUS_ACTIVE
+            };
+
+            const { error: insertError } = await supabase.from('profiles').insert([bootstrapProfile]);
+            if (!insertError) {
+                profile = bootstrapProfile;
+            }
         }
 
+        if (isBootstrapAdmin && profile && (profile.role !== 'admin' || profile.status !== USER_STATUS_ACTIVE)) {
+            const { error: promoteError } = await supabase
+                .from('profiles')
+                .update({ role: 'admin', status: USER_STATUS_ACTIVE })
+                .eq('id', user.id);
+
+            if (!promoteError) {
+                profile = { ...profile, role: 'admin', status: USER_STATUS_ACTIVE };
+            }
+        }
+
+        const hasAdminAccess = isBootstrapAdmin || profile?.role === 'admin';
+        if (!hasAdminAccess) {
+            showNotification('Access denied. Admin privileges required.', 'error');
+            setTimeout(() => window.location.href = '/dashboard.html', 1500);
+            return;
+        }
+
+        console.log(`Admin access granted for ${normalizedEmail}`);
         initializeAdmin();
     } catch (error) {
         console.error('Auth check failed:', error);
@@ -103,13 +151,13 @@ async function initUsersSuite() {
                             <td>${u.full_name || 'Unnamed King'}</td>
                             <td>${u.email}</td>
                             <td><span class="role-pill">${u.role || 'user'}</span></td>
-                            <td><span class="status-pill status-${u.status === 'active' ? 'success' : 'info'}">${u.status || 'active'}</span></td>
+                            <td><span class="status-pill status-${u.status === 'active' ? 'success' : (u.status === 'inactive' ? 'danger' : 'info')}">${u.status || 'pending'}</span></td>
                             <td>
                                 <button class="btn btn-ghost btn-xs edit-user-btn" 
                                     data-id="${u.id}" 
                                     data-name="${u.full_name || u.email}"
                                     data-role="${u.role || 'user'}"
-                                    data-status="${u.status || 'active'}">
+                                    data-status="${u.status || 'pending'}">
                                     Edit
                                 </button>
                             </td>
