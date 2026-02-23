@@ -2,6 +2,12 @@
 
 A modern, professional website for the Restored Kings Foundation - supporting men and boys through compassionate outreach, mentorship, and community programs.
 
+## Project Links
+
+- GitHub Repository: https://github.com/mhassaniuk-coder/Foundation-web-
+- Production URL: https://foundation-website-gray.vercel.app
+- Vercel Project: https://vercel.com/mhassaniuk-coders-projects/foundation-website
+
 ## Website Structure
 
 ```
