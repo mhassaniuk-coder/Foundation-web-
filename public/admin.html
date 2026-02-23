@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/premium.css">
     <!-- Chart.js for Intelligence Engine -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/theme.js"></script>
 </head>
 
 <body class="admin-body" style="background: #020617; color: white; display: flex; height: 100vh; overflow: hidden;">
@@ -26,11 +27,12 @@
                 style="font-size: 0.7rem; color: var(--gold-500); letter-spacing: 2px; margin-bottom: 1rem; text-transform: uppercase;">
                 Command Suites</div>
             <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem;">
-                <li><a href="#" class="nav-link active" data-suite="intelligence"><span>📊</span> Intelligence</a></li>
-                <li><a href="#" class="nav-link" data-suite="command"><span>🕹️</span> Control</a></li>
-                <li><a href="#" class="nav-link" data-suite="engagement"><span>📈</span> Engagement</a></li>
-                <li><a href="#" class="nav-link" data-suite="analytics"><span>📣</span> Analytics</a></li>
-                <li><a href="#" class="nav-link" data-suite="sovereign"><span>👑</span> Sovereign Intel</a></li>
+                <li><a href="#" class="nav-link active" data-suite="users"><span>👥</span> Users</a></li>
+                <li><a href="#" class="nav-link" data-suite="content"><span>📝</span> Content</a></li>
+                <li><a href="#" class="nav-link" data-suite="donations"><span>💰</span> Donations</a></li>
+                <li><a href="#" class="nav-link" data-suite="volunteers"><span>🤝</span> Volunteers</a></li>
+                <li><a href="#" class="nav-link" data-suite="analytics"><span>📊</span> Analytics</a></li>
+                <li><a href="#" class="nav-link" data-suite="settings"><span>⚙️</span> Settings</a></li>
                 <li style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem;">
                     <a href="/dashboard.html" class="nav-link"><span>🏠</span> User Dashboard</a>
                 </li>
@@ -61,232 +63,395 @@
             Global Intelligence
         </div>
 
-        <!-- SUITE 1: Intelligence & Oversight (Features 1-8) -->
-        <div id="intelligenceSuite" class="suite-section">
+        <!-- SUITE: Users -->
+        <div id="usersSuite" class="suite-section">
             <div class="section-header" style="text-align: left; margin-bottom: 3rem;">
-                <span class="section-label">Suite 1: Intelligence & Oversight</span>
-                <h1 style="color: white; margin-top: 0.5rem;">Operational Pulse Radar</h1>
+                <span class="section-label">User Management</span>
+                <h1 style="color: white; margin-top: 0.5rem;">Foundation Members</h1>
             </div>
-
-            <div class="grid grid-3" style="gap: 2rem; margin-bottom: 3rem;">
-                <div class="card glass-panel"
-                    style="padding: 2rem; min-height: 300px; display: flex; flex-direction: column;">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
-                        <h4 style="color: var(--gold-400); margin: 0; font-size: 0.9rem;">Impact Growth Velocity
-                            (Feature 2)</h4>
-                        <span style="color: #4ade80; font-size: 0.75rem;">+18.4%</span>
-                    </div>
-                    <div style="flex-grow: 1; position: relative;"><canvas id="impactVelocityChart"></canvas></div>
-                </div>
-
-                <div class="card glass-panel" id="impactRadar"
-                    style="padding: 2rem; min-height: 300px; overflow: hidden; position: relative;">
-                    <h4 style="color: var(--gold-400); margin: 0 0 1.5rem; font-size: 0.9rem;">Heatmap: Field
-                        Distribution (Feature 1)</h4>
-                    <div class="radar-container"
-                        style="height: 180px; background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); border-radius: 8px; position: relative;">
-                        <div class="ping" style="top: 20%; left: 30%;"></div>
-                        <div class="ping" style="top: 60%; left: 70%;"></div>
-                        <div class="ping" style="top: 40%; left: 50%;"></div>
-                    </div>
-                    <div
-                        style="margin-top: 1.5rem; display: flex; justify-content: space-between; font-size: 0.7rem; color: rgba(255,255,255,0.5);">
-                        <span>GLOBAL COVERAGE: 82%</span>
-                        <span style="color: var(--gold-500);">3 ACTIVE MISSIONS</span>
-                    </div>
-                </div>
-
-                <div class="card glass-panel" style="padding: 2rem; background: var(--gradient-primary); border: none;">
-                    <h4 style="color: var(--gold-400); margin: 0 0 1rem; font-size: 0.9rem;">Predictive Funding (Feature
-                        3)</h4>
-                    <div style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">$1.2M</div>
-                    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.7);">Projected Q4 revenue based on current
-                        engagement velocity.</p>
-                    <div style="margin-top: 2rem;">
-                        <div
-                            style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 0.5rem;">
-                            <span>Progress to Milestone</span><span>74%</span>
-                        </div>
-                        <div class="fund-bar" style="height: 8px; background: rgba(255,255,255,0.1);">
-                            <div class="fund-fill" style="width: 74%; background: white;"></div>
-                        </div>
-                    </div>
+            <div class="card glass-master" style="padding: 2rem;">
+                <div id="userList" class="data-table-container">
+                    <p style="color: rgba(255,255,255,0.5);">Syncing member records...</p>
                 </div>
             </div>
+        </div>
 
+        <!-- SUITE: Content -->
+        <div id="contentSuite" class="suite-section" style="display: none;">
+            <div class="section-header" style="text-align: left; margin-bottom: 3rem;">
+                <span class="section-label">Content Management</span>
+                <h1 style="color: white; margin-top: 0.5rem;">Media & Narrative Forge</h1>
+            </div>
             <div class="grid grid-2" style="gap: 2rem;">
-                <div class="card glass-master" style="padding: 2rem;">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                        <h3 class="font-premium">Foundation Vital Signs</h3>
-                        <button class="btn btn-ghost btn-sm" onclick="generateGovernanceReport()">Export Gov
-                            Report</button>
-                    </div>
-                    <div id="auditLog" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+                <div class="card glass-panel" style="padding: 2rem;">
+                    <h3>Blog Posts</h3>
+                    <div id="blogList"></div>
+                    <button class="btn btn-primary btn-sm btn-block" style="margin-top: 1rem;">Create New Post</button>
                 </div>
-                <div class="glass-panel" style="padding: 2rem;">
-                    <h3 style="color: white; margin: 0 0 2rem;">Success Matrix (Feature 6)</h3>
-                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                        <div class="matrix-item">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span
-                                    style="font-size: 0.85rem;">Mentorship ROI</span><span
-                                    style="color: var(--gold-500); font-weight: 700;">High Impact</span></div>
-                            <div class="fund-bar" style="height: 4px;">
-                                <div class="fund-fill" style="width: 92%;"></div>
-                            </div>
-                        </div>
-                        <div class="matrix-item">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span
-                                    style="font-size: 0.85rem;">Outreach Conversion</span><span
-                                    style="color: #4ade80; font-weight: 700;">68% Efficiency</span></div>
-                            <div class="fund-bar" style="height: 4px;">
-                                <div class="fund-fill" style="width: 68%; background: #4ade80;"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <p style="margin-top: 2rem; font-size: 0.75rem; color: rgba(255,255,255,0.5);">Feature 7: Resource
-                        Efficiency KPI calculates $840 per kingly restoration.</p>
+                <div class="card glass-panel" style="padding: 2rem;">
+                    <h3>Programs</h3>
+                    <div id="programList"></div>
+                    <button class="btn btn-ghost btn-sm btn-block" style="margin-top: 1rem;">Add Program</button>
                 </div>
             </div>
         </div>
 
-        <!-- SUITE 2: Command & Control (Features 9-16) -->
-        <div id="commandSuite" class="suite-section" style="display: none;">
+        <!-- SUITE: Donations -->
+        <div id="donationsSuite" class="suite-section" style="display: none;">
             <div class="section-header" style="text-align: left; margin-bottom: 3rem;">
-                <span class="section-label">Suite 2: Command & Control</span>
-                <h1 style="color: white; margin-top: 0.5rem;">Operational Command Console</h1>
+                <span class="section-label">Financial Oversight</span>
+                <h1 style="color: white; margin-top: 0.5rem;">Heritage Contributions</h1>
             </div>
-
-            <div class="grid grid-2" style="gap: 2rem; margin-bottom: 3rem;">
-                <div class="card glass-panel" style="padding: 2rem;">
-                    <h3 style="color: white; margin-top: 0;">Bulk Outreach Hub (Feature 9)</h3>
-                    <div class="form-group" style="margin-top: 1.5rem;">
-                        <label style="font-size: 0.7rem; color: var(--gold-500);">Target Segment</label>
-                        <select class="form-input"
-                            style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1);">
-                            <option>All Heritage Givers</option>
-                            <option>Field Volunteers</option>
-                        </select>
+            <div class="grid grid-2" style="gap: 2rem; margin-bottom: 2rem;">
+                <div class="card glass-panel" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+                    <div style="font-size: 2rem;">🏛️</div>
+                    <div>
+                        <div style="font-size: 0.7rem; color: var(--gold-500); text-transform: uppercase;">Total
+                            Heritage Pledged</div>
+                        <div id="totalHeritageDisplay" style="font-size: 1.5rem; font-weight: 800;">$0.00</div>
                     </div>
-                    <textarea class="form-input" rows="4"
-                        style="margin-top: 1rem; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1);"
-                        placeholder="Broadcast royal decree..."></textarea>
-                    <button class="btn btn-primary btn-block" style="margin-top: 1rem;">Execute Global
-                        Broadcast</button>
                 </div>
-
-                <div class="card glass-panel" style="padding: 2rem;">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <h3 style="color: white; margin: 0;">Lifecycle Forge (Feature 12)</h3>
-                        <button class="btn btn-ghost btn-sm">+ Forge Project</button>
-                    </div>
-                    <div class="forge-list" style="display: flex; flex-direction: column; gap: 1rem;">
-                        <div class="glass-panel"
-                            style="padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 700;">Mentorship Q1</div>
-                                <div style="font-size: 0.6rem; color: #4ade80;">ACTIVE</div>
-                            </div>
-                            <button class="btn btn-ghost btn-xs">Control</button>
-                        </div>
-                        <div class="glass-panel"
-                            style="padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 700;">Field Mission 7</div>
-                                <div style="font-size: 0.6rem; color: var(--gold-500);">PLANNING</div>
-                            </div>
-                            <button class="btn btn-ghost btn-xs">Control</button>
-                        </div>
+                <div class="card glass-panel" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+                    <div style="font-size: 2rem;">📈</div>
+                    <div>
+                        <div style="font-size: 0.7rem; color: #4ade80; text-transform: uppercase;">30-Day Velocity</div>
+                        <div id="monthlyVelocityDisplay" style="font-size: 1.5rem; font-weight: 800; color: #4ade80;">
+                            +$0.00</div>
                     </div>
                 </div>
             </div>
-
-            <div class="grid grid-4" style="gap: 2rem;">
-                <div class="glass-panel" style="padding: 1.5rem;">
-                    <h4 style="margin: 0 0 0.5rem; font-size: 0.7rem; color: var(--gold-500);">Asset Ledger (F13)</h4>
-                    <div style="font-size: 1.25rem; font-weight: 800;">1,402 Items</div>
+            <div class="card glass-master" style="padding: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h3 style="margin: 0;">Heritage Ledger</h3>
+                    <button id="addDonationTrigger" class="btn btn-primary btn-sm">+ record heritage</button>
                 </div>
-                <div class="glass-panel" style="padding: 1.5rem;">
-                    <h4 style="margin: 0 0 0.5rem; font-size: 0.7rem; color: var(--gold-500);">Role Authority (F10)</h4>
-                    <span class="status-pill status-success">SYSTEM_ROOT</span>
-                </div>
-                <div class="glass-panel" style="padding: 1.5rem;">
-                    <h4 style="margin: 0 0 0.5rem; font-size: 0.7rem; color: var(--gold-500);">Compliance (F8)</h4><span
-                        class="status-pill status-success">VERIFIED</span>
-                </div>
-                <div class="glass-panel" style="padding: 1.5rem;">
-                    <h4 style="margin: 0 0 0.5rem; font-size: 0.7rem; color: var(--gold-500);">Workspace (F15)</h4>
-                    <button class="btn btn-ghost btn-xs">Open Intel Lab</button>
-                </div>
+                <div id="donationLedger"></div>
             </div>
         </div>
 
-        <!-- SUITE 3: Growth & Engagement (Features 17-25) -->
-        <div id="engagementSuite" class="suite-section" style="display: none;">
+        <!-- SUITE: Volunteers -->
+        <div id="volunteersSuite" class="suite-section" style="display: none;">
             <div class="section-header" style="text-align: left; margin-bottom: 3rem;">
-                <span class="section-label">Suite 3: Growth & Engagement</span>
-                <h1 style="color: white; margin-top: 0.5rem;">Community Growth Radar</h1>
+                <span class="section-label">Human Capital</span>
+                <h1 style="color: white; margin-top: 0.5rem;">Volunteer Nexus</h1>
             </div>
-
-            <div class="grid grid-3" style="gap: 2rem; margin-bottom: 3rem;">
-                <div class="card glass-panel" style="padding: 2rem;">
-                    <h4 style="margin: 0 0 1.5rem; font-size: 0.8rem; color: var(--gold-500);">Volunteer Funnel (Feature
-                        17)</h4>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <div class="funnel-step"><span>Onboarding</span>
-                            <div style="height: 4px; background: var(--gold-600); width: 100%;"></div>
-                        </div>
-                        <div class="funnel-step"><span>Oriented</span>
-                            <div style="height: 4px; background: var(--gold-500); width: 64%;"></div>
-                        </div>
-                        <div class="funnel-step"><span>Deployed</span>
-                            <div style="height: 4px; background: var(--gold-400); width: 42%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card glass-panel" style="padding: 2rem;">
-                    <h4 style="margin: 0 0 1.5rem; font-size: 0.8rem; color: var(--gold-500);">Sentiment Matrix (Feature
-                        18)</h4>
-                    <div style="text-align: center; padding: 1.5rem 0;">
-                        <div style="font-size: 3rem;">🎭</div>
-                        <div style="font-weight: 800; color: #4ade80;">94% POSITIVE</div>
-                    </div>
-                </div>
-                <div class="card glass-panel" style="padding: 2rem;">
-                    <h4 style="margin: 0 0 1.5rem; font-size: 0.8rem; color: var(--gold-500);">Field Media Portal
-                        (Feature 21)</h4>
-                    <div class="media-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-                        <div style="aspect-ratio: 1; background: rgba(255,255,255,0.05); border-radius: 4px;"></div>
-                        <div style="aspect-ratio: 1; background: rgba(255,255,255,0.05); border-radius: 4px;"></div>
-                    </div>
-                    <button class="btn btn-ghost btn-sm btn-block" style="margin-top: 1rem;">Intake Media</button>
-                </div>
-            </div>
-
             <div class="grid grid-2" style="gap: 2rem;">
-                <div class="glass-panel" style="padding: 1.5rem;">
-                    <h4 style="margin: 0 0 1.5rem; font-size: 0.8rem; color: var(--gold-500);">Legacy Pipeline (Feature
-                        20)</h4>
-                    <div style="font-size: 1.5rem; font-weight: 800;">$4.2M Pledged</div>
-                    <p style="font-size: 0.7rem; color: rgba(255,255,255,0.5);">Tracking multi-year "Royal Legacy"
-                        commitmetns.</p>
+                <div class="card glass-panel" style="padding: 2rem;">
+                    <h3>Pending Applications</h3>
+                    <div id="pendingVolunteers" class="data-table-container">
+                        <p style="color: rgba(255,255,255,0.4);">Searching for human capital...</p>
+                    </div>
                 </div>
-                <div class="glass-panel" style="padding: 1.5rem;">
-                    <h4 style="margin: 0 0 1.5rem; font-size: 0.8rem; color: var(--gold-500);">Health Triage (Feature
-                        22)</h4>
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <div
-                            style="width: 10px; height: 10px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 10px #4ade80;">
-                        </div>
-                        <span style="font-size: 0.9rem;">ALL SYSTEMS OPERATIONAL</span>
+                <div class="card glass-panel" style="padding: 2rem;">
+                    <h3>Active Deployments</h3>
+                    <div id="activeDeployments" class="data-table-container">
+                        <p style="color: rgba(255,255,255,0.4);">Overseeing deployments...</p>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- SUITE: Analytics -->
+        <div id="analyticsSuite" class="suite-section" style="display: none;">
+            <div class="section-header" style="text-align: left; margin-bottom: 3rem;">
+                <span class="section-label">Platform Analytics</span>
+                <h1 style="color: white; margin-top: 0.5rem;">Intelligence Radar</h1>
+            </div>
+            <div class="grid grid-3" style="gap: 2rem;">
+                <div class="card glass-panel" style="padding: 2rem;">
+                    <h4>Impact Velocity</h4>
+                    <canvas id="impactVelocityChart"></canvas>
+                </div>
+                <div class="card glass-panel" style="padding: 2rem;">
+                    <h4>Sentiment Matrix</h4>
+                    <div style="text-align: center; padding: 2rem;">
+                        <span style="font-size: 3rem;">🎭</span>
+                        <div style="font-weight: 800; color: #4ade80; margin-top: 1rem;">94% POSITIVE</div>
+                    </div>
+                </div>
+                <div class="card glass-panel" style="padding: 2rem;">
+                    <h4>Resource ROI</h4>
+                    <div style="font-size: 2rem; font-weight: 800; color: var(--gold-400);">$840 / King</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUITE: Settings -->
+        <div id="settingsSuite" class="suite-section" style="display: none;">
+            <div class="section-header" style="text-align: left; margin-bottom: 3rem;">
+                <span class="section-label">System Configuration</span>
+                <h1 style="color: white; margin-top: 0.5rem;">Sovereign Control</h1>
+            </div>
+            <div class="grid grid-2" style="gap: 2rem;">
+                <div class="card glass-panel" style="padding: 2rem;">
+                    <h3>Sovereign Configuration</h3>
+                    <form id="systemSettingsForm"
+                        style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600;">Maintenance Mode</div>
+                                <div style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Freeze all public
+                                    interactions</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="maintenanceMode">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600;">Public Registration</div>
+                                <div style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Allow new kings to join
+                                    the foundation</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="publicRegistration" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600;">Heritage Visibility</div>
+                                <div style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Enable the live legacy
+                                    ledger page</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="heritageVisibility" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1rem;">Commit
+                            Configuration</button>
+                    </form>
+                </div>
+                <div class="card glass-panel" style="padding: 2rem;">
+                    <h3>Platform Integrity</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
+                        <div class="glass-master"
+                            style="padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                            <div style="font-size: 0.7rem; color: var(--gold-500); text-transform: uppercase;">Supabase
+                                Core</div>
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                                <span id="apiStatus" style="font-size: 0.9rem;">Operational</span>
+                                <span class="status-pill status-success">ACTIVE</span>
+                            </div>
+                        </div>
+                        <div class="glass-master"
+                            style="padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                            <div style="font-size: 0.7rem; color: var(--gold-500); text-transform: uppercase;">Heritage
+                                Vault</div>
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                                <span style="font-size: 0.9rem;">Encrypted & Synchronized</span>
+                                <span class="status-pill status-success">SECURE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
     </main>
+
+    <!-- User Edit Modal (Phase 2) -->
+    <div id="userEditModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content glass-master">
+            <div class="modal-header">
+                <h3>Edit Authority</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editUserId">
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label>Member Name</label>
+                    <input type="text" id="editUserName" class="form-input" readonly
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                </div>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>Role Assignment</label>
+                    <select id="editUserRole" class="form-input"
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                        <option value="user">User (Standard)</option>
+                        <option value="partner">Partner (Provider)</option>
+                        <option value="admin">Admin (System Root)</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>Operational Status</label>
+                    <select id="editUserStatus" class="form-input"
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive / Deauthorized</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button id="saveUserBtn" class="btn btn-primary btn-block">Commit Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Edit Modal (Phase 3) -->
+    <div id="blogModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content glass-master" style="width: 600px;">
+            <div class="modal-header">
+                <h3>Narrative Forge: Blog Post</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem;">
+                <input type="hidden" id="blogId">
+                <div class="form-group">
+                    <label>Post Title</label>
+                    <input type="text" id="blogTitle" class="form-input" placeholder="Enter headline..."
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                </div>
+                <div class="form-group">
+                    <label>Slug (URL Identifier)</label>
+                    <input type="text" id="blogSlug" class="form-input" placeholder="my-new-post"
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                </div>
+                <div class="form-group">
+                    <label>Content (HTML Supported)</label>
+                    <textarea id="blogContent" class="form-input" rows="8"
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Featured Image URL</label>
+                    <input type="text" id="blogImage" class="form-input" placeholder="https://..."
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <input type="checkbox" id="blogPublished">
+                    <label for="blogPublished" style="margin: 0; cursor: pointer;">Execute Immediate Publication</label>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button id="saveBlogBtn" class="btn btn-primary btn-block">Forge Post</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Program Edit Modal (Phase 3) -->
+    <div id="programModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content glass-master">
+            <div class="modal-header">
+                <h3>Asset Nexus: Program</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem;">
+                <input type="hidden" id="programId">
+                <div class="form-group">
+                    <label>Program Name</label>
+                    <input type="text" id="programName" class="form-input"
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="programDesc" class="form-input" rows="3"
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Icon Identifier (Emoji/Lucide)</label>
+                    <input type="text" id="programIcon" class="form-input" placeholder="👑"
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                </div>
+                <div class="form-group">
+                    <label>Sort Priority</label>
+                    <input type="number" id="programSort" class="form-input" value="0"
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button id="saveProgramBtn" class="btn btn-primary btn-block">Sync Program</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Donation Modal (Phase 4) -->
+    <div id="donationModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content glass-master">
+            <div class="modal-header">
+                <h3>Heritage Ledger Entry</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="form-group">
+                    <label>Assigned King (Donor Search)</label>
+                    <div style="position: relative;">
+                        <input type="text" id="donorSearch" class="form-input" placeholder="Search by name or email..."
+                            style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                        <div id="donorSearchResults" class="glass-panel"
+                            style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 10; max-height: 200px; overflow-y: auto; margin-top: 5px;">
+                        </div>
+                    </div>
+                    <input type="hidden" id="selectedDonorId">
+                </div>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>Amount (USD)</label>
+                    <input type="number" id="donationAmount" class="form-input" placeholder="0.00" step="0.01"
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                </div>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>Contribution Type</label>
+                    <select id="donationType" class="form-input"
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                        <option value="heritage">Heritage Pledges</option>
+                        <option value="legacy">Legacy Bequests</option>
+                        <option value="impact">Immediate Impact</option>
+                        <option value="recurring">Monthly Covenant</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>External Reference / Notes</label>
+                    <input type="text" id="donationRef" class="form-input"
+                        placeholder="Cheque # / Stripe Ref / Event Name"
+                        style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); width: 100%; padding: 0.5rem;">
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button id="saveDonationBtn" class="btn btn-primary btn-block">Commit to Ledger</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Volunteer Review Modal (Phase 5) -->
+    <div id="volunteerModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content glass-master" style="width: 500px;">
+            <div class="modal-header">
+                <h3>Nexus Review: Application</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <input type="hidden" id="reviewAppId">
+                <div>
+                    <div style="font-size: 0.7rem; color: var(--gold-500); text-transform: uppercase;">Applicant</div>
+                    <div id="reviewAppName" style="font-size: 1.1rem; font-weight: 700;">-</div>
+                    <div id="reviewAppEmail" style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">@email.com</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.7rem; color: var(--gold-500); text-transform: uppercase;">Human Assets
+                        (Skills)</div>
+                    <div id="reviewAppSkills"
+                        style="font-size: 0.9rem; margin-top: 0.5rem; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+                        -</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.7rem; color: var(--gold-500); text-transform: uppercase;">Operational
+                        Intent (Motivation)</div>
+                    <div id="reviewAppMotivation"
+                        style="font-size: 0.9rem; margin-top: 0.5rem; color: rgba(255,255,255,0.8);"> - </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button id="rejectAppBtn" class="btn btn-ghost btn-block"
+                    style="border-color: #ef4444; color: #ef4444;">Decline Asset</button>
+                <button id="approveAppBtn" class="btn btn-primary btn-block">Approve Deployment</button>
+            </div>
+        </div>
+    </div>
 
     <style>
         .nav-link {
@@ -372,9 +537,93 @@
             flex-direction: column;
             gap: 0.25rem;
         }
+
+        /* Admin Table Styles */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .admin-table th {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gold-500);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+        }
+
+        .admin-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .role-pill {
+            background: rgba(212, 165, 116, 0.1);
+            color: var(--gold-500);
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            border: 1px solid rgba(212, 165, 116, 0.2);
+        }
+
+        .data-table-container {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            width: 400px;
+            padding: 2.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--gold-500);
+            box-shadow: 0 0 50px rgba(212, 165, 116, 0.2);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--gold-500);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
     </style>
 
-    <script src="/js/admin.js"></script>
+    <script type="module" src="/js/admin.js"></script>
 </body>
 
 </html>

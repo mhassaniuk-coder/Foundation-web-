@@ -1,265 +1,125 @@
-// ============================================
-// SOVEREIGN HERITAGE ENGINE - Phase 11
-// Restored Kings Foundation - User Legacy
-// ============================================
+/**
+ * HERITAGE ENGINE - Phase 11
+ * Managing Sovereign Assets and Vault Interactions.
+ */
+
+import { auth, supabase } from './supabase.js';
 
 class HeritageEngine {
     constructor() {
-        this.vaultFiles = [
-            { name: 'Heritage_Charter.pdf', type: 'LEGACY', date: '2024-01-15', status: 'ENCRYPTED' },
-            { name: 'Impact_Directives.json', type: 'STRATEGY', date: '2024-02-10', status: 'VERIFIED' }
-        ];
-        this.avatarData = { level: 4, title: 'Heritage Guardian', xp: 85 };
+        this.init();
     }
 
-    init() {
-        console.log('Sovereign Heritage Engine: Online');
-        this.renderVault();
-        this.renderTimeline();
+    async init() {
+        const user = (await auth.getUser());
+        if (!user) return;
+
+        this.initVault();
+        this.initAvatar();
+        this.initNetworkingPulse();
     }
 
-    // Feature 1: Digital Heritage Vault
-    renderVault() {
-        const container = document.getElementById('heritageVault');
-        if (!container) return;
+    initVault() {
+        const vaultSection = document.getElementById('heritageVault');
+        if (!vaultSection) return;
 
-        container.innerHTML = `
-            <div class="glass-master" style="padding: 1.5rem;">
-                <h3 class="font-premium" style="margin-bottom: 1.5rem; font-size: 1.1rem;">Digital Heritage Vault</h3>
-                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                    ${this.vaultFiles.map(file => `
-                        <div class="vault-item" style="padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--sovereign-border); display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-size: 0.85rem; font-weight: 600;">${file.name}</div>
-                                <div style="font-size: 0.7rem; color: rgba(255,255,255,0.4);">${file.type} • ${file.date}</div>
-                            </div>
-                            <span class="status-pill ${file.status === 'ENCRYPTED' ? 'status-warning' : 'status-success'}" style="font-size: 0.6rem;">${file.status}</span>
-                        </div>
-                    `).join('')}
-                </div>
-                <button class="btn btn-primary btn-sm btn-block" style="margin-top: 1.5rem;">Secure New Document</button>
-            </div>
-        `;
+        const vaultBtn = vaultSection.querySelector('.btn');
+        if (vaultBtn) {
+            vaultBtn.addEventListener('click', () => {
+                this.openVaultModal();
+            });
+        }
     }
 
-    // Feature 3: Heritage Interactive Timeline
-    renderTimeline() {
-        const container = document.getElementById('impactTimeline');
-        if (!container) return;
-
-        const events = [
-            { date: 'Dec 2023', title: 'First King Restored', desc: 'Marcus entered employment protocol.' },
-            { date: 'Feb 2024', title: 'Community Pillar Award', desc: 'Recognized for sustained heritage giving.' },
-            { date: 'Mar 2024', title: 'Global Scaling Initiated', desc: 'Your gift unlocked the London Chapter.' }
-        ];
-
-        container.innerHTML = `
-            <div class="heritage-timeline">
-                ${events.map(ev => `
-                    <div class="timeline-event">
-                        <div style="font-size: 0.7rem; font-weight: 800; color: var(--gold-500); text-transform: uppercase;">${ev.date}</div>
-                        <div style="font-size: 0.9rem; font-weight: 700; margin-bottom: 0.25rem;">${ev.title}</div>
-                        <div style="font-size: 0.8rem; color: rgba(255,255,255,0.6);">${ev.desc}</div>
+    openVaultModal() {
+        const modal = document.createElement('div');
+        modal.className = 'modal-backdrop';
+        modal.innerHTML = `
+            <div class="glass-panel modal-content" style="max-width: 600px; padding: 2.5rem; border: 1px solid var(--gold-500); position: relative;">
+                <button class="close-btn" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
+                <h2 style="color: var(--gold-400); margin-bottom: 1.5rem; font-family: 'Outfit', sans-serif;">Heritage Vault</h2>
+                <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-bottom: 2rem;">Access your encrypted legacy documents and sovereign certificates.</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="glass-panel" style="padding: 1rem; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">📜</div>
+                        <div style="font-size: 0.8rem; font-weight: 700;">Foundation Charter</div>
+                        <button class="btn btn-ghost btn-sm" style="margin-top: 0.5rem; width: 100%;">View</button>
                     </div>
-                `).join('')}
-            </div>
-        `;
-    }
-
-    // Feature 2: Kingly Avatar System
-    updateAvatar() {
-        const xpBar = document.getElementById('heritageXp');
-        if (xpBar) xpBar.style.width = this.avatarData.xp + '%';
-    }
-    // Feature 6: Achievement Milestone Certificates
-    renderAchievements() {
-        const container = document.getElementById('heritageAchievements');
-        if (!container) return;
-
-        const achievements = [
-            { id: 'HONOR-001', title: 'Restoration Pioneer', date: '2024-01-01', rarity: 'LEGENDARY' },
-            { id: 'HONOR-052', title: 'Global Catalyst', date: '2024-03-12', rarity: 'EPIC' }
-        ];
-
-        container.innerHTML = `
-            <div class="glass-master" style="padding: 1.5rem; margin-top: 2rem;">
-                <h3 class="font-premium" style="margin-bottom: 1rem; font-size: 1rem;">Achievement Honors</h3>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
-                    ${achievements.map(a => `
-                        <div class="achievement-medal glass-panel" style="padding: 1rem; text-align: center; border-color: var(--gold-500); cursor: pointer;" onclick="window.heritage.downloadCertificate('${a.id}')">
-                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏅</div>
-                            <div style="font-size: 0.75rem; font-weight: 800;">${a.title}</div>
-                            <div style="font-size: 0.6rem; color: var(--gold-400);">${a.rarity}</div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-    }
-
-    async downloadCertificate(id) {
-        alert(`Generating verified certificate for ${id}...`);
-        const { jsPDF } = window.jspdf ? window.jspdf : (await import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'));
-        const doc = new jsPDF('landscape');
-        doc.setFillColor(10, 12, 16);
-        doc.rect(0, 0, 297, 210, 'F');
-        doc.setTextColor(212, 165, 116);
-        doc.setFontSize(40);
-        doc.text('CERTIFICATE OF HONOR', 148.5, 60, { align: 'center' });
-        doc.setFontSize(20);
-        doc.text('Presented to a Sovereign Heritage Supporter', 148.5, 90, { align: 'center' });
-        doc.setFontSize(14);
-        doc.text(`VERIFICATION_ID: ${id}`, 148.5, 120, { align: 'center' });
-        doc.text('Restored Kings Foundation - Global Heritage Registry', 148.5, 150, { align: 'center' });
-        doc.save(`RKF_Honor_${id}.pdf`);
-    }
-    // Feature 2: Kingly Avatar System (Visual)
-    renderAvatar() {
-        const container = document.getElementById('sovereignAvatar');
-        if (!container) return;
-
-        container.innerHTML = `
-            <div class="glass-master" style="padding: 1.5rem; text-align: center; border-color: var(--gold-500);">
-                <div class="avatar-silhouette" style="width: 100px; height: 100px; background: var(--gradient-gold); margin: 0 auto 1rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; box-shadow: 0 0 20px var(--sovereign-gold-glow);">
-                    👑
-                </div>
-                <h4 class="font-premium" style="margin: 0;">${this.avatarData.title}</h4>
-                <div style="font-size: 0.7rem; color: var(--gold-400); margin-bottom: 1rem;">LEVEL ${this.avatarData.level} SOVEREIGN</div>
-                <div class="progress-bar" style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
-                    <div id="heritageXp" class="progress-fill" style="width: ${this.avatarData.xp}%; height: 100%; background: var(--gold-500);"></div>
-                </div>
-            </div>
-        `;
-    }
-
-    // Feature 8: Personal Impact Heatmap
-    renderImpactMap() {
-        const container = document.getElementById('personalImpactMap');
-        if (!container) return;
-
-        container.innerHTML = `
-            <div class="glass-master" style="padding: 1.5rem; margin-top: 2rem;">
-                <h3 class="font-premium" style="margin-bottom: 1rem; font-size: 1rem;">Personal Heritage Map</h3>
-                <div class="impact-map-container" style="background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=600') center/cover; height: 200px;">
-                    <div class="map-ping" style="top: 40%; left: 30%;"></div>
-                    <div class="map-ping" style="top: 55%; left: 65%;"></div>
-                    <div style="position: absolute; bottom: 0.5rem; right: 0.5rem; font-size: 0.5rem; color: rgba(255,255,255,0.4);">LIVE_HERITAGE_PING</div>
-                </div>
-            </div>
-        `;
-    }
-    // Feature 5: Multi-Generational Giving Accounts
-    renderFamilyAccounts() {
-        const container = document.getElementById('familyAccounts');
-        if (!container) return;
-
-        const members = [
-            { name: 'Prince Julian', relation: 'Son', contributions: '$120' },
-            { name: 'Princess Elena', relation: 'Daughter', contributions: '$85' }
-        ];
-
-        container.innerHTML = `
-            <div class="glass-master" style="padding: 1.5rem; margin-top: 2rem;">
-                <h3 class="font-premium" style="margin-bottom: 1rem; font-size: 1rem;">Family Heritage Circle</h3>
-                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem;">
-                    ${members.map(m => `
-                        <div class="glass-panel" style="padding: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-size: 0.8rem; font-weight: 700;">${m.name}</div>
-                                <div style="font-size: 0.6rem; color: rgba(255,255,255,0.4);">${m.relation} Member</div>
-                            </div>
-                            <div style="font-size: 0.8rem; color: var(--gold-500); font-weight: 800;">${m.contributions}</div>
-                        </div>
-                    `).join('')}
-                </div>
-                <button class="btn btn-ghost btn-sm btn-block">Add Family Member</button>
-            </div>
-        `;
-    }
-
-    // Feature 4: Noble Networking Hub
-    renderNetworking() {
-        const container = document.getElementById('nobleNetworking');
-        if (!container) return;
-
-        container.innerHTML = `
-            <div class="glass-master" style="padding: 1.5rem; margin-top: 2rem; background: var(--gradient-primary); border: none;">
-                <h3 class="font-premium" style="color: white; margin-bottom: 0.5rem; font-size: 1rem;">Noble Networking</h3>
-                <p style="font-size: 0.75rem; color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;">Connect with 1,200+ fellow heritage guardians in your region.</p>
-                <div style="display: flex; gap: -10px; margin-bottom: 1.5rem;">
-                    <div style="width: 30px; height: 30px; border-radius: 50%; background: #555; border: 2px solid #000;"></div>
-                    <div style="width: 30px; height: 30px; border-radius: 50%; background: #777; border: 2px solid #000;"></div>
-                    <div style="width: 30px; height: 30px; border-radius: 50%; background: #999; border: 2px solid #000;"></div>
-                    <div style="width: 30px; height: 30px; border-radius: 50%; background: var(--gold-500); border: 2px solid #000; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; font-weight: 800;">+1.2k</div>
-                </div>
-                <button class="btn btn-primary btn-sm btn-block" style="background: white; color: var(--primary-900);">Join Circle</button>
-            </div>
-        `;
-    }
-    // Feature 15: Syndicated Giving Circles
-    renderGivingCircles() {
-        const container = document.getElementById('givingCircles');
-        if (!container) return;
-
-        container.innerHTML = `
-            <div class="glass-master" style="padding: 1.5rem; margin-top: 2rem; border-color: #a855f7;">
-                <h3 class="font-premium" style="margin-bottom: 1rem; font-size: 1rem;">Syndicated Giving Circles</h3>
-                <div class="glass-panel" style="padding: 1rem; margin-bottom: 1rem;">
-                    <div style="font-size: 0.8rem; font-weight: 700;">Global Restoration Fund 2026</div>
-                    <div style="font-size: 0.6rem; color: rgba(255,255,255,0.4); margin-bottom: 0.5rem;">Total Pool: $4.2M • 12.5k Members</div>
-                    <div class="progress-bar" style="height: 4px; background: rgba(0,0,0,0.2);">
-                        <div class="progress-fill" style="width: 72%; height: 100%; background: #a855f7;"></div>
+                    <div class="glass-panel" style="padding: 1rem; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">💎</div>
+                        <div style="font-size: 0.8rem; font-weight: 700;">Legacy Certificate</div>
+                        <button class="btn btn-ghost btn-sm" style="margin-top: 0.5rem; width: 100%;">Download</button>
                     </div>
                 </div>
-                <button class="btn btn-primary btn-sm btn-block" style="background: #a855f7; border: none; color: white;">Contribute to Pool</button>
+                
+                <div style="margin-top: 2rem; padding: 1rem; background: rgba(212, 165, 116, 0.05); border-radius: 8px;">
+                    <div style="font-size: 0.7rem; color: var(--gold-500); font-weight: 800; letter-spacing: 1px;">VAULT STATUS: ENCRYPTED</div>
+                    <div style="font-size: 0.6rem; color: rgba(255,255,255,0.4); margin-top: 2px;">Last access: ${new Date().toLocaleString()}</div>
+                </div>
             </div>
         `;
+
+        document.body.appendChild(modal);
+        modal.querySelector('.close-btn').onclick = () => modal.remove();
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
     }
 
-    // Feature 17: Heritage AI Advisor
-    renderAIAdvisor() {
-        const container = document.getElementById('heritageAIAdvisor');
-        if (!container) return;
-
-        container.innerHTML = `
-            <div class="glass-master" style="padding: 1.5rem; margin-top: 2rem; border-left: 4px solid var(--gold-500);">
-                <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
-                    <div style="font-size: 1.5rem;">🤖</div>
-                    <h3 class="font-premium" style="margin:0; font-size: 1rem;">Heritage AI Advisor</h3>
-                </div>
-                <div style="font-size: 0.8rem; font-style: italic; color: rgba(255,255,255,0.7); margin-bottom: 1rem;">
-                    "Based on your 2024 giving trajectory, increasing your focus on the London Chapter would maximize your heritage impact by 24%."
-                </div>
-                <button class="btn btn-ghost btn-sm btn-block">Review Strategy</button>
-            </div>
-        `;
+    initAvatar() {
+        const avatar = document.querySelector('.avatar-container img');
+        if (avatar) {
+            avatar.classList.add('sovereign-avatar');
+            avatar.addEventListener('click', () => {
+                alert("King's Profile: Level 4 Patron\nYour contribution velocity is in the top 5%.");
+            });
+        }
     }
 
-    // Feature 21: Legacy Pledge Smart Reminders
-    renderPledges() {
-        const container = document.getElementById('legacyPledges');
-        if (!container) return;
+    async initNetworkingPulse() {
+        const hubSection = document.getElementById('nobleNetworking');
+        if (!hubSection) return;
 
-        container.innerHTML = `
-            <div class="glass-panel" style="padding: 1rem; margin-top: 1rem; border: 1px dashed rgba(255,255,255,0.1);">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div style="font-size: 0.75rem; color: rgba(255,255,255,0.4);">ACTIVE_PLEDGE: <strong>$5,000 / Quarter</strong></div>
-                    <span class="status-pill status-success" style="font-size: 0.5rem;">ON_TRACK</span>
+        const hubBtn = hubSection.querySelector('.btn');
+        if (hubBtn) {
+            hubBtn.addEventListener('click', async () => {
+                this.openNetworkingHub();
+            });
+        }
+    }
+
+    async openNetworkingHub() {
+        const { data: kings, error } = await supabase
+            .from('profiles')
+            .select('full_name, role')
+            .limit(5);
+
+        const modal = document.createElement('div');
+        modal.className = 'modal-backdrop';
+        modal.innerHTML = `
+            <div class="glass-panel modal-content" style="max-width: 500px; padding: 2.5rem; border: 1px solid var(--gold-500); position: relative;">
+                <button class="close-btn" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
+                <h2 style="color: var(--gold-400); margin-bottom: 1.5rem; font-family: 'Outfit', sans-serif;">Noble Networking</h2>
+                <div id="kingsList" style="display: flex; flex-direction: column; gap: 1rem;">
+                    ${kings ? kings.map(k => `
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <div style="width: 32px; height: 32px; background: var(--gold-500); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary-900); font-weight: 800; font-size: 0.8rem;">
+                                ${k.full_name?.charAt(0) || 'K'}
+                            </div>
+                            <div>
+                                <div style="font-size: 0.9rem; font-weight: 600;">${k.full_name || 'Anonymous King'}</div>
+                                <div style="font-size: 0.7rem; color: var(--gold-400);">${k.role?.toUpperCase() || 'PATRON'}</div>
+                            </div>
+                        </div>
+                    `).join('') : '<p>Recruiting noble allies...</p>'}
                 </div>
             </div>
         `;
+
+        document.body.appendChild(modal);
+        modal.querySelector('.close-btn').onclick = () => modal.remove();
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    window.heritage = new HeritageEngine();
-    window.heritage.init();
-    window.heritage.renderAchievements();
-    window.heritage.renderAvatar();
-    window.heritage.renderImpactMap();
-    window.heritage.renderFamilyAccounts();
-    window.heritage.renderNetworking();
-    window.heritage.renderGivingCircles();
-    window.heritage.renderAIAdvisor();
-    window.heritage.renderPledges();
+    new HeritageEngine();
 });

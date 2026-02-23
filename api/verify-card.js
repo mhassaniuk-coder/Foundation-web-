@@ -17,6 +17,7 @@
 
 const {
     getStripeClient,
+    getStripeSecretKey,
     setCorsHeaders,
     parseRequestBody,
     handleOptionsRequest,
@@ -205,9 +206,19 @@ module.exports = async (req, res) => {
         stripe = getStripeClient();
     } catch (configError) {
         console.error('[CONFIG_ERROR]', configError.message);
+        const vercelEnv = process.env.VERCEL_ENV || process.env.NODE_ENV || 'unknown';
+        const isVercelRuntime = Boolean(process.env.VERCEL);
+        const runtimeLabel = isVercelRuntime ? vercelEnv : 'local';
+        const hasAliasKey = Boolean(getStripeSecretKey());
+        const scopeMessage = isVercelRuntime
+            ? `Set STRIPE_SECRET_KEY in Vercel Environment Variables for the same scope (${vercelEnv}), then redeploy.`
+            : 'Set STRIPE_SECRET_KEY in your local .env file and restart the server.';
         return res.status(503).json({
             error: 'Payment processing is not configured',
-            message: 'Please set STRIPE_SECRET_KEY in environment variables.',
+            message: `Missing Stripe secret key for this runtime (${runtimeLabel}). ${scopeMessage}`,
+            details: hasAliasKey
+                ? 'An alternate Stripe key variable was detected, but STRIPE_SECRET_KEY is recommended for consistency.'
+                : 'No supported Stripe secret key variable was detected (STRIPE_SECRET_KEY / STRIPE_SECRET / STRIPE_API_KEY / STRIPE_PRIVATE_KEY / STRIPE_LIVE_SECRET_KEY / STRIPE_TEST_SECRET_KEY).',
             code: 'STRIPE_NOT_CONFIGURED'
         });
     }

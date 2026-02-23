@@ -21,6 +21,7 @@
     <title>Restored Kings Foundation - Restoring Dignity, Rebuilding Lives</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/premium.css">
+    <link rel="stylesheet" href="/css/topbar.css">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#d4a574">
 
@@ -43,14 +44,19 @@
     </script>
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23d4a574'>♔</text></svg>">
+    <script src="/js/theme.js"></script>
 </head>
 
-<body>
-    <!-- Advanced Theme Engine: Data Attribute controlled by JS -->
-    <script>
-        const theme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', theme);
-    </script>
+<body class="font-premium">
+    <!-- Global Notice Bar (Phase 9) -->
+    <div class="notice-bar">
+        <span>Restoring Dignity: 2,400+ Lives Impacted in 2024</span>
+    </div>
+
+    <!-- Scroll Progress Indicator (Phase 9) -->
+    <div class="scroll-progress-container">
+        <div class="scroll-progress-bar"></div>
+    </div>
 
     <!-- Navigation Header -->
     <header id="header">
@@ -72,7 +78,7 @@
             </div>
 
             <ul class="nav-links" id="navLinks">
-                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/">Home</a></li>
                 <li><a href="/about.html">About</a></li>
                 <li><a href="/programs.html">Programs</a></li>
                 <li><a href="/impact.html">Impact</a></li>
@@ -80,15 +86,13 @@
                 <li><a href="/contact.html">Contact</a></li>
                 <li class="nav-search">
                     <div class="search-box">
-                        <input type="text" id="globalSearch" placeholder="Search foundation...">
+                        <input type="text" id="globalSearch" placeholder="Search the kingdom...">
                         <button id="searchBtn">🔍</button>
                     </div>
                 </li>
                 <li class="nav-login"><a href="#" id="loginTrigger" class="btn btn-ghost"
                         style="margin-right: 15px;">Login</a></li>
                 <li class="nav-cta"><a href="/donate.html" class="btn btn-primary">Donate Now</a></li>
-
-
             </ul>
         </nav>
     </header>
@@ -106,9 +110,9 @@
         </div>
         <div class="hero-content">
             <div class="hero-badge">Making a Difference Since 2020</div>
-            <h1>Restoring <span class="highlight">Dignity</span>, Rebuilding Lives</h1>
-            <p class="hero-subtitle">We support men and boys who are homeless, struggling, or taken advantage of —
-                providing mentorship, education, and community to help them rise again.</p>
+            <h1>Ascend to <span class="highlight">Greatness</span>, Reclaim Your Throne</h1>
+            <p class="hero-subtitle">We empower men and boys who have been disenfranchised, providing elite mentorship,
+                strategic education, and a powerful community to help them conquer their circumstances.</p>
             <div class="hero-cta">
                 <a href="/donate.html" class="btn btn-primary btn-lg">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -116,7 +120,7 @@
                             d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
                         </path>
                     </svg>
-                    Donate Now
+                    Become a Patron
                 </a>
                 <a href="/volunteer.html" class="btn btn-secondary btn-lg">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -145,37 +149,40 @@
     <!-- Stats Section -->
     <section class="stats" id="impact">
         <div class="container">
-            <div class="grid grid-2" style="gap: 4rem; align-items: start;">
-                <div class="stats-content">
+            <div class="grid grid-2 impact-dashboard">
+                <div class="stats-content impact-metrics">
                     <span class="section-label">Real-Time Impact</span>
-                    <h2 class="section-title">Verified Restoration Metrics</h2>
-                    <div class="stats-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
+                    <h2 class="section-title">Community Impact Metrics</h2>
+                    <p class="section-description">
+                        Verified outcomes from outreach, meals, training, and mentorship delivery.
+                    </p>
+                    <div class="stats-grid">
                         <div class="stat-item">
                             <div class="stat-number">2,400+</div>
-                            <div class="stat-label">Kings Restored</div>
+                            <div class="stat-label">Lives Supported</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-number">15,200</div>
-                            <div class="stat-label">Nutritional Units</div>
+                            <div class="stat-label">Meals Provided</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-number">320</div>
-                            <div class="stat-label">Economic Placements</div>
+                            <div class="stat-label">Job Placements</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-number">45</div>
-                            <div class="stat-label">Verified Programs</div>
+                            <div class="stat-label">Active Programs</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Transparency Hub (Feature: Phase 10) -->
                 <div id="transparencyHub" class="glass-master"
-                    style="padding: 2rem; max-height: 550px; overflow: hidden; margin-top: 1rem;">
+                    style="padding: 2rem; max-height: 550px; overflow: hidden;">
                     <div style="text-align: center; padding: 4rem 2rem;">
                         <span class="spinner"></span>
-                        <p style="color: rgba(255,255,255,0.4); margin-top: 1rem; font-size: 0.8rem;">Initializing
-                            Public Ledger Protocol...</p>
+                        <p style="color: rgba(255,255,255,0.4); margin-top: 1rem; font-size: 0.8rem;">Loading
+                            transparency ledger...</p>
                     </div>
                 </div>
             </div>
@@ -515,7 +522,7 @@
                 </div>
             </div>
             <div style="text-align: center; margin-top: 3rem;">
-                <a href="/programs.html" class="btn btn-dark btn-lg">View All Programs</a>
+                <a href="/programs.html" class="btn btn-dark btn-lg premium-hover">View All Programs</a>
             </div>
         </div>
     </section>
@@ -530,7 +537,7 @@
                     stronger, healthier, and more hopeful.</p>
             </div>
             <div class="grid grid-3">
-                <div class="testimonial-card">
+                <div class="testimonial-card glass-panel">
                     <p class="testimonial-content">"I was homeless for 3 years before I found Restored Kings. They
                         didn't just give me a bed — they gave me a brotherhood. Today, I have a job, an apartment, and a
                         purpose."</p>
@@ -545,7 +552,7 @@
                     </div>
                 </div>
 
-                <div class="testimonial-card">
+                <div class="testimonial-card glass-panel">
                     <p class="testimonial-content">"The mentorship program changed my life. My mentor saw potential in
                         me when I couldn't see it myself. Now I'm mentoring others and giving back what was given to
                         me."</p>
@@ -560,7 +567,7 @@
                     </div>
                 </div>
 
-                <div class="testimonial-card">
+                <div class="testimonial-card glass-panel">
                     <p class="testimonial-content">"At 19, I was lost and on the streets. The skills training program
                         taught me a trade and gave me confidence. I'm now a certified electrician with a bright future."
                     </p>
@@ -576,7 +583,7 @@
                 </div>
             </div>
             <div style="text-align: center; margin-top: 3rem;">
-                <a href="/impact.html" class="btn btn-primary btn-lg">Read More Stories</a>
+                <a href="/impact.html" class="btn btn-primary btn-lg premium-hover">Read More Stories</a>
             </div>
         </div>
     </section>
@@ -648,8 +655,7 @@
                 <p class="section-description">We are proud to work with these organizations dedicated to social impact.
                 </p>
             </div>
-            <div
-                style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4rem; align-items: center; opacity: 0.6; filter: grayscale(1);">
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4rem; align-items: center; opacity: 0.6; filter: grayscale(1);" class="font-premium">
                 <div style="font-size: 2rem; font-weight: 700;">TECHCORP</div>
                 <div style="font-size: 2rem; font-weight: 700;">GLOBEX</div>
                 <div style="font-size: 2rem; font-weight: 700;">ACME INC</div>
@@ -659,7 +665,7 @@
     </section>
 
     <!-- Admin Insights Suite (Feature 25 - Mock) -->
-    <section id="adminDashboard" class="section" style="display: none; background: #050b14;">
+    <section id="adminDashboard" class="section" style="background: #050b14;">
         <div class="container">
             <div class="section-header">
                 <span class="section-label">Admin Console</span>
@@ -699,11 +705,30 @@
                     Your support directly impacts the lives of men and boys in our community. Join us in restoring
                     dignity and rebuilding lives.</p>
                 <div class="btn-group" style="justify-content: center;">
-                    <a href="/donate.html" class="btn btn-primary btn-lg">💰 Donate Now</a>
-                    <a href="/volunteer.html" class="btn btn-ghost btn-lg">🤝 Become a Volunteer</a>
+                    <div class="hero-cta"
+                        style="margin-top: 2.5rem; display: flex; gap: 1rem; justify-content: center;">
+                        <a href="/donate.html" class="btn btn-primary btn-lg premium-hover">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" style="margin-right: 8px;">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                </path>
+                            </svg>
+                            Support the Cause
+                        </a>
+                        <a href="/volunteer.html" class="btn btn-secondary btn-lg premium-hover">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" style="margin-right: 8px;">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                            Join the Mission
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
     </section>
 
     <!-- Newsletter Section -->
@@ -825,7 +850,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Restored Kings Foundation. All rights reserved. 501(c)(3) Nonprofit.</p>
+                <p>&copy; 2026 Restored Kings Foundation. All rights reserved. 501(c)(3) Nonprofit.</p>
                 <div class="footer-bottom-links">
                     <a href="/privacy.html">Privacy Policy</a>
                     <a href="#">Terms of Service</a>
@@ -860,6 +885,7 @@
 
     <script type="module" src="/js/main.js"></script>
 
+    <script src="/js/topbar.js"></script>
 </body>
 
 </html>

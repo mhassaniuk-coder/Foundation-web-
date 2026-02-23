@@ -88,7 +88,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Fetch Stats
     try {
         const { data: profile } = await db.getProfile(user.id);
-        const { count: tasksCount } = await supabase.from('volunteer_tasks').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
+        const { count: tasksCount } = await supabase
+            .from('volunteer_tasks')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', user.id);
 
         if (profile) {
             totalDonated.innerText = `$${profile.total_donated || 0}`;
@@ -107,9 +110,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Badge Logic (Feature 43)
             const badgeContainer = document.getElementById('badgeContainer');
-            if (profile.total_donated > 0) addBadge(badgeContainer, '❤️', 'Golden Heart', 'First Donation');
-            if (profile.volunteer_hours >= 10) addBadge(badgeContainer, '⚔️', 'Iron Will', '10+ Hours');
-            if (tasksCount >= 3) addBadge(badgeContainer, '🏛️', 'Community Pillar', '3+ Projects');
+            if (badgeContainer) {
+                badgeContainer.innerHTML = ''; // Clear existing
+                if (profile.total_donated > 0) addBadge(badgeContainer, '❤️', 'Golden Heart', 'First Donation');
+                if (profile.total_donated >= 1000) addBadge(badgeContainer, '💎', 'Diamond Patron', 'High Impact Giver');
+                if (profile.volunteer_hours >= 10) addBadge(badgeContainer, '⚔️', 'Iron Will', '10+ Hours');
+                if (tasksCount >= 3) addBadge(badgeContainer, '🏛️', 'Community Pillar', '3+ Projects');
+                if (profile.lives_impacted >= 5) addBadge(badgeContainer, '🌟', 'Life Restorer', '5+ Lives Impacted');
+            }
+
+            // Sync Heritage Progress Bar
+            const progressFill = document.querySelector('.heritage-progress-fill');
+            const progressText = document.querySelector('.heritage-progress-text');
+            if (progressFill && progressText) {
+                const goal = 5000;
+                const current = profile.total_donated || 0;
+                const percent = Math.min((current / goal) * 100, 100);
+                progressFill.style.width = `${percent}%`;
+                progressText.innerText = `${percent.toFixed(0)}% TO NEXT BADGE`;
+            }
 
             // Role-Based UI (Feature 5 & 22)
             if (profile.role === 'admin') {

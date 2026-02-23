@@ -7,6 +7,7 @@
   <title>User Dashboard | Restored Kings Foundation</title>
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/premium.css">
+  <script src="/js/theme.js"></script>
 </head>
 
 <body class="dashboard-body">
@@ -100,28 +101,73 @@
           <!-- Right Column: Community & Support -->
           <div class="dashboard-sidebar">
             <!-- Feature 2: Sovereign Avatar -->
-            <div id="sovereignAvatar" style="margin-bottom: 2rem;"></div>
+            <div id="sovereignAvatar" class="card glass-panel" style="margin-bottom: 2rem; text-align: center; padding: 1.5rem;">
+              <div class="avatar-container" style="margin-bottom: 1rem;">
+                <img src="https://i.pravatar.cc/100?u=a042581f4e29026704d" alt="User Avatar" class="avatar" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--gold-400);">
+              </div>
+              <h4 style="color: white; margin: 0;">King Mustafa</h4>
+              <p style="color: var(--gold-400); font-size: 0.8rem; margin-top: 0.25rem;">Patron of the First Order</p>
+            </div>
 
             <!-- Feature 1: Digital Heritage Vault -->
-            <div id="heritageVault" style="margin-bottom: 2rem;"></div>
+            <div id="heritageVault" class="card glass-panel" style="margin-bottom: 2rem; padding: 1.5rem;">
+              <h5 style="color: white; margin-top: 0; margin-bottom: 0.5rem;">Digital Heritage Vault</h5>
+              <p style="color: rgba(255,255,255,0.7); font-size: 0.8rem; margin-bottom: 1rem;">Securely store and manage your important documents, photos, and memories.</p>
+              <button class="btn btn-primary btn-sm" style="width: 100%;">Enter Vault</button>
+            </div>
 
             <!-- Feature 8: Personal Impact map -->
-            <div id="personalImpactMap" style="margin-bottom: 2rem;"></div>
+            <div id="personalImpactMap" class="card glass-panel" style="margin-bottom: 2rem; padding: 1.5rem;">
+              <h5 style="color: white; margin-top: 0; margin-bottom: 0.5rem;">Personal Impact Map</h5>
+              <p style="color: rgba(255,255,255,0.7); font-size: 0.8rem; margin-bottom: 1rem;">Visualize the reach of your contributions and volunteer work.</p>
+              <div class="map-placeholder" style="height: 150px; background: rgba(0,0,0,0.2); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.4);">
+                Map Loading...
+              </div>
+            </div>
 
             <!-- Feature 4: Noble Networking Hub -->
-            <div id="nobleNetworking" style="margin-bottom: 2rem;"></div>
+            <div id="nobleNetworking" class="card glass-panel" style="margin-bottom: 2rem; padding: 1.5rem;">
+              <h5 style="color: white; margin-top: 0; margin-bottom: 0.5rem;">Noble Networking Hub</h5>
+              <p style="color: rgba(255,255,255,0.7); font-size: 0.8rem; margin-bottom: 1rem;">Connect with other patrons, mentors, and leaders within the foundation.</p>
+              <button class="btn btn-primary btn-sm" style="width: 100%;">Enter Hub</button>
+            </div>
 
             <!-- Feature 5: Multi-Generational Giving -->
-            <div id="familyAccounts" style="margin-bottom: 2rem;"></div>
+            <div id="familyAccounts" class="card glass-panel" style="margin-bottom: 2rem; padding: 1.5rem;">
+              <h5 style="color: white; margin-top: 0; margin-bottom: 0.5rem;">Multi-Generational Giving</h5>
+              <p style="color: rgba(255,255,255,0.7); font-size: 0.8rem; margin-bottom: 1rem;">Create a lasting legacy by linking family accounts and pooling your impact.</p>
+              <button class="btn btn-primary btn-sm" style="width: 100%;">Manage Family</button>
+            </div>
 
             <!-- Feature 6: Achievement Honors -->
-            <div id="heritageAchievements" style="margin-bottom: 2rem;"></div>
+            <div id="heritageAchievements" class="card glass-panel" style="margin-bottom: 2rem; padding: 1.5rem;">
+              <h5 style="color: white; margin-top: 0; margin-bottom: 0.5rem;">Achievement Honors</h5>
+              <p style="color: rgba(255,255,255,0.7); font-size: 0.8rem; margin-bottom: 1rem;">A record of your milestones and contributions to the foundation.</p>
+              <ul class="achievement-list" style="list-style: none; padding: 0; margin: 0;">
+                <li style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                  <span style="color: var(--gold-400);">🏆</span>
+                  <span>First Donation: Founder's Circle</span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem;">
+                  <span style="color: var(--gold-400);">🤝</span>
+                  <span>First Volunteer Project: Outreach</span>
+                </li>
+              </ul>
+            </div>
 
             <!-- Feature 11: Regional Chapter Nexus -->
-            <div id="chapterNexus" style="margin-bottom: 2rem;"></div>
+            <div id="chapterNexus" class="card glass-panel" style="margin-bottom: 2rem; padding: 1.5rem;">
+              <h5 style="color: white; margin-top: 0; margin-bottom: 0.5rem;">Regional Chapter Nexus</h5>
+              <p style="color: rgba(255,255,255,0.7); font-size: 0.8rem; margin-bottom: 1rem;">Connect with your local chapter, attend events, and get involved in your community.</p>
+              <button class="btn btn-primary btn-sm" style="width: 100%;">View Chapters</button>
+            </div>
 
             <!-- Feature 16: Global Restoration Summit Hub -->
-            <div id="summitHub" style="margin-bottom: 2rem;"></div>
+            <div id="summitHub" class="card glass-panel" style="margin-bottom: 2rem; padding: 1.5rem;">
+              <h5 style="color: white; margin-top: 0; margin-bottom: 0.5rem;">Global Restoration Summit Hub</h5>
+              <p style="color: rgba(255,255,255,0.7); font-size: 0.8rem; margin-bottom: 1rem;">Access exclusive content, register for events, and connect with attendees of our annual summit.</p>
+              <button class="btn btn-primary btn-sm" style="width: 100%;">View Summit</button>
+            </div>
 
             <!-- Feature 15: Syndicated Giving Circles -->
             <div id="givingCircles" style="margin-bottom: 2rem;"></div>

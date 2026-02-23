@@ -1,7 +1,9 @@
 // ============================================
-// LIVE HERITAGE LEDGER - Absolute Transparency
+// LIVE TRANSPARENCY LEDGER - Public Visibility
 // Restored Kings Foundation - Phase 10
 // ============================================
+
+import { supabase } from './supabase.js';
 
 class HeritageLedger {
     constructor(containerId) {
@@ -12,11 +14,11 @@ class HeritageLedger {
     }
 
     init() {
-        console.log('Heritage Ledger: System Transparent');
+        console.log('Transparency Ledger: System Active');
         this.container.innerHTML = `
             <div class="ledger-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h3 style="margin:0; font-family: 'Outfit', sans-serif;">Live Heritage Ledger</h3>
-                <span class="status-pill status-success" style="font-size: 0.6rem;">PUBLIC_VERIFIED</span>
+                <h3 style="margin:0; font-family: 'Outfit', sans-serif;">Live Transparency Ledger</h3>
+                <span class="status-pill status-success" style="font-size: 0.6rem;">PUBLIC VERIFIED</span>
             </div>
             <div id="ledgerStream" style="display: flex; flex-direction: column; gap: 0.75rem;"></div>
         `;
@@ -24,23 +26,45 @@ class HeritageLedger {
         this.startStreaming();
     }
 
-    startStreaming() {
-        const mockData = [
-            { id: 'TX-8821', type: 'INPUT', amt: '$50.00', desc: 'Secure Heritage Gift', source: 'Anonymous King' },
-            { id: 'OPS-102', type: 'OUTPUT', amt: '$120.00', desc: 'Mentorship Session Materials', source: 'Sector 7' },
-            { id: 'TX-8822', type: 'INPUT', amt: '$1,000.00', desc: 'Corporate Match: Apple Inc', source: 'Matching Hub' },
-            { id: 'LOG-441', type: 'IMPACT', amt: '1 Unit', desc: 'Dignity Restoration Verified', source: 'Case #Marcus4' }
-        ];
+    async startStreaming() {
+        try {
+            // Fetch initial real data
+            const { data, error } = await supabase
+                .from('donations')
+                .select('id, amount, type, created_at, profiles(full_name, email)')
+                .order('created_at', { ascending: false })
+                .limit(this.maxEntries);
 
-        // Seed initial
-        mockData.forEach(d => this.addEntry(d));
+            if (data) {
+                data.forEach(d => {
+                    this.addEntry({
+                        id: d.id.substring(0, 8).toUpperCase(),
+                        type: d.type === 'heritage' ? 'INPUT' : (d.type === 'impact' ? 'INPUT' : 'OUTPUT'),
+                        amt: `$${parseFloat(d.amount).toLocaleString()}`,
+                        desc: d.type.toUpperCase() + ' Contribution',
+                        source: d.profiles?.full_name || 'Anonymous Donor'
+                    });
+                });
+            }
 
-        // Random pulse
-        setInterval(() => {
-            const random = mockData[Math.floor(Math.random() * mockData.length)];
-            const unique = { ...random, id: 'TX-' + Math.floor(Math.random() * 9000), time: 'Just now' };
-            this.addEntry(unique);
-        }, 15000);
+            // Real-time subscription for new donations
+            supabase
+                .channel('public:donations')
+                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'donations' }, payload => {
+                    const newEntry = payload.new;
+                    this.addEntry({
+                        id: (newEntry.id || 'TX').substring(0, 8).toUpperCase(),
+                        type: 'INPUT',
+                        amt: `$${parseFloat(newEntry.amount).toLocaleString()}`,
+                        desc: 'Real-time Contribution',
+                        source: 'Verified Donor'
+                    });
+                })
+                .subscribe();
+
+        } catch (e) {
+            console.error('Ledger Real-time Sync Error:', e);
+        }
     }
 
     addEntry(data) {
@@ -64,7 +88,7 @@ class HeritageLedger {
             </div>
             <div style="text-align: right;">
                 <div style="color: ${color}; font-weight: 800;">${data.amt}</div>
-                <div style="font-size: 0.6rem; color: var(--gold-500); font-family: monospace;">SHA-256 VERIFIED</div>
+                <div style="font-size: 0.6rem; color: var(--gold-500); font-family: monospace;">Integrity Verified</div>
             </div>
         `;
 
@@ -80,8 +104,9 @@ class HeritageLedger {
         }, 10);
 
         if (this.stream.children.length > this.maxEntries) {
-            this.stream.lastChild.classList.add('fade-out');
-            setTimeout(() => this.stream.removeChild(this.stream.lastChild), 500);
+            const last = this.stream.lastChild;
+            last.classList.add('fade-out');
+            setTimeout(() => this.stream.removeChild(last), 500);
         }
     }
 }

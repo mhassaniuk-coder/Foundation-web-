@@ -11,6 +11,44 @@
 
 // Initialize Stripe client
 let stripeClient = null;
+let stripeSecretCache = null;
+
+/**
+ * Resolve Stripe secret key from supported environment variable names.
+ * This helps recover from common naming mismatches across deployments.
+ * @returns {string} Stripe secret key or empty string
+ */
+function getStripeSecretKey() {
+    if (stripeSecretCache) {
+        return stripeSecretCache;
+    }
+
+    const candidates = [
+        process.env.STRIPE_SECRET_KEY,
+        process.env.STRIPE_SECRET,
+        process.env.STRIPE_API_KEY,
+        process.env.STRIPE_PRIVATE_KEY,
+        process.env.STRIPE_LIVE_SECRET_KEY,
+        process.env.STRIPE_TEST_SECRET_KEY
+    ];
+
+    for (const rawCandidate of candidates) {
+        if (typeof rawCandidate !== 'string') {
+            continue;
+        }
+
+        // Normalize accidental whitespace/quotes from env entry.
+        const normalized = rawCandidate.trim().replace(/^['"]|['"]$/g, '');
+        if (!normalized) {
+            continue;
+        }
+
+        stripeSecretCache = normalized;
+        return stripeSecretCache;
+    }
+
+    return '';
+}
 
 /**
  * Get or initialize the Stripe client
@@ -19,10 +57,13 @@ let stripeClient = null;
  */
 function getStripeClient() {
     if (!stripeClient) {
-        if (!process.env.STRIPE_SECRET_KEY) {
-            throw new Error('STRIPE_SECRET_KEY is not configured in environment variables');
+        const stripeSecretKey = getStripeSecretKey();
+
+        if (!stripeSecretKey) {
+            throw new Error('Stripe secret key is not configured');
         }
-        stripeClient = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+        stripeClient = require('stripe')(stripeSecretKey);
     }
     return stripeClient;
 }
@@ -335,6 +376,7 @@ function getPaymentStatusMessage(status) {
 module.exports = {
     // Stripe client
     getStripeClient,
+    getStripeSecretKey,
 
     // CORS helpers
     getCorsHeaders,

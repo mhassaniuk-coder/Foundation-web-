@@ -8,26 +8,43 @@
         content="Contact Restored Kings Foundation - Get help, volunteer, partner with us, or share feedback.">
     <title>Contact - Restored Kings Foundation</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/premium.css">
+    <link rel="stylesheet" href="/css/topbar.css">
+    <script src="/js/theme.js"></script>
 </head>
 
 <body>
-    <header>
+    <!-- Global Notice Bar (Phase 9) -->
+    <div class="notice-bar">
+        <span>Restoring Dignity: 2,400+ Lives Impacted in 2024</span>
+    </div>
+
+    <!-- Scroll Progress Indicator (Phase 9) -->
+    <div class="scroll-progress-container">
+        <div class="scroll-progress-bar"></div>
+    </div>
+
+    <header id="header">
         <nav class="navbar">
-            <div class="logo">♔ Restored Kings</div>
-            <div class="hamburger" id="hamburger">
-                <span></span><span></span><span></span>
+            <a href="/" class="logo">
+                <div class="logo-icon font-premium">♔</div>
+                <div class="logo-text font-premium">Restored <span>Kings</span></div>
+            </a>
+            <div class="nav-controls">
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
             <ul class="nav-links" id="navLinks">
                 <li><a href="/">Home</a></li>
-                <li><a href="/about.html">About Us</a></li>
+                <li><a href="/about.html">About</a></li>
                 <li><a href="/programs.html">Programs</a></li>
                 <li><a href="/impact.html">Impact</a></li>
                 <li><a href="/blog.html">Blog</a></li>
-                <li><a href="/donate.html" class="btn btn-primary" style="margin: 0;">Donate</a></li>
-                <li><a href="/volunteer.html" class="btn btn-secondary" style="margin: 0;">Volunteer</a></li>
-                <li><a href="/auth/login.html" class="btn btn-outline" style="margin: 0;">Login</a></li>
-                <li><a href="/auth/signup.html" class="btn btn-primary" style="margin: 0;">Sign Up</a></li>
-                <li><a href="/dashboard.html" class="btn" style="margin: 0;">Dashboard</a></li>
+                <li><a href="/contact.html" class="active">Contact</a></li>
+                <li class="nav-cta"><a href="/donate.html" class="btn btn-primary">Donate Now</a></li>
             </ul>
         </nav>
     </header>
@@ -301,6 +318,7 @@
     </footer>
 
     <script type="module" src="/js/main.js"></script>
+    <script src="/js/topbar.js"></script>
 </body>
 
 </html>

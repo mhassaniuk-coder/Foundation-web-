@@ -271,6 +271,11 @@ function initAnimations() {
 // ============================================
 
 function initThemeEngine() {
+    if (window.ThemeEngine && typeof window.ThemeEngine.init === 'function') {
+        window.ThemeEngine.init();
+        return;
+    }
+
     const themeToggle = document.getElementById('themeToggle');
     if (!themeToggle) return;
 

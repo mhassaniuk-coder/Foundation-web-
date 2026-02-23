@@ -8,158 +8,76 @@
         content="Become a Volunteer - Restored Kings Foundation needs mentors, outreach workers, and community supporters.">
     <title>Become a Volunteer - Restored Kings Foundation</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/premium.css">
+    <link rel="stylesheet" href="/css/topbar.css">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23d4a574'>♔</text></svg>">
+    <script src="/js/theme.js"></script>
 </head>
 
 <body>
-    <header>
+    <!-- Global Notice Bar (Phase 9) -->
+    <div class="notice-bar">
+        <span>Restoring Dignity: 2,400+ Lives Impacted in 2024</span>
+    </div>
+
+    <!-- Scroll Progress Indicator (Phase 9) -->
+    <div class="scroll-progress-container">
+        <div class="scroll-progress-bar"></div>
+    </div>
+
+    <header id="header">
         <nav class="navbar">
-            <div class="logo">♔ Restored Kings</div>
-            <div class="hamburger" id="hamburger">
-                <span></span><span></span><span></span>
+            <a href="/" class="logo">
+                <div class="logo-icon font-premium">♔</div>
+                <div class="logo-text font-premium">Restored <span>Kings</span></div>
+            </a>
+            <div class="nav-controls">
+                <button id="themeToggle" class="btn-theme" title="Toggle Light/Dark Mode">
+                    <span class="sun">☀️</span>
+                    <span class="moon">🌙</span>
+                </button>
+                <div class="hamburger" id="hamburger">
+                    <span></span><span></span><span></span>
+                </div>
             </div>
+
             <ul class="nav-links" id="navLinks">
                 <li><a href="/">Home</a></li>
-                <li><a href="/about.html">About Us</a></li>
+                <li><a href="/about.html">About</a></li>
                 <li><a href="/programs.html">Programs</a></li>
                 <li><a href="/impact.html">Impact</a></li>
                 <li><a href="/blog.html">Blog</a></li>
-                <li><a href="/donate.html" class="btn btn-primary" style="margin: 0;">Donate</a></li>
-                <li><a href="/volunteer.html" class="btn btn-secondary active" style="margin: 0;">Volunteer</a></li>
-                <li><a href="/auth/login.html" class="btn btn-outline" style="margin: 0;">Login</a></li>
-                <li><a href="/auth/signup.html" class="btn btn-primary" style="margin: 0;">Sign Up</a></li>
-                <li><a href="/dashboard.html" class="btn" style="margin: 0;">Dashboard</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+                <li class="nav-cta"><a href="/donate.html" class="btn btn-primary">Donate Now</a></li>
+                <li class="nav-cta"><a href="/volunteer.html" class="btn btn-secondary active">Volunteer</a></li>
             </ul>
         </nav>
     </header>
 
-    <section class="hero"
-        style="background: linear-gradient(135deg, var(--primary-color) 0%, rgba(26, 58, 92, 0.8) 100%); padding: 3rem 2rem;">
+    <!-- Hero Section -->
+    <section class="hero" style="padding: 6rem 2rem; position: relative; overflow: hidden;">
+        <div class="hero-particles">
+            <div class="hero-particle" style="left: 10%; top: 20%; animation-delay: 0s;"></div>
+            <div class="hero-particle" style="left: 80%; top: 55%; animation-delay: 5s;"></div>
+        </div>
         <div class="hero-content">
-            <h1 style="color: white;">Join Our Team</h1>
-            <p style="color: rgba(255,255,255,0.95);">Be the mentor someone needs. Volunteer with Restored Kings.</p>
-        </div>
-    </section>
-
-    <!-- Why Volunteer -->
-    <section class="section container">
-        <h2 style="text-align: center; margin-bottom: 2rem;">Why Volunteer With Us?</h2>
-        <div class="grid grid-3">
-            <div class="card">
-                <div
-                    style="background: var(--primary-color); color: var(--secondary-color); padding: 2rem; text-align: center; font-size: 3rem;">
-                    ❤️</div>
-                <div class="card-content">
-                    <h3>Make Real Impact</h3>
-                    <p>You're not just volunteering—you're changing someone's life. See direct results from your work.
-                    </p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div
-                    style="background: var(--secondary-color); color: var(--primary-color); padding: 2rem; text-align: center; font-size: 3rem;">
-                    🤝</div>
-                <div class="card-content">
-                    <h3>Build Community</h3>
-                    <p>Join a passionate team of volunteers and staff dedicated to serving others.</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div
-                    style="background: var(--accent-color); color: white; padding: 2rem; text-align: center; font-size: 3rem;">
-                    📚</div>
-                <div class="card-content">
-                    <h3>Learn & Grow</h3>
-                    <p>Develop new skills, gain experience, and grow personally through meaningful work.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Volunteer Opportunities -->
-    <section class="section light">
-        <div class="container">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Volunteer Opportunities</h2>
-
-            <div style="display: grid; gap: 2rem;">
-                <!-- Mentorship -->
-                <div class="card">
-                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 2rem; align-items: center;">
-                        <div
-                            style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; padding: 2rem; text-align: center; border-radius: 8px; font-size: 3rem;">
-                            👨‍🏫</div>
-                        <div>
-                            <h3 style="margin-top: 0;">Mentor</h3>
-                            <p><strong>Commitment:</strong> 2-4 hours per week for 6-12 months</p>
-                            <p>Be a trusted guide for someone rebuilding their life. Mentors help with goal-setting, job
-                                prep, life skills, and emotional support.</p>
-                            <p><strong>Requirements:</strong> Compassion, reliability, ability to listen. Training
-                                provided.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Outreach -->
-                <div class="card">
-                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 2rem; align-items: center;">
-                        <div
-                            style="background: linear-gradient(135deg, var(--secondary-color), var(--accent-color)); color: var(--primary-color); padding: 2rem; text-align: center; border-radius: 8px; font-size: 3rem;">
-                            🏘️</div>
-                        <div>
-                            <h3 style="margin-top: 0;">Outreach Worker</h3>
-                            <p><strong>Commitment:</strong> 4-8 hours per week (weekends available)</p>
-                            <p>Help our teams connect with homeless and at-risk men. Distribute supplies, connect people
-                                to resources, build relationships.</p>
-                            <p><strong>Requirements:</strong> Physical ability to be outdoors, comfort in difficult
-                                situations. Full training provided.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Event Support -->
-                <div class="card">
-                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 2rem; align-items: center;">
-                        <div
-                            style="background: linear-gradient(135deg, var(--accent-color), #1a3a5c); color: white; padding: 2rem; text-align: center; border-radius: 8px; font-size: 3rem;">
-                            🎉</div>
-                        <div>
-                            <h3 style="margin-top: 0;">Event Volunteer</h3>
-                            <p><strong>Commitment:</strong> 4-8 hours per event (flexible schedule)</p>
-                            <p>Help organize and run community events, workshops, and celebrations. Registration, setup,
-                                hospitality.</p>
-                            <p><strong>Requirements:</strong> Enthusiasm and teamwork. Great for flexible availability.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Skills-Based -->
-                <div class="card">
-                    <div style="display: grid; grid-template-columns: 150px 1fr; gap: 2rem; align-items: center;">
-                        <div
-                            style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 2rem; text-align: center; border-radius: 8px; font-size: 3rem;">
-                            💼</div>
-                        <div>
-                            <h3 style="margin-top: 0;">Skills-Based Volunteer</h3>
-                            <p><strong>Commitment:</strong> Flexible (project-based)</p>
-                            <p>Use your professional skills: Resume writing, interview coaching, legal help, counseling,
-                                accounting, marketing, web design, etc.</p>
-                            <p><strong>Requirements:</strong> Professional experience in your field. Can work virtually.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="hero-badge">Join the Mission</div>
+            <h1 style="color: white;">Become a <span class="highlight">King's</span> Ally</h1>
+            <p class="hero-subtitle">Your mentorship and support can be the catalyst that transforms a life. Join our
+                elite team of volunteers today.</p>
         </div>
     </section>
 
     <!-- Multi-Step Volunteer Application Form -->
-    <section class="section container">
+    <section class="section container" id="apply">
         <div class="donation-wrapper">
-            <h2 style="text-align: center; margin-bottom: 0.5rem;">Volunteer Application</h2>
-            <p style="text-align: center; color: var(--neutral-500); margin-bottom: 2rem;">Complete all steps to submit
-                your application</p>
+            <div class="section-header">
+                <span class="section-label">Volunteer Application</span>
+                <h2 class="section-title">The Path to <span class="highlight">Impact</span></h2>
+                <p class="section-description">Complete our premium multi-step application to begin your journey as a
+                    volunteer.</p>
+            </div>
 
             <!-- Progress Steps Indicator -->
             <div class="progress-steps">
@@ -170,9 +88,9 @@
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                     </div>
-                    <span class="step-label">Personal</span>
+                    <span class="step-label">Personal Identity</span>
                 </div>
-                <div class="step-line"></div>
+                <div class="step-line" data-line="1"></div>
                 <div class="step" data-step="2">
                     <div class="step-circle">
                         <span class="step-number">2</span>
@@ -180,9 +98,9 @@
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                     </div>
-                    <span class="step-label">Interests</span>
+                    <span class="step-label">Interests & Skills</span>
                 </div>
-                <div class="step-line"></div>
+                <div class="step-line" data-line="2"></div>
                 <div class="step" data-step="3">
                     <div class="step-circle">
                         <span class="step-number">3</span>
@@ -192,7 +110,7 @@
                     </div>
                     <span class="step-label">Experience</span>
                 </div>
-                <div class="step-line"></div>
+                <div class="step-line" data-line="3"></div>
                 <div class="step" data-step="4">
                     <div class="step-circle">
                         <span class="step-number">4</span>
@@ -200,9 +118,10 @@
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                     </div>
-                    <span class="step-label">Review</span>
+                    <span class="step-label">Review & Vow</span>
                 </div>
-                <div class="step-line"></div>
+                <!-- Line 4 is not needed if only 4 steps, but following current JS logic which has 5 steps including confirmation -->
+                <div class="step-line" data-line="4"></div>
                 <div class="step" data-step="5">
                     <div class="step-circle">
                         <span class="step-number">5</span>
@@ -210,19 +129,19 @@
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                     </div>
-                    <span class="step-label">Confirmation</span>
+                    <span class="step-label">Enthroned</span>
                 </div>
             </div>
 
             <!-- Form Container -->
-            <div class="donation-form-container">
+            <div class="donation-form-container glass-panel">
                 <form id="volunteerForm" class="donation-form">
 
                     <!-- Step 1: Personal Information -->
                     <div class="form-step active" data-step="1">
                         <div class="step-header">
-                            <h2>Personal Information</h2>
-                            <p>Please provide your contact details</p>
+                            <h2>Personal Identity</h2>
+                            <p>Let us know who you are</p>
                         </div>
 
                         <div class="form-row">
@@ -236,21 +155,22 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" required placeholder="john@example.com">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="phone">Phone Number *</label>
-                            <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required placeholder="john@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label for="dob">Date of Birth *</label>
                             <input type="date" id="dob" name="dob" required>
-                            <small style="color: var(--neutral-500); font-size: 0.85rem;">You must be 18 years or older
-                                to volunteer</small>
+                            <small style="color: var(--text-secondary); font-size: 0.85rem;">You must be 18 years or
+                                older</small>
                         </div>
 
                         <div class="form-group">
@@ -267,22 +187,9 @@
                                 <label for="state">State/Province *</label>
                                 <input type="text" id="state" name="state" required placeholder="California">
                             </div>
-                        </div>
-
-                        <div class="form-row">
                             <div class="form-group">
-                                <label for="zip">ZIP/Postal Code *</label>
+                                <label for="zip">ZIP Code *</label>
                                 <input type="text" id="zip" name="zip" required placeholder="90001">
-                            </div>
-                            <div class="form-group">
-                                <label for="country">Country *</label>
-                                <select id="country" name="country" required>
-                                    <option value="US">United States</option>
-                                    <option value="CA">Canada</option>
-                                    <option value="UK">United Kingdom</option>
-                                    <option value="AU">Australia</option>
-                                    <option value="other">Other</option>
-                                </select>
                             </div>
                         </div>
 
@@ -290,7 +197,7 @@
 
                         <div class="step-navigation">
                             <button type="button" class="btn btn-primary btn-next" data-next="2">
-                                Continue
+                                Continue to Interests
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <path d="M5 12h14M12 5l7 7-7 7" />
@@ -302,77 +209,68 @@
                     <!-- Step 2: Interests & Skills -->
                     <div class="form-step" data-step="2">
                         <div class="step-header">
-                            <h2>Interests & Skills</h2>
-                            <p>Tell us about your volunteer preferences</p>
+                            <h2>Interests & Talents</h2>
+                            <p>How would you like to contribute?</p>
                         </div>
 
                         <div class="form-group">
-                            <label>Volunteer Areas (Select all that apply) *</label>
-                            <div style="display: grid; gap: 0.8rem; margin-top: 0.5rem;">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="volunteerAreas" value="event-support">
-                                    <span class="checkbox-custom"></span>
-                                    <span>Event Support</span>
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="volunteerAreas" value="administrative">
-                                    <span class="checkbox-custom"></span>
-                                    <span>Administrative Support</span>
-                                </label>
-                                <label class="checkbox-label">
+                            <label>Spheres of Influence (Select all that apply) *</label>
+                            <div
+                                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                                <label class="checkbox-label glass-card"
+                                    style="padding: 1rem; border-radius: var(--radius-lg);">
                                     <input type="checkbox" name="volunteerAreas" value="mentorship">
                                     <span class="checkbox-custom"></span>
-                                    <span>Mentorship Programs</span>
+                                    <span>Mentorship</span>
                                 </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="volunteerAreas" value="fundraising">
-                                    <span class="checkbox-custom"></span>
-                                    <span>Fundraising</span>
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="volunteerAreas" value="marketing">
-                                    <span class="checkbox-custom"></span>
-                                    <span>Marketing & Social Media</span>
-                                </label>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" name="volunteerAreas" value="technical">
-                                    <span class="checkbox-custom"></span>
-                                    <span>Technical Support</span>
-                                </label>
-                                <label class="checkbox-label">
+                                <label class="checkbox-label glass-card"
+                                    style="padding: 1rem; border-radius: var(--radius-lg);">
                                     <input type="checkbox" name="volunteerAreas" value="outreach">
                                     <span class="checkbox-custom"></span>
-                                    <span>Community Outreach</span>
+                                    <span>Street Outreach</span>
+                                </label>
+                                <label class="checkbox-label glass-card"
+                                    style="padding: 1rem; border-radius: var(--radius-lg);">
+                                    <input type="checkbox" name="volunteerAreas" value="education">
+                                    <span class="checkbox-custom"></span>
+                                    <span>Education</span>
+                                </label>
+                                <label class="checkbox-label glass-card"
+                                    style="padding: 1rem; border-radius: var(--radius-lg);">
+                                    <input type="checkbox" name="volunteerAreas" value="technical">
+                                    <span class="checkbox-custom"></span>
+                                    <span>Technical Aid</span>
                                 </label>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="skills">Skills & Qualifications</label>
+                            <label for="skills">Unique Skills & Qualifications</label>
                             <textarea id="skills" name="skills" rows="4"
-                                placeholder="List any relevant skills, certifications, or qualifications you have..."></textarea>
+                                placeholder="Describe your master skills..."></textarea>
                         </div>
 
-                        <div class="form-group">
-                            <label for="availability">Availability *</label>
-                            <select id="availability" name="availability" required>
-                                <option value="">Select your availability...</option>
-                                <option value="weekdays">Weekdays</option>
-                                <option value="weekends">Weekends</option>
-                                <option value="evenings">Evenings</option>
-                                <option value="flexible">Flexible</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="languages">Languages Spoken</label>
-                            <input type="text" id="languages" name="languages" placeholder="English, Spanish, etc.">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="availability">Availability *</label>
+                                <select id="availability" name="availability" required>
+                                    <option value="">Select availability...</option>
+                                    <option value="weekdays">Weekdays</option>
+                                    <option value="weekends">Weekends</option>
+                                    <option value="evenings">Evenings</option>
+                                    <option value="flexible">Flexible / Remote</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="languages">Languages</label>
+                                <input type="text" id="languages" name="languages" placeholder="e.g. English, Spanish">
+                            </div>
                         </div>
 
                         <div class="step-error" id="step2Error" style="display: none;"></div>
 
                         <div class="step-navigation">
-                            <button type="button" class="btn btn-outline btn-back" data-back="1">
+                            <button type="button" class="btn btn-ghost btn-back" data-back="1">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -380,7 +278,7 @@
                                 Back
                             </button>
                             <button type="button" class="btn btn-primary btn-next" data-next="3">
-                                Continue
+                                Continue to Experience
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <path d="M5 12h14M12 5l7 7-7 7" />
@@ -392,57 +290,38 @@
                     <!-- Step 3: Experience & Motivation -->
                     <div class="form-step" data-step="3">
                         <div class="step-header">
-                            <h2>Experience & Motivation</h2>
-                            <p>Share your background and motivation</p>
+                            <h2>Legacy & Intent</h2>
+                            <p>Share your background and vision</p>
                         </div>
 
                         <div class="form-group">
-                            <label for="experience">Previous Volunteer Experience</label>
+                            <label for="experience">Previous Impact Journeys (Volunteer Experience)</label>
                             <textarea id="experience" name="experience" rows="4"
-                                placeholder="Describe any previous volunteer work or relevant experience..."></textarea>
+                                placeholder="Where have you served before?"></textarea>
                         </div>
 
                         <div class="form-group">
-                            <label for="motivation">Why do you want to volunteer with us?</label>
+                            <label for="motivation">Your Manifesto (Motivation)</label>
                             <textarea id="motivation" name="motivation" rows="4"
-                                placeholder="Tell us what draws you to this work and what you hope to achieve..."></textarea>
+                                placeholder="Why do you wish to join the Kings Foundation?"></textarea>
                         </div>
 
-                        <div class="form-group">
-                            <label for="referral">How did you hear about us?</label>
-                            <select id="referral" name="referral">
-                                <option value="">Select...</option>
-                                <option value="friend">Friend or Family</option>
-                                <option value="social">Social Media</option>
-                                <option value="web">Website</option>
-                                <option value="event">Community Event</option>
-                                <option value="church">Church/Religious Organization</option>
-                                <option value="news">News Article</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="emergencyName">Emergency Contact Name *</label>
-                            <input type="text" id="emergencyName" name="emergencyName" required placeholder="Jane Doe">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="emergencyPhone">Emergency Contact Phone *</label>
-                            <input type="tel" id="emergencyPhone" name="emergencyPhone" required
-                                placeholder="(555) 987-6543">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="emergencyRelation">Emergency Contact Relationship</label>
-                            <input type="text" id="emergencyRelation" name="emergencyRelation"
-                                placeholder="Spouse, Parent, Sibling, etc.">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="emergencyName">Emergency Contact *</label>
+                                <input type="text" id="emergencyName" name="emergencyName" required placeholder="Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="emergencyPhone">Emergency Phone *</label>
+                                <input type="tel" id="emergencyPhone" name="emergencyPhone" required
+                                    placeholder="Phone">
+                            </div>
                         </div>
 
                         <div class="step-error" id="step3Error" style="display: none;"></div>
 
                         <div class="step-navigation">
-                            <button type="button" class="btn btn-outline btn-back" data-back="2">
+                            <button type="button" class="btn btn-ghost btn-back" data-back="2">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -450,7 +329,7 @@
                                 Back
                             </button>
                             <button type="button" class="btn btn-primary btn-next" data-next="4">
-                                Continue
+                                Review & Vow
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <path d="M5 12h14M12 5l7 7-7 7" />
@@ -462,84 +341,57 @@
                     <!-- Step 4: Review & Submit -->
                     <div class="form-step" data-step="4">
                         <div class="step-header">
-                            <h2>Review Your Application</h2>
-                            <p>Please verify all information is correct before submitting</p>
+                            <h2>Review Your Oath</h2>
+                            <p>Verify your details before commitment</p>
                         </div>
 
-                        <!-- Personal Info Summary -->
-                        <div class="review-section">
-                            <div class="review-header">
-                                <h3>Personal Information</h3>
-                                <button type="button" class="btn btn-sm btn-outline edit-section"
-                                    data-edit="1">Edit</button>
+                        <div class="review-section glass-panel" style="padding: 2rem; border-radius: var(--radius-xl);">
+                            <div class="review-section">
+                                <div class="review-header">
+                                    <h3>Personal Identity</h3>
+                                    <button type="button" class="btn btn-sm btn-ghost edit-section"
+                                        data-edit="1">Edit</button>
+                                </div>
+                                <div class="review-content" id="reviewPersonal"></div>
                             </div>
-                            <div class="review-content" id="reviewPersonal">
-                                <!-- Populated by JavaScript -->
-                            </div>
-                        </div>
 
-                        <!-- Interests Summary -->
-                        <div class="review-section">
-                            <div class="review-header">
-                                <h3>Interests & Skills</h3>
-                                <button type="button" class="btn btn-sm btn-outline edit-section"
-                                    data-edit="2">Edit</button>
+                            <div class="review-section">
+                                <div class="review-header">
+                                    <h3>Interests & Skills</h3>
+                                    <button type="button" class="btn btn-sm btn-ghost edit-section"
+                                        data-edit="2">Edit</button>
+                                </div>
+                                <div class="review-content" id="reviewInterests"></div>
                             </div>
-                            <div class="review-content" id="reviewInterests">
-                                <!-- Populated by JavaScript -->
-                            </div>
-                        </div>
 
-                        <!-- Experience Summary -->
-                        <div class="review-section">
-                            <div class="review-header">
-                                <h3>Experience & Motivation</h3>
-                                <button type="button" class="btn btn-sm btn-outline edit-section"
-                                    data-edit="3">Edit</button>
-                            </div>
-                            <div class="review-content" id="reviewExperience">
-                                <!-- Populated by JavaScript -->
+                            <div class="review-section">
+                                <div class="review-header">
+                                    <h3>Legacy & Intent</h3>
+                                    <button type="button" class="btn btn-sm btn-ghost edit-section"
+                                        data-edit="3">Edit</button>
+                                </div>
+                                <div class="review-content" id="reviewExperience"></div>
                             </div>
                         </div>
 
-                        <!-- Agreements -->
-                        <div class="form-group" style="margin-top: 1.5rem;">
+                        <div style="margin-top: 2rem; display: grid; gap: 1rem;">
                             <label class="checkbox-label">
                                 <input type="checkbox" id="termsAgreement" name="termsAgreement" required>
                                 <span class="checkbox-custom"></span>
-                                <span>I agree to the <a href="/privacy.html" target="_blank">Terms and Conditions</a>
-                                    *</span>
+                                <span>I accept the <a href="#">Terms of Service</a> & <a href="#">Vow of
+                                        Confidentiality</a> *</span>
                             </label>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="privacyAgreement" name="privacyAgreement" required>
-                                <span class="checkbox-custom"></span>
-                                <span>I agree to the <a href="/privacy.html" target="_blank">Privacy Policy</a> *</span>
-                            </label>
-                        </div>
-
-                        <div class="form-group">
                             <label class="checkbox-label">
                                 <input type="checkbox" id="backgroundCheck" name="backgroundCheck">
                                 <span class="checkbox-custom"></span>
-                                <span>I consent to a background check if required for my volunteer role</span>
-                            </label>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="newsletter" name="newsletter">
-                                <span class="checkbox-custom"></span>
-                                <span>Keep me updated about volunteer opportunities and organization news</span>
+                                <span>I consent to a background check to ensure community safety</span>
                             </label>
                         </div>
 
                         <div class="step-error" id="step4Error" style="display: none;"></div>
 
                         <div class="step-navigation">
-                            <button type="button" class="btn btn-outline btn-back" data-back="3">
+                            <button type="button" class="btn btn-ghost btn-back" data-back="3">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -547,7 +399,7 @@
                                 Back
                             </button>
                             <button type="submit" class="btn btn-primary" id="submitBtn">
-                                Submit Application
+                                Submit Formal Vow
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
@@ -558,154 +410,84 @@
 
                     <!-- Step 5: Confirmation -->
                     <div class="form-step" data-step="5">
-                        <div class="confirmation-container">
-                            <div class="confirmation-icon">
-                                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                                    <polyline points="22 4 12 14.01 9 11.01" />
+                        <div class="confirmation-container text-center" style="padding: 4rem 2rem;">
+                            <div class="confirmation-icon"
+                                style="margin: 0 auto 2rem; width: 100px; height: 100px; background: var(--gradient-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(212, 165, 116, 0.4);">
+                                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--primary-900)"
+                                    stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </div>
-                            <h2>Application Submitted!</h2>
-                            <p class="confirmation-message">Thank you for your interest in volunteering with Restored
-                                Kings Foundation.</p>
+                            <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Welcome to the Fold</h2>
+                            <p style="font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 3rem;">Your
+                                application is being reviewed by the High Commission.</p>
 
-                            <div class="reference-number">
-                                <span>Application Reference Number</span>
-                                <strong id="referenceNumber">VOL-XXXXXX</strong>
+                            <div class="glass-panel" style="padding: 2rem; display: inline-block; margin-bottom: 3rem;">
+                                <p
+                                    style="text-transform: uppercase; font-size: 0.75rem; color: var(--gold-500); letter-spacing: 2px; margin-bottom: 0.5rem;">
+                                    Reference Token</p>
+                                <strong id="referenceNumber"
+                                    style="font-size: 1.5rem; font-family: 'Outfit', sans-serif;">VOL-XXXXXX</strong>
                             </div>
 
-                            <div class="next-steps">
-                                <h3>What Happens Next?</h3>
-                                <ul>
-                                    <li>
-                                        <span class="step-icon">📋</span>
-                                        <div>
-                                            <strong>Application Review</strong>
-                                            <p>Our team will review your application within 3-5 business days.</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span class="step-icon">📞</span>
-                                        <div>
-                                            <strong>Initial Contact</strong>
-                                            <p>We'll reach out to discuss opportunities that match your interests.</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span class="step-icon">✅</span>
-                                        <div>
-                                            <strong>Background Check</strong>
-                                            <p>If required for your role, we'll initiate a background check.</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span class="step-icon">🎯</span>
-                                        <div>
-                                            <strong>Orientation</strong>
-                                            <p>You'll be invited to an orientation session to get started.</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="email-confirmation">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path
-                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                                    <polyline points="22,6 12,13 2,6" />
-                                </svg>
-                                <p>A confirmation email has been sent to <strong id="confirmEmail">your email
-                                        address</strong>.</p>
-                            </div>
-
-                            <div class="confirmation-actions">
-                                <a href="/" class="btn btn-primary">Return Home</a>
-                                <a href="/programs.html" class="btn btn-outline">Explore Programs</a>
+                            <div class="text-center">
+                                <a href="/" class="btn btn-primary btn-lg">Return to Realm</a>
                             </div>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials from Volunteers -->
-    <section class="section light">
+    <!-- Opportunity Grid -->
+    <section class="section">
         <div class="container">
-            <h2 style="text-align: center; margin-bottom: 2rem;">What Our Volunteers Say</h2>
+            <div class="section-header">
+                <span class="section-label">Opportunities</span>
+                <h2 class="section-title">Open <span class="highlight">Directives</span></h2>
+            </div>
             <div class="grid grid-3">
-                <div class="card">
-                    <div class="card-content">
-                        <div style="color: var(--secondary-color); font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
-                        <p style="font-style: italic; color: var(--text-light); margin-bottom: 1rem;">"Mentoring through
-                            Restored Kings has been the most rewarding experience of my life. I've learned as much from
-                            my mentee as he has from me."</p>
-                        <p style="font-weight: 600;">— Sarah M., Mentor for 18 months</p>
-                    </div>
+                <div class="card glass-panel" style="padding: 2.5rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1.5rem;">👨‍🏫</div>
+                    <h3>Mentor Elite</h3>
+                    <p>Be a trusted guide for someone rebuilding their life. Goal-setting, job prep, and emotional
+                        support.</p>
                 </div>
-
-                <div class="card">
-                    <div class="card-content">
-                        <div style="color: var(--secondary-color); font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
-                        <p style="font-style: italic; color: var(--text-light); margin-bottom: 1rem;">"The organization
-                            is incredibly professional and well-run. You can tell every donation and volunteer hour
-                            directly impacts lives."</p>
-                        <p style="font-weight: 600;">— David K., Volunteer Coordinator</p>
-                    </div>
+                <div class="card glass-panel" style="padding: 2.5rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1.5rem;">🏘️</div>
+                    <h3>Outreach Specialist</h3>
+                    <p>Connect with homeless and at-risk men. Distribute supplies and build lasting relationships.</p>
                 </div>
-
-                <div class="card">
-                    <div class="card-content">
-                        <div style="color: var(--secondary-color); font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
-                        <p style="font-style: italic; color: var(--text-light); margin-bottom: 1rem;">"This work has
-                            changed my perspective on homelessness. Our clients are real people with real potential.
-                            Volunteering here restored my hope in humanity."</p>
-                        <p style="font-weight: 600;">— Jennifer W., Outreach Volunteer</p>
-                    </div>
+                <div class="card glass-panel" style="padding: 2.5rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1.5rem;">💼</div>
+                    <h3>Skills Architect</h3>
+                    <p>Use your professional skills: Resume writing, legal help, or technical training.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA -->
-    <section class="section"
-        style="background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; text-align: center;">
-        <div class="container">
-            <h2 style="color: white;">Can't Volunteer Right Now?</h2>
-            <p style="color: rgba(255,255,255,0.95); font-size: 1.1rem; margin-bottom: 2rem;">You can still make a
-                difference by donating or sharing our mission with others.</p>
-            <div class="btn-group">
-                <a href="/donate.html" class="btn"
-                    style="background-color: var(--secondary-color); color: var(--primary-color);">💰 Make a
-                    Donation</a>
-                <a href="/" class="btn" style="background-color: white; color: var(--primary-color);">📢 Share Our
-                    Mission</a>
-            </div>
-        </div>
-    </section>
-
+    <!-- Footer -->
     <footer>
-        <div class="footer-content">
+        <div class="container">
             <div class="footer-grid">
-                <div class="footer-section">
-                    <h3>Restored Kings</h3>
-                    <p>Supporting men and boys with dignity, respect, and real action.</p>
+                <div class="footer-brand">
+                    <a href="/" class="logo">
+                        <div class="logo-icon">♔</div>
+                        <div class="logo-text">Restored <span>Kings</span></div>
+                    </a>
+                    <p>Restoring dignity, rebuilding lives. We support men and boys through elite outreach and
+                        mentorship.</p>
                 </div>
                 <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="/">Home</a></li>
+                    <h4>Quick Access</h4>
+                    <ul class="footer-links">
+                        <li><a href="/about.html">About</a></li>
                         <li><a href="/programs.html">Programs</a></li>
-                        <li><a href="/donate.html">Donate</a></li>
+                        <li><a href="/impact.html">Impact</a></li>
+                        <li><a href="/contact.html">Contact</a></li>
                     </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Contact</h3>
-                    <p>📧 contact@restoredkings.org</p>
-                    <p>📞 (555) 123-4567</p>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -714,8 +496,9 @@
         </div>
     </footer>
 
-    <script type="module" src="/js/main.js"></script>
-    <script type="module" src="/js/volunteer.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/volunteer.js"></script>
+    <script src="/js/topbar.js"></script>
 </body>
 
 </html>

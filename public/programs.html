@@ -20,22 +20,37 @@
 
     <title>Programs & Services - Restored Kings Foundation</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/premium.css">
+    <link rel="stylesheet" href="/css/topbar.css">
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23d4a574'>♔</text></svg>">
+    <script src="/js/theme.js"></script>
 </head>
 
 <body>
     <!-- Navigation Header -->
+    <!-- Global Notice Bar (Phase 9) -->
+    <div class="notice-bar">
+        <span>Restoring Dignity: 2,400+ Lives Impacted in 2024</span>
+    </div>
+
+    <!-- Scroll Progress Indicator (Phase 9) -->
+    <div class="scroll-progress-container">
+        <div class="scroll-progress-bar"></div>
+    </div>
+
     <header id="header">
         <nav class="navbar">
             <a href="/" class="logo">
-                <div class="logo-icon">♔</div>
-                <div class="logo-text">Restored <span>Kings</span></div>
+                <div class="logo-icon font-premium">♔</div>
+                <div class="logo-text font-premium">Restored <span>Kings</span></div>
             </a>
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+            <div class="nav-controls">
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
             <ul class="nav-links" id="navLinks">
                 <li><a href="/">Home</a></li>
@@ -559,6 +574,7 @@
     </footer>
 
     <script type="module" src="/js/main.js"></script>
+    <script src="/js/topbar.js"></script>
 </body>
 
 </html>

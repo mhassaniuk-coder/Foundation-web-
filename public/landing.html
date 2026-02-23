@@ -3,58 +3,89 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Restored Kings Foundation — Restore Dignity</title>
-    <meta name="description" content="Restored Kings Foundation — mentorship, outreach, and community programs for men and boys.">
+    <title>Restored Kings Foundation - Restore Dignity</title>
+    <meta name="description"
+        content="Restored Kings Foundation supports men and boys through mentorship, outreach, and practical community programs.">
     <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/theme.js"></script>
 </head>
-<body>
-    <header>
+<body class="landing-page">
+    <header id="header">
         <nav class="navbar">
-            <div class="logo">♔ Restored Kings</div>
-            <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
-            <ul class="nav-links">
+            <a href="/" class="logo">
+                <div class="logo-icon">RK</div>
+                <div class="logo-text">Restored <span>Kings</span></div>
+            </a>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="/">Home</a></li>
                 <li><a href="/about.html">About</a></li>
                 <li><a href="/programs.html">Programs</a></li>
                 <li><a href="/impact.html">Impact</a></li>
-                <li><a href="/donate.html" class="btn btn-primary">Donate</a></li>
-                <li><a href="/auth/signup.html" class="btn btn-primary">Join</a></li>
+                <li class="nav-cta"><a href="/donate.html" class="btn btn-primary">Donate Now</a></li>
+                <li><a href="/auth/signup.html" class="btn btn-secondary">Join</a></li>
             </ul>
         </nav>
     </header>
 
-    <section class="hero" style="padding:4rem 2rem; background:linear-gradient(135deg,var(--primary-color),var(--secondary-color)); color:#fff; text-align:center;">
-        <div class="container">
-            <h1 style="font-size:2.2rem; margin-bottom:.5rem;">Restore dignity. Rebuild lives.</h1>
-            <p style="max-width:700px; margin:0 auto 1.5rem; opacity:.95;">Restored Kings Foundation empowers men and boys through mentoring, job training, and community programs—help us create lasting change.</p>
-            <div style="display:flex; gap:1rem; justify-content:center; margin-top:1rem;">
+    <section class="hero landing-hero">
+        <div class="container hero-content landing-hero-content">
+            <span class="hero-badge">Community Restoration</span>
+            <h1>Restore dignity. <span class="highlight">Rebuild lives.</span></h1>
+            <p class="hero-subtitle landing-hero-subtitle">
+                Restored Kings Foundation equips men and boys with mentorship, job readiness,
+                and trusted community support so change is not temporary, but lasting.
+            </p>
+            <div class="hero-cta landing-hero-cta">
                 <a href="/donate.html" class="btn btn-primary">Donate</a>
                 <a href="/volunteer.html" class="btn btn-secondary">Volunteer</a>
-                <a href="/auth/signup.html" class="btn">Get Involved</a>
+                <a href="/auth/signup.html" class="btn btn-outline">Get Involved</a>
             </div>
         </div>
     </section>
 
-    <section class="section container" style="margin-top:2rem;">
-        <div class="grid grid-3">
-            <div class="card">
-                <h3>Mentorship</h3>
-                <p>Safe, consistent relationships for personal growth.</p>
+    <section class="section landing-pillars">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">What We Do</span>
+                <h2 class="section-title">Programs designed for long-term impact</h2>
+                <p class="section-description">
+                    Practical support, leadership development, and real pathways to stability.
+                </p>
             </div>
-            <div class="card">
-                <h3>Job Training</h3>
-                <p>Skills and pathways to stable employment.</p>
-            </div>
-            <div class="card">
-                <h3>Community</h3>
-                <p>Events, support groups, and opportunities to belong.</p>
+            <div class="grid grid-3">
+                <article class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Mentorship</h3>
+                        <p class="card-text">Safe, consistent relationships that build confidence and direction.</p>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Job Training</h3>
+                        <p class="card-text">Hands-on skill development and pathways to stable employment.</p>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Community</h3>
+                        <p class="card-text">Events, support groups, and belonging-centered community care.</p>
+                    </div>
+                </article>
             </div>
         </div>
     </section>
 
-    <footer class="footer" style="margin-top:3rem; padding:2rem; text-align:center;">
-        <div class="container">© Restored Kings Foundation</div>
+    <footer class="landing-footer">
+        <div class="container">
+            <p>&copy; 2024 Restored Kings Foundation</p>
+        </div>
     </footer>
 
+    <script type="module" src="/js/main.js"></script>
 </body>
 </html>

@@ -24,12 +24,15 @@
     /* Sovereign Heritage Tokens - Phase 11 */
     --sovereign-midnight: #0a0c10;
     --sovereign-gold-glow: rgba(212, 165, 116, 0.4);
+    --sovereign-gold-solid: #d4a574;
     --sovereign-border: rgba(212, 165, 116, 0.15);
     --neutral-bg: #0f172a;
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --premium-glass-bg: rgba(15, 23, 42, 0.3);
     --premium-glass-border: rgba(255, 255, 255, 0.05);
+    --ledger-input: #4ade80;
+    --ledger-output: #f87171;
 }
 
 /* Glassmorphism Utilities */
@@ -40,6 +43,36 @@
     border: 1px solid var(--premium-glass-border);
     box-shadow: var(--premium-glass-shadow);
     border-radius: var(--radius-xl);
+}
+
+.glass-master {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(25px) saturate(160%);
+    -webkit-backdrop-filter: blur(25px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-2xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-master::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.05),
+            transparent);
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+.glass-master:hover::after {
+    left: 100%;
 }
 
 .glass-card {
@@ -457,4 +490,321 @@ main {
 .annual-track circle {
     fill: none;
     stroke-width: 4;
+}
+
+/* Sovereign Avatar */
+.avatar-container {
+    position: relative;
+    display: inline-block;
+}
+
+.avatar {
+    transition: transform 0.3s var(--anim-spring);
+}
+
+.avatar:hover {
+    transform: scale(1.1);
+}
+
+/* ============================================
+   MULTI-STEP VOLUNTEER FORM STYLES
+   ============================================ */
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    position: relative;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+    flex: 1;
+    position: relative;
+}
+
+.step-circle {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    transition: all 0.4s var(--anim-spring);
+    color: var(--text-secondary);
+    font-weight: 700;
+}
+
+.step-check {
+    width: 20px;
+    height: 20px;
+    display: none;
+}
+
+.step.active .step-circle {
+    background: var(--gradient-gold);
+    border-color: var(--gold-400);
+    color: var(--primary-900);
+    box-shadow: 0 0 20px rgba(212, 165, 116, 0.3);
+    transform: scale(1.1);
+}
+
+.step.completed .step-circle {
+    background: var(--gold-500);
+    border-color: var(--gold-500);
+    color: white;
+}
+
+.step.completed .step-number {
+    display: none;
+}
+
+.step.completed .step-check {
+    display: block;
+}
+
+.step-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+.step.active .step-label {
+    color: var(--gold-400);
+}
+
+.step-line {
+    position: absolute;
+    top: 22.5px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 0;
+    transition: all 0.6s ease;
+}
+
+/* Calculate step lines */
+.step-line[data-line="1"] {
+    left: 10%;
+    width: 20%;
+}
+
+.step-line[data-line="2"] {
+    left: 30%;
+    width: 20%;
+}
+
+.step-line[data-line="3"] {
+    left: 50%;
+    width: 20%;
+}
+
+.step-line[data-line="4"] {
+    left: 70%;
+    width: 20%;
+}
+
+.step-line.completed {
+    background: var(--gold-500);
+    box-shadow: 0 0 10px rgba(212, 165, 116, 0.5);
+}
+
+/* Premium Form Steps */
+.form-step {
+    display: none;
+    animation: slideInRight 0.5s var(--anim-spring) forwards;
+}
+
+.form-step.active {
+    display: block;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.donation-form-container {
+    padding: 3rem;
+    border-radius: var(--radius-2xl);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.step-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.step-header h2 {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.step-header p {
+    color: var(--text-secondary);
+}
+
+/* Premium Review Section */
+.review-section {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.review-header h3 {
+    font-size: 1.1rem;
+    color: var(--gold-400);
+    margin: 0;
+}
+
+.review-item {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.review-item strong {
+    color: var(--text-secondary);
+    margin-right: 0.5rem;
+}
+
+/* Form Helper Classes */
+.field-error {
+    color: #ef4444;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+
+        /* Liquid Transparency - Phase 10 */
+        .liquid-transparency {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .liquid-transparency:hover {
+            background: rgba(255, 255, 255, 0.08) !important;
+            transform: translateX(5px) scale(1.01);
+            border-left: 2px solid var(--gold-400);
+        }
+
+        /* Sovereign Heritage Tokens - Phase 11 */
+        .sovereign-avatar {
+            position: relative;
+            padding: 2px;
+            border-radius: 50%;
+            background: var(--sovereign-midnight);
+            border: 2px solid var(--sovereign-border);
+            box-shadow: 0 0 20px var(--sovereign-gold-glow);
+            transition: all 0.5s var(--anim-spring);
+        }
+
+        .sovereign-avatar:hover {
+            box-shadow: 0 0 40px var(--sovereign-gold-glow);
+            transform: rotate(5deg) scale(1.1);
+        }
+
+        .heritage-token {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 6px 14px;
+            background: rgba(212, 165, 116, 0.1);
+            border: 1px solid var(--sovereign-border);
+            border-radius: var(--radius-full);
+            color: var(--gold-400);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.05em;
+        }
+
+        .noble-pulse {
+            animation: noble-pulse 3s infinite;
+        }
+
+        @keyframes noble-pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(212, 165, 116, 0.2);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(212, 165, 116, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(212, 165, 116, 0);
+            }
+        }
+
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+input.error,
+select.error,
+textarea.error {
+    border-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.05) !important;
+}
+
+.step-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.step-navigation .btn-primary {
+    margin-left: auto;
+}
+
+.step-navigation .btn-outline {
+    margin-right: auto;
 }
