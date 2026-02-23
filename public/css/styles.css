@@ -3808,6 +3808,264 @@ footer::before {
 }
 
 /* ============================================
+   DONATE PAGE REDESIGN
+   ============================================ */
+.donate-page {
+  background:
+    radial-gradient(circle at 8% 12%, rgba(212, 165, 116, 0.16) 0%, transparent 42%),
+    radial-gradient(circle at 92% 0%, rgba(26, 58, 92, 0.14) 0%, transparent 38%),
+    linear-gradient(180deg, #f6f8fc 0%, #ffffff 34%);
+}
+
+.donate-page .page-header {
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 0 3rem;
+  background: linear-gradient(128deg, #0f2540 0%, #17365c 52%, #275782 100%);
+}
+
+.donate-page .page-header::before,
+.donate-page .page-header::after {
+  content: '';
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.donate-page .page-header::before {
+  width: 280px;
+  height: 280px;
+  background: rgba(212, 165, 116, 0.22);
+  top: -120px;
+  right: -70px;
+}
+
+.donate-page .page-header::after {
+  width: 220px;
+  height: 220px;
+  background: rgba(255, 255, 255, 0.08);
+  bottom: -120px;
+  left: -60px;
+}
+
+.donate-page .page-header .container {
+  position: relative;
+  z-index: 2;
+}
+
+.donate-page .page-header h1 {
+  color: #ffffff;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.5rem;
+}
+
+.donate-page .page-header .breadcrumb {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.donate-page .page-header .breadcrumb a {
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.donate-page .donation-section {
+  padding-top: 2.25rem;
+  background: transparent;
+}
+
+.donate-page .donation-wrapper {
+  max-width: 1160px;
+  display: grid;
+  grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+  gap: 1.35rem;
+  align-items: start;
+}
+
+.donate-page .donation-main {
+  min-width: 0;
+}
+
+.donate-page .donation-brief {
+  position: sticky;
+  top: 102px;
+  border-radius: 26px;
+  padding: 1.5rem 1.35rem;
+  color: #e9f1fc;
+  background:
+    linear-gradient(170deg, rgba(255, 255, 255, 0.08) 0%, rgba(11, 28, 49, 0.55) 60%),
+    linear-gradient(140deg, #1f4f7f 0%, #0f2845 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 20px 44px rgba(13, 30, 53, 0.28);
+}
+
+.donation-brief-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.donation-brief h2 {
+  margin: 0.75rem 0;
+  font-size: clamp(1.35rem, 1.55vw, 1.75rem);
+  line-height: 1.2;
+  color: #ffffff;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.donation-brief-copy {
+  margin: 0;
+  color: rgba(237, 244, 255, 0.9);
+  line-height: 1.55;
+}
+
+.donation-impact-grid {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.donation-impact-card {
+  padding: 0.85rem 0.95rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.impact-value {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f5d4a3;
+}
+
+.impact-label {
+  margin: 0.25rem 0 0;
+  font-size: 0.86rem;
+  color: rgba(240, 246, 255, 0.9);
+  line-height: 1.45;
+}
+
+.donation-brief-list {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.donation-brief-list li {
+  position: relative;
+  padding-left: 1.05rem;
+  font-size: 0.84rem;
+  line-height: 1.4;
+  color: rgba(236, 243, 255, 0.94);
+}
+
+.donation-brief-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.47rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: #f0bb73;
+}
+
+.donate-page .progress-steps {
+  margin-bottom: 1.1rem;
+  border-radius: 18px;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(20, 55, 92, 0.12);
+  background: linear-gradient(180deg, #ffffff 0%, #f6faff 100%);
+  box-shadow: 0 14px 28px rgba(12, 32, 55, 0.08);
+}
+
+.donate-page .step-line {
+  max-width: none;
+}
+
+.donate-page .donation-form-container {
+  border-radius: 24px;
+  border: 1px solid rgba(20, 55, 92, 0.11);
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+  box-shadow: 0 22px 40px rgba(11, 32, 56, 0.12);
+}
+
+.donate-page .donation-form {
+  padding: 2.1rem;
+}
+
+.donate-page .step-header h2 {
+  color: #10263f;
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: 0.01em;
+}
+
+.donate-page .frequency-label,
+.donate-page .amount-btn,
+.donate-page .payment-method-content {
+  border-radius: 14px;
+}
+
+.donate-page .amount-btn {
+  min-height: 86px;
+  justify-content: center;
+}
+
+.donate-page .step-navigation {
+  margin-top: 2.2rem;
+}
+
+.donate-page .trust-badges {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.donate-page .trust-badge {
+  padding: 0.9rem 0.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(20, 55, 92, 0.14);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 20px rgba(11, 32, 56, 0.06);
+}
+
+.donate-page .trust-badge span {
+  font-size: 0.78rem;
+}
+
+@media (max-width: 1080px) {
+  .donate-page .donation-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .donate-page .donation-brief {
+    position: static;
+  }
+}
+
+@media (max-width: 700px) {
+  .donate-page .page-header {
+    padding-top: 4.2rem;
+  }
+
+  .donate-page .donation-form {
+    padding: 1.3rem;
+  }
+
+  .donate-page .progress-steps {
+    padding: 0.75rem 0.6rem;
+  }
+
+  .donate-page .trust-badges {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
    VOLUNTEER APPLICATION STYLES
    ============================================ */
 
@@ -4129,4 +4387,48 @@ footer::before {
         gap: 1rem;
     }
 }
+
+/* ============================================
+   PREMIUM FEATURES STYLES
+   ============================================ */
+
+.auth-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    padding: 3rem 1rem;
+}
+
+.premium-features {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    height: 100%;
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.features-list li {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9375rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.features-list li::before {
+    content: '✓';
+    color: var(--gold-500);
+    font-weight: 600;
+}
+
 
